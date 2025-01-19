@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ObnoviMe - Uređivanje Dokumenta</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="bg-primary text-white text-center py-4 mb-4">
+        <h1>ObnoviMe</h1>
+        <p>Uređivanje dokumenata, opreme i licenci</p>
+    </header>
+
+    <div class="container">
+        <!-- Form Section -->
+        <form class="border rounded p-4 shadow">
+            <h2 class="text-center mb-4">Uređivanje Dokumenta</h2>
+            <div class="mb-3">
+                <label for="documentName" class="form-label">Naziv Dokumenta</label>
+                <input type="text" class="form-control" id="documentName" placeholder="Unesi naziv dokumenta" required>
+            </div>
+            <div class="mb-3">
+                <label for="documentType" class="form-label">Tip Dokumenta</label>
+                <input type="text" class="form-control bg-light" id="documentType" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="serialNumber" class="form-label">Serijski Broj</label>
+                <input type="text" class="form-control bg-light" id="serialNumber" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="validFrom" class="form-label">Vrijedi Od</label>
+                <input type="date" class="form-control" id="validFrom" required>
+            </div>
+            <div class="mb-3">
+                <label for="validTo" class="form-label">Vrijedi Do</label>
+                <input type="date" class="form-control" id="validTo" required>
+            </div>
+            <div class="mb-3">
+                <label for="notificationDays" class="form-label">Broj dana za obavijest o obnovi</label>
+                <input type="number" class="form-control" id="notificationDays" placeholder="Unesi broj dana" min="1" required>
+            </div>
+            <div class="mb-3">
+                <label for="serviser" class="form-label">Serviser</label>
+                <input type="text" class="form-control" id="serviser" placeholder="Unesi ime servisera">
+            </div>
+            <div class="mb-3">
+                <label for="ispostava" class="form-label">Ispostava</label>
+                <input type="text" class="form-control" id="ispostava" placeholder="Unesi ispostavu">
+            </div>
+            <div class="mb-3">
+                <label for="status" class="form-label">Status</label>
+                <select class="form-select" id="status" required>
+                    <option value="active" selected>Aktivno</option>
+                    <option value="expired">Isteklo</option>
+                </select>
+            </div>
+            <div class="text-center">
+                <button type="button" class="btn btn-secondary me-2" onclick="history.back()">Nazad</button>
+                <button type="submit" class="btn btn-primary">Spremi Promjene</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="bg-dark text-white text-center py-3 mt-4">
+        <p>&copy; 2025 ObnoviMe. Sva prava pridržana. | <a href="ObnoviMe_Informacije.html" class="text-white text-decoration-underline">Informacije o aplikaciji</a></p>
+    </footer>
+</body>
+</html>
