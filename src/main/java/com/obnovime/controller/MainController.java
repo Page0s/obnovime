@@ -25,12 +25,12 @@ public class MainController {
 
     @GetMapping("/archive")
     public String showArchive() {
-        return "ObnoviMe_Arhiva";
+        return "ObnoviMe_Archive";
     }
 
     @GetMapping("/history")
     public String showHistory() {
-        return "ObnoviMe_Povijest";
+        return "ObnoviMe_RenewalHistory";
     }
 
     @GetMapping("/edit")
@@ -40,11 +40,7 @@ public class MainController {
 
     @GetMapping("/renewal")
     public String showRenewal() {
-        return "ObnoviMe_Obnova";
+        return "ObnoviMe_Renewal";
     }
 
-    @GetMapping("/info")
-    public String showInfo() {
-        return "ObnoviMe_Informacije";
-    }
 }
