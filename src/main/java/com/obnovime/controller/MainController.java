@@ -43,4 +43,9 @@ public class MainController {
         return "ObnoviMe_Renewal";
     }
 
+    @GetMapping("/index")
+    public String showIndex() {
+        return "redirect:/index.html";
+    }
+
 }
