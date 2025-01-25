@@ -66,6 +66,7 @@
                     <select id="outpost" name="outpost" class="form-select">
                         <option value="option1">Zagreb</option>
                         <option value="option2">Zabok</option>
+                        <option value="option2">Krapina</option>
                     </select>
                 </div>
                 <div class="mb-3">
@@ -85,9 +86,10 @@
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="reminderDay" class="form-label">Podsjetnik dana(Istek licence/pod danima):</label>
-                    <input type="text" class="form-control" id="reminderDay" placeholder="Podsjetnik dana(Istek licence/pod danima)">
+                    <label for="reminderDay" class="form-label">Podsjetnik dana(Istek licence/po danima):</label>
+                    <input type="text" class="form-control" id="reminderDay" placeholder="Podsjetnik dana(Istek licence/po danima)">
                 </div>
+                <br><br>
 
             <button href="/main" type="nazad" class="btn btn-secondary">Nazad</button>
             <button type="submit" class="btn btn-primary">Spremi</button>
@@ -119,6 +121,7 @@
                 <select id="outpostPeriodic" name="outpostPeriodic" class="form-select">
                     <option value="option1">Zagreb</option>
                     <option value="option2">Zabok</option>
+                    <option value="option2">Krapina</option>
                 </select>
             </div>
             <div class="mb-3">
@@ -129,6 +132,11 @@
                     <option value="option3">Svakih 3 mjeseca za vozila starija od 10 godina</option>
                 </select>
             </div>
+            <div class="mb-3">
+                <label for="reminderDayPeriodic" class="form-label">Podsjetnik dana(Istek licence/po danima):</label>
+                <input type="text" class="form-control" id="reminderDayPeriodic" placeholder="Podsjetnik dana(Istek licence/po danima)">
+            </div>
+            <br><br>
             <button type="submit" class="btn btn-primary">Spremi</button>
         </form>
     </div>
@@ -160,6 +168,11 @@
                     <option value="option2">Krapina</option>
                 </select>
             </div>
+            <div class="mb-3">
+                <label for="reminderDayCertificate" class="form-label">Podsjetnik dana(Istek licence/po danima):</label>
+                <input type="text" class="form-control" id="reminderDayCertificate" placeholder="Podsjetnik dana(Istek licence/po danima)">
+            </div>
+            <br><br>
             <button type="submit" class="btn btn-primary">Spremi</button>
         </form>
     </div>
@@ -168,7 +181,7 @@
         <h2>Tehnički pregled vozila</h2>
         <form>
             <div class="mb-3">
-                <label for="vehicleTechnicalInspectionName" class="form-label">Ime:</label>
+                <label for="vehicleTechnicalInspectionName" class="form-label">Ime automobila:</label>
                 <input type="text" class="form-control" id="vehicleTechnicalInspectionName" placeholder="Unesite naziv automobila">
             </div>
             <div class="mb-3">
@@ -188,6 +201,11 @@
                     <option value="option2">Krapina</option>
                 </select>
             </div>
+            <div class="mb-3">
+                <label for="reminderDayVehicleInspection" class="form-label">Podsjetnik dana(Istek licence/po danima):</label>
+                <input type="text" class="form-control" id="reminderDayVehicleInspection" placeholder="Podsjetnik dana(Istek licence/po danima)">
+            </div>
+            <br><br>
             <button type="submit" class="btn btn-primary">Spremi</button>
         </form>
     </div>
@@ -216,11 +234,56 @@
                     <option value="option2">Krapina</option>
                 </select>
             </div>
+            <div class="mb-3">
+                <label for="reminderDayVehicleInsurance" class="form-label">Podsjetnik dana(Istek licence/po danima):</label>
+                <input type="text" class="form-control" id="reminderDayVehicleInsurance" placeholder="Podsjetnik dana(Istek licence/po danima)">
+            </div>
             <br><br>
 
             <button type="submit" class="btn btn-primary">Spremi</button>
         </form>
     </div>
+    <!-- Forma 6: Ugovor o radu -->
+    <div id="form-6" class="form-container">
+        <h2>Ugovor o radu</h2>
+        <form>
+            <div class="mb-3">
+                <label for="employmentContractName" class="form-label">Ime:</label>
+                <input type="text" class="form-control" id="employmentContractName" placeholder="Unesite ime">
+            </div>
+            <div class="mb-3">
+                <label for="employmentContractSurname" class="form-label">Prezime:</label>
+                <input type="text" class="form-control" id="employmentContractSurname" placeholder="Unesite prezime">
+            </div>
+            <div class="mb-3">
+                <label for="renewalDateEmploymentContract" class="form-label">Datum obnove:</label>
+                <input type="date" class="form-control" id="renewalDateEmploymentContract">
+            </div>
+            <div class="mb-3">
+                <label for="outpostEmploymentContract" class="form-label">Ispostava:</label>
+                <select id="outpostEmploymentContract" name="outpostEmploymentContract" class="form-select">
+                    <option value="option1">Zagreb</option>
+                    <option value="option2">Zabok</option>
+                    <option value="option2">Krapina</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="employmentContractDepartment" class="form-label">Odjel:</label>
+                <select id="employmentContractDepartment" name="employmentContractDepartment" class="form-select">
+                    <option value="option1">Glavna Sestra</option>
+                    <option value="option2">Vozni park</option>
+                    <option value="option3">Kadrovska</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="reminderDayEmploymentContract" class="form-label">Podsjetnik dana(Istek licence/po danima):</label>
+                <input type="text" class="form-control" id="reminderDayEmploymentContract" placeholder="Podsjetnik dana(Istek licence/po danima)">
+            </div>
+            <br><br>
+            <button type="submit" class="btn btn-primary">Spremi</button>
+        </form>
+    </div>
+
 
     <a href="/main" class="btn btn-light mt-2">Nazad</a>
 
