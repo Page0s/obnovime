@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ObnoviMe - Sustav za praćenje dokumenata</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         .status-expired { background-color: #ffc1ca !important; }
         .status-renewal { background-color: #ffe0ad !important; }
@@ -44,9 +45,12 @@
     <header class="bg-primary text-white py-4 mb-4">
         <div class="container">
             <div class="row align-items-center">
-                <div class="col">
-                    <h1>ObnoviMe</h1>
-                    <p class="mb-0">Sustav za praćenje i obnavljanje dokumenata, licenci i opreme</p>
+                <div class="col d-flex align-items-center">
+                    <i class="bi bi-clipboard2-pulse fs-1 me-3"></i>
+                    <div>
+                        <h1>ObnoviMe</h1>
+                        <p class="mb-0">Sustav za praćenje i obnavljanje dokumenata, licenci i opreme</p>
+                    </div>
                 </div>
                 <div class="col-auto">
                     <div class="text-end">
@@ -79,6 +83,71 @@
             </a>
         </div>
 
+        <!-- Legends Toggle -->
+        <div class="mb-4">
+            <h5 class="legend-toggle" data-bs-toggle="collapse" data-bs-target="#legendsSection" aria-expanded="false">
+                <i class="bi bi-info-circle me-2"></i>Legende o stranici
+                <i class="bi bi-chevron-down ms-2"></i>
+            </h5>
+            <div id="legendsSection" class="collapse">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title">Status dokumenta</h6>
+                                <div class="d-flex flex-column gap-2">
+                                    <div class="legend-row p-2">
+                                        <span class="color-indicator" style="background-color: #ffc1ca;"></span>
+                                        Dokument zahtijeva obnovu
+                                    </div>
+                                    <div class="legend-row p-2">
+                                        <span class="color-indicator" style="background-color: #ffe0ad;"></span>
+                                        Dokument u periodu za obnovu
+                                    </div>
+                                    <div class="legend-row p-2">
+                                        <span class="color-indicator" style="background-color: #ffffff;"></span>
+                                        Dokument aktivan
+                                    </div>
+                                    <!--
+                                    <div class="legend-row p-2">
+                                        <span class="color-indicator" style="background-color: #ffffff;"></span>
+                                        Dokumenti koji se ne obnavljaju
+                                    </div>
+                                    -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title">Status obnove</h6>
+                                <div class="d-flex flex-column gap-2">
+                                    <div class="legend-row p-2">
+                                        <span class="badge badge-renewal-progress">Pokreni obnovu</span>
+                                        Potrebno pokrenuti proces obnove
+                                    </div>
+                                    <div class="legend-row p-2">
+                                        <span class="badge badge-renewal">Obnova u tijeku</span>
+                                        Proces obnove je u tijeku
+                                    </div>
+                                    <div class="legend-row p-2">
+                                        <span class="badge bg-success">Nema obnove</span>
+                                        Dokument ne zahtijeva obnovu
+                                    </div>
+                                    <div class="legend-row p-2">
+                                        <span class="badge bg-success">Aktivno</span>
+                                        Dokument je važeći
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Documents Table -->
         <div class="table-responsive mb-4">
             <table class="table table-hover">
@@ -105,8 +174,10 @@
                         <td>OPR-2024-004</td>
                         <td>2024-12-01</td>
                         <td>
-                            <span class="badge bg-danger me-1">Isteklo</span>
-                            <span class="badge bg-success">Nema obnove</span>
+                            <select class="form-select form-select-sm status-select">
+                                <option value="pokreni">Pokreni obnovu</option>
+                                <option value="tijeku">Obnova u tijeku</option>
+                            </select>
                         </td>
                         <td>TechServis d.o.o.</td>
                         <td>Zagreb</td>
@@ -115,9 +186,9 @@
                         <td>Licenca</td>
                         <td>
                             <div class="d-flex gap-1">
-                                <a href="/edit" class="btn btn-sm btn-secondary">Promijeni</a>
-                                <a href="/renewal" class="btn btn-sm btn-secondary">Ažuriraj</a>
-                                <a href="/history" class="btn btn-sm btn-secondary">Obnove</a>
+                                <a href="/edit" class="btn btn-sm btn-secondary" title="Promijeni"><i class="bi bi-pencil-square"></i></a>
+                                <a href="/renewal" class="btn btn-sm btn-secondary" title="Ažuriraj"><i class="bi bi-arrow-clockwise"></i></a>
+                                <a href="/history" class="btn btn-sm btn-secondary" title="Obnove"><i class="bi bi-clock-history"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -128,8 +199,10 @@
                         <td>LIC-2024-001</td>
                         <td>2024-12-15</td>
                         <td>
-                            <span class="badge bg-danger me-1">Isteklo</span>
-                            <span class="badge badge-renewal-progress">Pokreni obnovu</span>
+                            <select class="form-select form-select-sm status-select">
+                                <option value="pokreni">Pokreni obnovu</option>
+                                <option value="tijeku">Obnova u tijeku</option>
+                            </select>
                         </td>
                         <td></td>
                         <td>Zabok</td>
@@ -138,9 +211,9 @@
                         <td>Licenca</td>
                         <td>
                             <div class="d-flex gap-1">
-                                <a href="/edit" class="btn btn-sm btn-secondary">Promijeni</a>
-                                <a href="/renewal" class="btn btn-sm btn-secondary">Ažuriraj</a>
-                                <a href="/history" class="btn btn-sm btn-secondary">Obnove</a>
+                                <a href="/edit" class="btn btn-sm btn-secondary" title="Promijeni"><i class="bi bi-pencil-square"></i></a>
+                                <a href="/renewal" class="btn btn-sm btn-secondary" title="Ažuriraj"><i class="bi bi-arrow-clockwise"></i></a>
+                                <a href="/history" class="btn btn-sm btn-secondary" title="Obnove"><i class="bi bi-clock-history"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -151,8 +224,10 @@
                         <td>REG-2024-002</td>
                         <td>2024-12-20</td>
                         <td>
-                            <span class="badge bg-danger me-1">Isteklo</span>
-                            <span class="badge badge-renewal">Obnova u tijeku</span>
+                            <select class="form-select form-select-sm status-select">
+                                <option value="pokreni">Pokreni obnovu</option>
+                                <option value="tijeku">Obnova u tijeku</option>
+                            </select>
                         </td>
                         <td>AutoTech d.o.o.</td>
                         <td>Zagreb</td>
@@ -161,9 +236,9 @@
                         <td>Registracija</td>
                         <td>
                             <div class="d-flex gap-1">
-                                <a href="/edit" class="btn btn-sm btn-secondary">Promijeni</a>
-                                <a href="/renewal" class="btn btn-sm btn-secondary">Ažuriraj</a>
-                                <a href="/history" class="btn btn-sm btn-secondary">Obnove</a>
+                                <a href="/edit" class="btn btn-sm btn-secondary" title="Promijeni"><i class="bi bi-pencil-square"></i></a>
+                                <a href="/renewal" class="btn btn-sm btn-secondary" title="Ažuriraj"><i class="bi bi-arrow-clockwise"></i></a>
+                                <a href="/history" class="btn btn-sm btn-secondary" title="Obnove"><i class="bi bi-clock-history"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -174,7 +249,10 @@
                         <td>CERT-2024-003</td>
                         <td>2025-02-01</td>
                         <td>
-                            <span class="badge badge-renewal">Obnova u tijeku</span>
+                            <select class="form-select form-select-sm status-select">
+                                <option value="pokreni">Pokreni obnovu</option>
+                                <option value="tijeku">Obnova u tijeku</option>
+                            </select>
                         </td>
                         <td>AutoTech d.o.o.</td>
                         <td>Zagreb</td>
@@ -183,9 +261,9 @@
                         <td>Periodički pregled vozila</td>
                         <td>
                             <div class="d-flex gap-1">
-                                <a href="/edit" class="btn btn-sm btn-secondary">Promijeni</a>
-                                <a href="/renewal" class="btn btn-sm btn-secondary">Ažuriraj</a>
-                                <a href="/history" class="btn btn-sm btn-secondary">Obnove</a>
+                                <a href="/edit" class="btn btn-sm btn-secondary" title="Promijeni"><i class="bi bi-pencil-square"></i></a>
+                                <a href="/renewal" class="btn btn-sm btn-secondary" title="Ažuriraj"><i class="bi bi-arrow-clockwise"></i></a>
+                                <a href="/history" class="btn btn-sm btn-secondary" title="Obnove"><i class="bi bi-clock-history"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -196,7 +274,10 @@
                         <td>OPR-2024-004</td>
                         <td>2025-02-15</td>
                         <td>
-                            <span class="badge badge-renewal-progress">Pokreni obnovu</span>
+                            <select class="form-select form-select-sm status-select">
+                                <option value="pokreni">Pokreni obnovu</option>
+                                <option value="tijeku">Obnova u tijeku</option>
+                            </select>
                         </td>
                         <td>MedTech d.o.o.</td>
                         <td>Zabok</td>
@@ -205,9 +286,9 @@
                         <td>Licenca</td>
                         <td>
                             <div class="d-flex gap-1">
-                                <a href="/edit" class="btn btn-sm btn-secondary">Promijeni</a>
-                                <a href="/renewal" class="btn btn-sm btn-secondary">Ažuriraj</a>
-                                <a href="/history" class="btn btn-sm btn-secondary">Obnove</a>
+                                <a href="/edit" class="btn btn-sm btn-secondary" title="Promijeni"><i class="bi bi-pencil-square"></i></a>
+                                <a href="/renewal" class="btn btn-sm btn-secondary" title="Ažuriraj"><i class="bi bi-arrow-clockwise"></i></a>
+                                <a href="/history" class="btn btn-sm btn-secondary" title="Obnove"><i class="bi bi-clock-history"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -218,7 +299,10 @@
                         <td>OPR-2024-005</td>
                         <td>2025-02-20</td>
                         <td>
-                            <span class="badge badge-renewal-progress">Pokreni obnovu</span>
+                            <select class="form-select form-select-sm status-select">
+                                <option value="pokreni">Pokreni obnovu</option>
+                                <option value="tijeku">Obnova u tijeku</option>
+                            </select>
                         </td>
                         <td>MedTech d.o.o.</td>
                         <td>Zabok</td>
@@ -227,9 +311,9 @@
                         <td>Licenca</td>
                         <td>
                             <div class="d-flex gap-1">
-                                <a href="/edit" class="btn btn-sm btn-secondary">Promijeni</a>
-                                <a href="/renewal" class="btn btn-sm btn-secondary">Ažuriraj</a>
-                                <a href="/history" class="btn btn-sm btn-secondary">Obnove</a>
+                                <a href="/edit" class="btn btn-sm btn-secondary" title="Promijeni"><i class="bi bi-pencil-square"></i></a>
+                                <a href="/renewal" class="btn btn-sm btn-secondary" title="Ažuriraj"><i class="bi bi-arrow-clockwise"></i></a>
+                                <a href="/history" class="btn btn-sm btn-secondary" title="Obnove"><i class="bi bi-clock-history"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -239,7 +323,10 @@
                         <td>OPR-2024-006</td>
                         <td>2025-02-25</td>
                         <td>
-                            <span class="badge badge-renewal-progress">Pokreni obnovu</span>
+                            <select class="form-select form-select-sm status-select">
+                                <option value="pokreni">Pokreni obnovu</option>
+                                <option value="tijeku">Obnova u tijeku</option>
+                            </select>
                         </td>
                         <td>MedTech d.o.o.</td>
                         <td>Zabok</td>
@@ -248,9 +335,9 @@
                         <td>Licenca</td>
                         <td>
                             <div class="d-flex gap-1">
-                                <a href="/edit" class="btn btn-sm btn-secondary">Promijeni</a>
-                                <a href="/renewal" class="btn btn-sm btn-secondary">Ažuriraj</a>
-                                <a href="/history" class="btn btn-sm btn-secondary">Obnove</a>
+                                <a href="/edit" class="btn btn-sm btn-secondary" title="Promijeni"><i class="bi bi-pencil-square"></i></a>
+                                <a href="/renewal" class="btn btn-sm btn-secondary" title="Ažuriraj"><i class="bi bi-arrow-clockwise"></i></a>
+                                <a href="/history" class="btn btn-sm btn-secondary" title="Obnove"><i class="bi bi-clock-history"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -270,9 +357,9 @@
                         <td>Licenca</td>
                         <td>
                             <div class="d-flex gap-1">
-                                <a href="/edit" class="btn btn-sm btn-secondary">Promijeni</a>
-                                <a href="/renewal" class="btn btn-sm btn-secondary">Ažuriraj</a>
-                                <a href="/history" class="btn btn-sm btn-secondary">Obnove</a>
+                                <a href="/edit" class="btn btn-sm btn-secondary" title="Promijeni"><i class="bi bi-pencil-square"></i></a>
+                                <a href="/renewal" class="btn btn-sm btn-secondary" title="Ažuriraj"><i class="bi bi-arrow-clockwise"></i></a>
+                                <a href="/history" class="btn btn-sm btn-secondary" title="Obnove"><i class="bi bi-clock-history"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -292,95 +379,14 @@
                         <td>Licenca</td>
                         <td>
                             <div class="d-flex gap-1">
-                                <a href="/edit" class="btn btn-sm btn-secondary">Promijeni</a>
-                                <a href="/renewal" class="btn btn-sm btn-secondary">Ažuriraj</a>
-                                <a href="/history" class="btn btn-sm btn-secondary">Obnove</a>
+                                <a href="/edit" class="btn btn-sm btn-secondary" title="Promijeni"><i class="bi bi-pencil-square"></i></a>
+                                <a href="/renewal" class="btn btn-sm btn-secondary" title="Ažuriraj"><i class="bi bi-arrow-clockwise"></i></a>
+                                <a href="/history" class="btn btn-sm btn-secondary" title="Obnove"><i class="bi bi-clock-history"></i></a>
                             </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
-        </div>
-
-        <!-- Legends Toggle -->
-        <div class="mb-3">
-            <h5 class="legend-toggle" data-bs-toggle="collapse" data-bs-target="#legendsSection" aria-expanded="false">
-                Legende o stranici
-                <div class="color-indicators">
-                    <span class="color-indicator status-expired"></span>
-                    <span class="color-indicator status-renewal"></span>
-                    <span class="color-indicator status-no-renewal"></span>
-                    <span class="color-indicator badge-renewal"></span>
-                    <span class="color-indicator badge-renewal-progress"></span>
-                </div>
-            </h5>
-        </div>
-
-        <!-- Collapsible Legends -->
-        <div class="collapse" id="legendsSection">
-            <div class="row mb-4">
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">Legenda boja redaka</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="d-flex flex-column gap-2">
-                                <div class="p-2 status-expired legend-row">Istekli dokumenti</div>
-                                <div class="p-2 status-renewal legend-row">Dokumenti koji trebaju obnovu</div>
-                                <div class="p-2 status-active legend-row">Aktivni dokumenti</div>
-                                <div class="p-2 status-no-renewal legend-row">Dokumenti koji se ne obnavljaju</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">Legenda oznaka statusa</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="mb-2">
-                                <span class="badge bg-danger">Isteklo</span>
-                                - Dokument je istekao
-                            </div>
-                            <div class="mb-2">
-                                <span class="badge badge-renewal-progress">Pokreni obnovu</span>
-                                - Potrebno pokrenuti proces obnove
-                            </div>
-                            <div class="mb-2">
-                                <span class="badge badge-renewal">Obnova u tijeku</span>
-                                - Proces obnove je u tijeku
-                            </div>
-                            <div class="mb-2">
-                                <span class="badge bg-success">Aktivno</span>
-                                - Dokument je važeći
-                            </div>
-                            <div class="mb-2">
-                                <span class="badge bg-success">Nema obnove</span>
-                                - Dokument se ne obnavlja
-                            </div>
-                            <hr>
-                            <h6>Kombinacije oznaka:</h6>
-                            <div class="mb-2">
-                                <span class="badge bg-danger me-1">Isteklo</span>
-                                <span class="badge badge-renewal-progress">Pokreni obnovu</span>
-                                - Istekao dokument koji treba obnoviti
-                            </div>
-                            <div class="mb-2">
-                                <span class="badge bg-danger me-1">Isteklo</span>
-                                <span class="badge badge-renewal">Obnova u tijeku</span>
-                                - Istekao dokument koji se obnavlja
-                            </div>
-                            <div class="mb-2">
-                                <span class="badge bg-danger me-1">Isteklo</span>
-                                <span class="badge bg-success">Nema obnove</span>
-                                - Istekao dokument koji se ne obnavlja
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
