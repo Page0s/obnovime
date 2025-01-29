@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -167,220 +167,24 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Istekli dokument koji se ne obnavlja -->
-                    <tr class="status-expired">
-                        <td>001</td>
-                        <td>Defiblirator</td>
-                        <td>OPR-2024-004</td>
-                        <td>2024-12-01</td>
+                    <tr th:each="document : ${documents}" th:class="${document.rowColor}">
+                        <td th:text="${document.id}">ID</td>
+                        <td th:text="${document.name}">Naziv dokumenta</td>
+                        <td th:text="${document.number}">Broj dokumenta</td>
+                        <td th:text="${#temporals.format(document.renewalDate, 'yyyy-MM-dd')}">Datum obnove</td>
                         <td>
-                            <select class="form-select form-select-sm status-select">
-                                <option value="pokreni">Pokreni obnovu</option>
-                                <option value="tijeku">Obnova u tijeku</option>
-                            </select>
+                            <span th:class="'badge ' + ${document.badgeClass}"
+                                  th:text="${document.status}">Status</span>
                         </td>
-                        <td>TechServis d.o.o.</td>
-                        <td>Zagreb</td>
-                        <td>Glavna Sestra</td>
-                        <td>Oprema</td>
-                        <td>Licenca</td>
+                        <td th:text="${document.serviceProvider}">Pružatelj usluge</td>
+                        <td th:text="${document.location}">Lokacija</td>
+                        <td th:text="${document.department}">Odjel</td>
+                        <td th:text="${document.resourceType}">Vrsta resursa</td>
+                        <td th:text="${document.documentType}">Vrsta dokumenta</td>
                         <td>
                             <div class="d-flex gap-1">
                                 <a href="/edit" class="btn btn-sm btn-secondary" title="Promijeni"><i class="bi bi-pencil-square"></i></a>
-                                <a href="/renewal" class="btn btn-sm btn-secondary" title="Ažuriraj"><i class="bi bi-arrow-clockwise"></i></a>
-                                <a href="/history" class="btn btn-sm btn-secondary" title="Obnove"><i class="bi bi-clock-history"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- Istekli dokument koji treba pokrenuti obnovu -->
-                    <tr class="status-expired">
-                        <td>002</td>
-                        <td>Licenca za rad</td>
-                        <td>LIC-2024-001</td>
-                        <td>2024-12-15</td>
-                        <td>
-                            <select class="form-select form-select-sm status-select">
-                                <option value="pokreni">Pokreni obnovu</option>
-                                <option value="tijeku">Obnova u tijeku</option>
-                            </select>
-                        </td>
-                        <td></td>
-                        <td>Zabok</td>
-                        <td>Glavna Sestra</td>
-                        <td>Radnik</td>
-                        <td>Licenca</td>
-                        <td>
-                            <div class="d-flex gap-1">
-                                <a href="/edit" class="btn btn-sm btn-secondary" title="Promijeni"><i class="bi bi-pencil-square"></i></a>
-                                <a href="/renewal" class="btn btn-sm btn-secondary" title="Ažuriraj"><i class="bi bi-arrow-clockwise"></i></a>
-                                <a href="/history" class="btn btn-sm btn-secondary" title="Obnove"><i class="bi bi-clock-history"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- Istekli dokument s pokrenutom obnovom -->
-                    <tr class="status-expired">
-                        <td>003</td>
-                        <td>Registracija vozila</td>
-                        <td>REG-2024-002</td>
-                        <td>2024-12-20</td>
-                        <td>
-                            <select class="form-select form-select-sm status-select">
-                                <option value="pokreni">Pokreni obnovu</option>
-                                <option value="tijeku">Obnova u tijeku</option>
-                            </select>
-                        </td>
-                        <td>AutoTech d.o.o.</td>
-                        <td>Zagreb</td>
-                        <td>Vozni park</td>
-                        <td>Vozilo</td>
-                        <td>Registracija</td>
-                        <td>
-                            <div class="d-flex gap-1">
-                                <a href="/edit" class="btn btn-sm btn-secondary" title="Promijeni"><i class="bi bi-pencil-square"></i></a>
-                                <a href="/renewal" class="btn btn-sm btn-secondary" title="Ažuriraj"><i class="bi bi-arrow-clockwise"></i></a>
-                                <a href="/history" class="btn btn-sm btn-secondary" title="Obnove"><i class="bi bi-clock-history"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- Dokument u procesu obnove -->
-                    <tr class="status-renewal">
-                        <td>004</td>
-                        <td>Periodički pregled vozila</td>
-                        <td>CERT-2024-003</td>
-                        <td>2025-02-01</td>
-                        <td>
-                            <select class="form-select form-select-sm status-select">
-                                <option value="pokreni">Pokreni obnovu</option>
-                                <option value="tijeku">Obnova u tijeku</option>
-                            </select>
-                        </td>
-                        <td>AutoTech d.o.o.</td>
-                        <td>Zagreb</td>
-                        <td>Vozni park</td>
-                        <td>Vozilo</td>
-                        <td>Periodički pregled vozila</td>
-                        <td>
-                            <div class="d-flex gap-1">
-                                <a href="/edit" class="btn btn-sm btn-secondary" title="Promijeni"><i class="bi bi-pencil-square"></i></a>
-                                <a href="/renewal" class="btn btn-sm btn-secondary" title="Ažuriraj"><i class="bi bi-arrow-clockwise"></i></a>
-                                <a href="/history" class="btn btn-sm btn-secondary" title="Obnove"><i class="bi bi-clock-history"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- Dokument koji se ne obnavlja u periodu obnove -->
-                    <tr class="status-renewal">
-                        <td>005</td>
-                        <td>Respirator</td>
-                        <td>OPR-2024-004</td>
-                        <td>2025-02-15</td>
-                        <td>
-                            <select class="form-select form-select-sm status-select">
-                                <option value="pokreni">Pokreni obnovu</option>
-                                <option value="tijeku">Obnova u tijeku</option>
-                            </select>
-                        </td>
-                        <td>MedTech d.o.o.</td>
-                        <td>Zabok</td>
-                        <td>Glavna Sestra</td>
-                        <td>Oprema</td>
-                        <td>Licenca</td>
-                        <td>
-                            <div class="d-flex gap-1">
-                                <a href="/edit" class="btn btn-sm btn-secondary" title="Promijeni"><i class="bi bi-pencil-square"></i></a>
-                                <a href="/renewal" class="btn btn-sm btn-secondary" title="Ažuriraj"><i class="bi bi-arrow-clockwise"></i></a>
-                                <a href="/history" class="btn btn-sm btn-secondary" title="Obnove"><i class="bi bi-clock-history"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- Dokumenti u periodu obnove -->
-                    <tr class="status-renewal">
-                        <td>006</td>
-                        <td>EKG aparat</td>
-                        <td>OPR-2024-005</td>
-                        <td>2025-02-20</td>
-                        <td>
-                            <select class="form-select form-select-sm status-select">
-                                <option value="pokreni">Pokreni obnovu</option>
-                                <option value="tijeku">Obnova u tijeku</option>
-                            </select>
-                        </td>
-                        <td>MedTech d.o.o.</td>
-                        <td>Zabok</td>
-                        <td>Glavna Sestra</td>
-                        <td>Oprema</td>
-                        <td>Licenca</td>
-                        <td>
-                            <div class="d-flex gap-1">
-                                <a href="/edit" class="btn btn-sm btn-secondary" title="Promijeni"><i class="bi bi-pencil-square"></i></a>
-                                <a href="/renewal" class="btn btn-sm btn-secondary" title="Ažuriraj"><i class="bi bi-arrow-clockwise"></i></a>
-                                <a href="/history" class="btn btn-sm btn-secondary" title="Obnove"><i class="bi bi-clock-history"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="status-renewal">
-                        <td>007</td>
-                        <td>Aspirator</td>
-                        <td>OPR-2024-006</td>
-                        <td>2025-02-25</td>
-                        <td>
-                            <select class="form-select form-select-sm status-select">
-                                <option value="pokreni">Pokreni obnovu</option>
-                                <option value="tijeku">Obnova u tijeku</option>
-                            </select>
-                        </td>
-                        <td>MedTech d.o.o.</td>
-                        <td>Zabok</td>
-                        <td>Glavna Sestra</td>
-                        <td>Oprema</td>
-                        <td>Licenca</td>
-                        <td>
-                            <div class="d-flex gap-1">
-                                <a href="/edit" class="btn btn-sm btn-secondary" title="Promijeni"><i class="bi bi-pencil-square"></i></a>
-                                <a href="/renewal" class="btn btn-sm btn-secondary" title="Ažuriraj"><i class="bi bi-arrow-clockwise"></i></a>
-                                <a href="/history" class="btn btn-sm btn-secondary" title="Obnove"><i class="bi bi-clock-history"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- Dokument koji se ne obnavlja u periodu obnove -->
-                    <tr class="status-active">
-                        <td>008</td>
-                        <td>Ventilator</td>
-                        <td>OPR-2024-005</td>
-                        <td>2025-03-01</td>
-                        <td>
-                            <span class="badge bg-success">Nema obnove</span>
-                        </td>
-                        <td>MedTech d.o.o.</td>
-                        <td>Zabok</td>
-                        <td>Glavna Sestra</td>
-                        <td>Oprema</td>
-                        <td>Licenca</td>
-                        <td>
-                            <div class="d-flex gap-1">
-                                <a href="/edit" class="btn btn-sm btn-secondary" title="Promijeni"><i class="bi bi-pencil-square"></i></a>
-                                <a href="/renewal" class="btn btn-sm btn-secondary" title="Ažuriraj"><i class="bi bi-arrow-clockwise"></i></a>
-                                <a href="/history" class="btn btn-sm btn-secondary" title="Obnove"><i class="bi bi-clock-history"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- Aktivni dokument -->
-                    <tr class="status-active">
-                        <td>009</td>
-                        <td>Licenca za rad</td>
-                        <td>DOZ-2024-006</td>
-                        <td>2025-06-30</td>
-                        <td>
-                            <span class="badge bg-success">Aktivno</span>
-                        </td>
-                        <td></td>
-                        <td>Zabok</td>
-                        <td>Glavna Sestra</td>
-                        <td>Radnik</td>
-                        <td>Licenca</td>
-                        <td>
-                            <div class="d-flex gap-1">
-                                <a href="/edit" class="btn btn-sm btn-secondary" title="Promijeni"><i class="bi bi-pencil-square"></i></a>
-                                <a href="/renewal" class="btn btn-sm btn-secondary" title="Ažuriraj"><i class="bi bi-arrow-clockwise"></i></a>
+                                <a th:href="@{/dokument/{id}/obnova(id=${document.id})}" class="btn btn-sm btn-secondary" title="Ažuriraj"><i class="bi bi-arrow-clockwise"></i></a>
                                 <a href="/history" class="btn btn-sm btn-secondary" title="Obnove"><i class="bi bi-clock-history"></i></a>
                             </div>
                         </td>
