@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,53 +14,78 @@
     </header>
 
     <div class="container">
+        <!-- Document Information -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3>Informacije o dokumentu</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <p><strong>Naziv dokumenta:</strong> <span th:text="${dokument.name}"></span></p>
+                    </div>
+                    <div class="col-md-4">
+                        <p><strong>Serijski broj:</strong> <span th:text="${dokument.number}"></span></p>
+                    </div>
+                    <div class="col-md-4">
+                        <p><strong>Tip dokumenta:</strong> <span th:text="${dokument.documentType}"></span></p>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-4">
+                        <p><strong>Lokacija:</strong> <span th:text="${dokument.location}"></span></p>
+                    </div>
+                    <div class="col-md-4">
+                        <p><strong>Odjel:</strong> <span th:text="${dokument.department}"></span></p>
+                    </div>
+                    <div class="col-md-4">
+                        <p><strong>Pružatelj usluge:</strong> <span th:text="${dokument.serviceProvider}"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Form Section -->
-        <form class="border rounded p-4 shadow">
-            <h2 class="text-center mb-4">Obnova Dokumenta</h2>
+        <form class="border rounded p-4 shadow" th:action="@{/spremi-obnovu}" method="post">
+            <input type="hidden" name="id" th:value="${dokument.id}" />
             
-            <div class="mb-4">
-                <label for="newValidTo" class="form-label">Novi datum isteka</label>
-                <input type="date" class="form-control" id="newValidTo" required>
+            <!-- Status dropdown - visible based on current status -->
+            <div class="mb-4" th:if="${dokument.status != 'Nema obnove' && dokument.status != 'Aktivno'}">
+                <label for="status" class="form-label">Status obnove</label>
+                <select class="form-select" id="status" name="status" th:value="${dokument.status}">
+                    <option value="Pokreni obnovu">Pokreni obnovu</option>
+                    <option value="Obnova u tijeku">Obnova u tijeku</option>
+                </select>
+            </div>
+
+            <!-- New renewal date - visible based on status -->
+            <div class="mb-4" th:if="${dokument.status != 'Nema obnove' && dokument.status != 'Aktivno'}">
+                <label for="renewalDate" class="form-label">Novi datum obnove</label>
+                <input type="date" class="form-control" id="renewalDate" name="renewalDate" th:value="${dokument.renewalDate}">
                 <div class="form-text">Unesite datum do kojeg će vrijediti obnovljeni dokument</div>
             </div>
 
+            <!-- Arhiva checkbox -->
             <div class="mb-4">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="noRenewal">
-                    <label class="form-check-label" for="noRenewal">
-                        Ne obnavlja se
-                    </label>
-                </div>
-            </div>
-
-            <div class="mb-4">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="renewalStarted">
-                    <label class="form-check-label" for="renewalStarted">
-                        Pokrenuta obnova
-                    </label>
-                </div>
-            </div>
-
-            <div class="mb-4">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="archiveDocument">
-                    <label class="form-check-label" for="archiveDocument">
+                    <input class="form-check-input" type="checkbox" id="arhiva" name="arhiva" th:checked="${dokument.arhiva}">
+                    <label class="form-check-label" for="arhiva">
                         Arhiva
                     </label>
                 </div>
             </div>
 
-            <div class="text-center">
-                <button type="button" class="btn btn-secondary me-2" onclick="history.back()">Nazad</button>
-                <button type="submit" class="btn btn-success">Spremi</button>
+            <!-- Submit button -->
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary">Spremi promjene</button>
+                <a href="/main" class="btn btn-secondary">Odustani</a>
             </div>
         </form>
     </div>
 
     <!-- Footer Section -->
     <footer class="bg-dark text-white text-center py-3 mt-4">
-        <p>&copy; 2025 ObnoviMe. Sva prava pridržana. | <a href="ObnoviMe_Information.html" class="text-white text-decoration-underline">Informacije o aplikaciji</a></p>
+        <p>&copy; 2025 ObnoviMe. Sva prava pridržana.</p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
