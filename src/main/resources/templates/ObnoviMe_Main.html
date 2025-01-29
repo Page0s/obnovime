@@ -193,6 +193,18 @@
             </table>
         </div>
     </div>
+    <div class="toast-container">
+        <div id="confirmationToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true"
+             th:if="${showToast}">
+            <div class="d-flex">
+                <div class="toast-body">
+                    Dokument uspješno spremljen.
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Zatvori"></button>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Footer -->
     <footer class="bg-dark text-white text-center py-3 mt-4">

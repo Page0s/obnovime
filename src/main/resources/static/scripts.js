@@ -56,10 +56,3 @@
         }
     });
 });
-document.addEventListener('DOMContentLoaded', function () {
-    const toastElement = document.getElementById('confirmationToast');
-    if (toastElement) {
-        const toast = new bootstrap.Toast(toastElement);
-        toast.show();
-    }
-});
