@@ -19,40 +19,38 @@
             backButton.style.display = "block"; // Prikaži "Nazad" ako nijedna forma nije odabrana
         }
     }
+            document.querySelectorAll('input[type="text"][id^="reminderDay"]').forEach(input => {
+            input.addEventListener('input', function () {
+                const warning = this.nextElementSibling;
+                if (isNaN(this.value) && this.value !== '') {
+                    if (!warning) {
+                        const warningMessage = document.createElement('small');
+                        warningMessage.textContent = 'Molimo unesite samo broj.';
+                        warningMessage.style.color = 'red';
+                        this.parentNode.appendChild(warningMessage);
+                    }
+                } else if (warning) {
+                    warning.remove();
+                }
+            });
+        });
     function openConfirmationModal(event) {
         event.preventDefault();
         formToSubmit = event.target;
         const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
         confirmationModal.show();
     }
+    document.addEventListener('DOMContentLoaded', function () {
+        console.log("Provjera: Pokretanje toast skripte...");
 
-    document.getElementById('confirmSaveButton').addEventListener('click', function () {
-        if (formToSubmit) {
-            const confirmationModal = bootstrap.Modal.getInstance(document.getElementById('confirmationModal'));
-            confirmationModal.hide();
-
-            // Prikaz toast poruke
-            const toastElement = document.getElementById('confirmationToast');
-            const toast = new bootstrap.Toast(toastElement);
+        const toastElement = document.getElementById('confirmationToast');
+        if (toastElement) {
+            console.log("Toast element pronađen!");
+            const toast = new bootstrap.Toast(toastElement, { delay: 1000 });
             toast.show();
-
-            setTimeout(() => {
-            window.location.href = '/main'; // Redirekcija na main.html nakon 2 sekundi
-               }, 2000);
+             setTimeout(() =>
+             formToSubmit.submit(), 1000);
+        } else {
+            console.log("Toast element NIJE pronađen.");
         }
     });
-    document.querySelectorAll('input[type="text"][id^="reminderDay"]').forEach(input => {
-    input.addEventListener('input', function () {
-        const warning = this.nextElementSibling;
-        if (isNaN(this.value) && this.value !== '') {
-            if (!warning) {
-                const warningMessage = document.createElement('small');
-                warningMessage.textContent = 'Molimo unesite samo broj.';
-                warningMessage.style.color = 'red';
-                this.parentNode.appendChild(warningMessage);
-            }
-        } else if (warning) {
-            warning.remove();
-        }
-    });
-});

@@ -12,7 +12,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.obnovime.model.DokumentFile;
 import com.obnovime.repository.DocumentRepository;
 
-import javax.swing.text.Document;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -70,14 +69,11 @@ public class DocumentController {
         
         return "redirect:/main";
     }
-
     @PostMapping("/saveDocument")
-    public String saveDocument( RedirectAttributes redirectAttributes) {
+    public String saveDocument(RedirectAttributes redirectAttributes) {
         // Logika za spremanje dokumenta u bazu podataka ili drugu obradu
-
         // Dodavanje informacije za prikaz toast poruke
         redirectAttributes.addFlashAttribute("showToast", true);
-
         // Redirekcija na glavnu stranicu
         return "redirect:/main";
     }
