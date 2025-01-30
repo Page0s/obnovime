@@ -40,17 +40,13 @@
         const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
         confirmationModal.show();
     }
-    document.addEventListener('DOMContentLoaded', function () {
-        console.log("Provjera: Pokretanje toast skripte...");
-
-        const toastElement = document.getElementById('confirmationToast');
-        if (toastElement) {
-            console.log("Toast element pronađen!");
-            const toast = new bootstrap.Toast(toastElement, { delay: 1000 });
+document.addEventListener("DOMContentLoaded", function() {
+    if (sessionStorage.getItem("showToast") === "true") {
+        const toastEl = document.getElementById("confirmationToast");
+        if (toastEl) {
+            const toast = new bootstrap.Toast(toastEl, {delay: 3000});
             toast.show();
-             setTimeout(() =>
-             formToSubmit.submit(), 1000);
-        } else {
-            console.log("Toast element NIJE pronađen.");
         }
-    });
+        sessionStorage.removeItem("showToast"); // Briše toast nakon prikazivanja
+    }
+});

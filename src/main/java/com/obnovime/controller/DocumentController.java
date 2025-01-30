@@ -69,6 +69,7 @@ public class DocumentController {
         
         return "redirect:/main";
     }
+
     @PostMapping("/saveDocument")
     public String saveDocument(RedirectAttributes redirectAttributes) {
         // Logika za spremanje dokumenta u bazu podataka ili drugu obradu
