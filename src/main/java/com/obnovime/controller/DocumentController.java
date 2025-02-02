@@ -1,5 +1,6 @@
 package com.obnovime.controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -81,4 +82,52 @@ public class DocumentController {
         // Redirekcija na glavnu stranicu
         return "redirect:/main";
     }
+
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable Long id, Model model, HttpSession session) {
+        Optional<DokumentFile> dokument = documentRepository.findById(id);
+
+        if (dokument.isPresent()) {
+            session.setAttribute("editDokument", dokument.get()); // Pohrana u sesiju
+            model.addAttribute("dokument", dokument.get());
+            return "DocumentEditForm"; // Prikaz forme
+        } else {
+            return "redirect:/main";
+        }
+    }
+
+    @PostMapping("/updateDocument")
+    public String updateDocument(
+            @RequestParam("id") Long id,
+            @RequestParam("name") String name,
+            @RequestParam("renewalPeriod") Integer renewalPeriod,  // Broj dana za podsjetnik
+            @RequestParam("location") String location,             // Ispostava
+            @RequestParam("serviceProvider") String serviceProvider, // Serviser
+            RedirectAttributes redirectAttributes, HttpSession session) {
+
+        Optional<DokumentFile> existingDoc = documentRepository.findById(id);
+
+        if (existingDoc.isPresent()) {
+            DokumentFile dokument = existingDoc.get();
+            dokument.setName(name);
+            dokument.setRenewalPeriod(renewalPeriod);
+            dokument.setLocation(location);
+            dokument.setServiceProvider(serviceProvider);
+
+            documentRepository.save(dokument);
+            session.removeAttribute("editDokument");
+
+            redirectAttributes.addFlashAttribute("successMessage", "Dokument uspješno uređen!");
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "Greška: Dokument nije pronađen!");
+        }
+
+        return "redirect:/main";
+    }
+
+
+
+
+
+
 }

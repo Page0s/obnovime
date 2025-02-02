@@ -21,11 +21,6 @@ public class MainController {
         return "ObnoviMe_RenewalHistory";
     }
 
-    @GetMapping("/edit")
-    public String showEditForm() {
-        return "ObnoviMe_EditForm";
-    }
-
     @GetMapping("/index")
     public String showIndex() {
         return "redirect:/index.html";
