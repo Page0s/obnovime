@@ -5,32 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DocAlert - Uređivanje Dokumenta</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script>
-        function validateReminder() {
-            let reminderField = document.getElementById("renewalPeriod");
-            let errorMsg = document.getElementById("error-message");
-
-            if (isNaN(reminderField.value) || reminderField.value.trim() === "") {
-                errorMsg.style.display = "block";
-                return false;
-            } else {
-                errorMsg.style.display = "none";
-                return true;
-            }
-        }
-
-        function showConfirmationModal(event) {
-            event.preventDefault(); // Spriječi automatsko slanje forme
-            if (validateReminder()) {
-                let modal = new bootstrap.Modal(document.getElementById('confirmationModal'));
-                modal.show();
-            }
-        }
-
-        function submitForm() {
-            document.getElementById('editForm').submit();
-        }
-    </script>
 </head>
 <body>
 <header class="bg-primary text-white text-center py-4 mb-4">
@@ -70,15 +44,15 @@
             <input type="text" class="form-control" id="serviceProvider" name="serviceProvider" th:value="${dokument.serviceProvider}">
         </div>
 
-        <div class="text-center">
-            <button type="button" class="btn btn-secondary me-2" onclick="history.back()">Nazad</button>
-            <button type="submit" class="btn btn-primary">Spremi Promjene</button>
+        <div class="text-left">
+            <button type="submit" class="btn btn-primary">Spremi</button>
+            <button type="button" class="btn btn-secondary" onclick="history.back()">Nazad</button>
         </div>
     </form>
 </div>
 
 <!-- Bootstrap Modal -->
-<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+<div class="modal fade" id="confirmationModalEdit" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -89,8 +63,8 @@
                 Jeste li sigurni da želite spremiti izmjene?
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="submitForm()">Potvrdi</button>
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Odustani</button>
+                <button type="button" class="btn btn-primary" onclick="submitFormEdit()">Potvrdi</button>
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Nazad</button>
             </div>
         </div>
     </div>
@@ -102,5 +76,6 @@
 
 <!-- Bootstrap JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/scripts.js"></script>
 </body>
 </html>
