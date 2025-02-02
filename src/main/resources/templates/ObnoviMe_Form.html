@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ObnoviMe - Unos Dokumenata</title>
+    <title>DocAlert - Unos Dokumenata</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .form-container {
@@ -27,7 +27,7 @@
 <body>
 <!-- Header Section -->
 <header class="bg-primary text-white text-center py-4 mb-4">
-    <h1>ObnoviMe</h1>
+    <h1>DocAlert</h1>
     <p>Unos dokumenata, opreme i licenci</p>
 </header>
 
@@ -56,24 +56,31 @@
                 <input type="text" class="form-control" id="name" name="name" placeholder="Unesite naziv">
             </div>
             <div class="mb-3">
-                <label for="identificationNumber" class="form-label">Šifra(Serijski broj...):</label>
+                <label for="identificationNumber" class="form-label">Šifra:</label>
                 <input type="text" class="form-control" id="identificationNumber" name="identificationNumber"
-                       placeholder="Unesite šifru(Serijski broj...)">
+                       placeholder="Unesite šifru">
             </div>
             <div class="mb-3">
                 <label for="renewalDate" class="form-label">Datum obnove(Do kad vrijedi):</label>
                 <input type="date" class="form-control" name="renewalDate" id="renewalDate">
             </div>
             <div class="mb-3">
-                <label for="service" class="form-label">Serviser:</label>
+                <label for="service" class="form-label">Partner:</label>
                 <input type="text" class="form-control" name="service" id="service" placeholder="Unesite servisera">
             </div>
             <div class="mb-3">
                 <label for="outpost" class="form-label">Ispostava:</label>
                 <select id="outpost" name="outpost" class="form-select">
-                    <option value="option1">Zagreb</option>
+                    <option value="option1">Krapina</option>
+                    <option value="option2">Donja Stubica</option>
                     <option value="option2">Zabok</option>
-                    <option value="option2">Krapina</option>
+                    <option value="option2">Zlatar </option>
+                    <option value="option2">Klanjec</option>
+                    <option value="option2">Konjščina</option>
+                    <option value="option2">Marija Bistrica</option>
+                    <option value="option2">Pregrada</option>
+
+
                 </select>
             </div>
             <div class="mb-3">
@@ -97,9 +104,10 @@
                        placeholder="Unesite broj dana">
             </div>
             <br><br>
-
-            <button href="/main" type="nazad" class="btn btn-secondary">Nazad</button>
-            <button type="submit" class="btn btn-primary" th:text="'Spremi'">Spremi</button>
+            <div class="d-flex justify-content-start align-items-end gap-2">
+                <button type="submit" class="btn btn-primary flex-grow-0" th:text="'Spremi'">Spremi</button>
+                <a href="/main" class="btn btn-light mt-2 flex-grow-0">Nazad</a>
+            </div>
         </form>
     </div>
 
@@ -122,16 +130,21 @@
                 <input type="date" class="form-control" name="renewalDatePeriodic" id="renewalDatePeriodic">
             </div>
             <div class="mb-3">
-                <label for="servicePeriodic" class="form-label">Serviser:</label>
+                <label for="servicePeriodic" class="form-label">Partner:</label>
                 <input type="text" class="form-control" id="servicePeriodic" name="servicePeriodic"
                        placeholder="Unesite servisera">
             </div>
             <div class="mb-3">
                 <label for="outpostPeriodic" class="form-label">Ispostava:</label>
                 <select id="outpostPeriodic" name="outpostPeriodic" class="form-select">
-                    <option value="option1">Zagreb</option>
+                    <option value="option1">Krapina</option>
+                    <option value="option2">Donja Stubica</option>
                     <option value="option2">Zabok</option>
-                    <option value="option2">Krapina</option>
+                    <option value="option2">Zlatar </option>
+                    <option value="option2">Klanjec</option>
+                    <option value="option2">Konjščina</option>
+                    <option value="option2">Marija Bistrica</option>
+                    <option value="option2">Pregrada</option>
                 </select>
             </div>
             <div class="mb-3">
@@ -148,7 +161,10 @@
                        placeholder="Unesite broj dana">
             </div>
             <br><br>
-            <button type="submit" class="btn btn-primary" th:text="'Spremi'">Spremi</button>
+            <div class="d-flex justify-content-start align-items-end gap-2">
+                <button type="submit" class="btn btn-primary flex-grow-0" th:text="'Spremi'">Spremi</button>
+                <a href="/main" class="btn btn-light mt-2 flex-grow-0">Nazad</a>
+            </div>
         </form>
     </div>
     <!-- Forma 3 : Svjedodžba -->
@@ -177,9 +193,14 @@
             <div class="mb-3">
                 <label for="outpostCertificate" class="form-label">Ispostava:</label>
                 <select id="outpostCertificate" name="outpostCertificate" class="form-select">
-                    <option value="option1">Zagreb</option>
+                    <option value="option1">Krapina</option>
+                    <option value="option2">Donja Stubica</option>
                     <option value="option2">Zabok</option>
-                    <option value="option2">Krapina</option>
+                    <option value="option2">Zlatar </option>
+                    <option value="option2">Klanjec</option>
+                    <option value="option2">Konjščina</option>
+                    <option value="option2">Marija Bistrica</option>
+                    <option value="option2">Pregrada</option>
                 </select>
             </div>
             <div class="mb-3">
@@ -188,7 +209,10 @@
                        placeholder="Unesite broj dana">
             </div>
             <br><br>
-            <button type="submit" class="btn btn-primary" th:text="'Spremi'">Spremi</button>
+            <div class="d-flex justify-content-start align-items-end gap-2">
+                <button type="submit" class="btn btn-primary flex-grow-0" th:text="'Spremi'">Spremi</button>
+                <a href="/main" class="btn btn-light mt-2 flex-grow-0">Nazad</a>
+            </div>
         </form>
     </div>
     <!-- Forma 4 : Tehnički pregled vozila -->
@@ -215,9 +239,14 @@
                 <label for="outpostVehicleTechnicalInspection" class="form-label">Ispostava:</label>
                 <select id="outpostVehicleTechnicalInspection" name="outpostVehicleTechnicalInspection"
                         class="form-select">
-                    <option value="option1">Zagreb</option>
+                    <option value="option1">Krapina</option>
+                    <option value="option2">Donja Stubica</option>
                     <option value="option2">Zabok</option>
-                    <option value="option2">Krapina</option>
+                    <option value="option2">Zlatar </option>
+                    <option value="option2">Klanjec</option>
+                    <option value="option2">Konjščina</option>
+                    <option value="option2">Marija Bistrica</option>
+                    <option value="option2">Pregrada</option>
                 </select>
             </div>
             <div class="mb-3">
@@ -226,7 +255,10 @@
                        name="reminderDayVehicleInspection" placeholder="Unesite broj dana">
             </div>
             <br><br>
-            <button type="submit" class="btn btn-primary" th:text="'Spremi'">Spremi</button>
+            <div class="d-flex justify-content-start align-items-end gap-2">
+                <button type="submit" class="btn btn-primary flex-grow-0" th:text="'Spremi'">Spremi</button>
+                <a href="/main" class="btn btn-light mt-2 flex-grow-0">Nazad</a>
+            </div>
         </form>
     </div>
     <!-- Forma 5 :Osiguranje vozila -->
@@ -252,9 +284,14 @@
             <div class="mb-3">
                 <label for="vehicleInsuranceoutpost" class="form-label">Ispostava:</label>
                 <select id="vehicleInsuranceoutpost" name="vehicleInsuranceoutpost" class="form-select">
-                    <option value="option1">Zagreb</option>
+                    <option value="option1">Krapina</option>
+                    <option value="option2">Donja Stubica</option>
                     <option value="option2">Zabok</option>
-                    <option value="option2">Krapina</option>
+                    <option value="option2">Zlatar </option>
+                    <option value="option2">Klanjec</option>
+                    <option value="option2">Konjščina</option>
+                    <option value="option2">Marija Bistrica</option>
+                    <option value="option2">Pregrada</option>
                 </select>
             </div>
             <div class="mb-3">
@@ -263,8 +300,11 @@
                        name="reminderDayVehicleInsurance" placeholder="Unesite broj dana">
             </div>
             <br><br>
+            <div class="d-flex justify-content-start align-items-end gap-2">
+                <button type="submit" class="btn btn-primary flex-grow-0" th:text="'Spremi'">Spremi</button>
+                <a href="/main" class="btn btn-light mt-2 flex-grow-0">Nazad</a>
+            </div>
 
-            <button type="submit" class="btn btn-primary" th:text="'Spremi'">Spremi</button>
         </form>
     </div>
     <!-- Forma 6: Ugovor o radu -->
@@ -282,6 +322,11 @@
                        placeholder="Unesite prezime">
             </div>
             <div class="mb-3">
+                <label for="identificationNumberEmploymentcontract" class="form-label">OIB:</label>
+                <input type="text" class="form-control" id="identificationNumberEmploymentcontract"
+                       name="identificationNumberEmploymentcontract" placeholder="Unesite OIB">
+            </div>
+            <div class="mb-3">
                 <label for="renewalDateEmploymentContract" class="form-label">Datum obnove(Do kad vrijedi):</label>
                 <input type="date" class="form-control" name="renewalDateEmploymentContract"
                        id="renewalDateEmploymentContract">
@@ -289,9 +334,14 @@
             <div class="mb-3">
                 <label for="outpostEmploymentContract" class="form-label">Ispostava:</label>
                 <select id="outpostEmploymentContract" name="outpostEmploymentContract" class="form-select">
-                    <option value="option1">Zagreb</option>
+                    <option value="option1">Krapina</option>
+                    <option value="option2">Donja Stubica</option>
                     <option value="option2">Zabok</option>
-                    <option value="option2">Krapina</option>
+                    <option value="option2">Zlatar </option>
+                    <option value="option2">Klanjec</option>
+                    <option value="option2">Konjščina</option>
+                    <option value="option2">Marija Bistrica</option>
+                    <option value="option2">Pregrada</option>
                 </select>
             </div>
             <div class="mb-3">
@@ -308,12 +358,15 @@
                        name="reminderDayEmploymentContract" placeholder="Unesite broj dana">
             </div>
             <br><br>
-            <button type="submit" class="btn btn-primary" th:text="'Spremi'">Spremi</button>
+            <div class="d-flex justify-content-start align-items-end gap-2">
+                <button type="submit" class="btn btn-primary flex-grow-0" th:text="'Spremi'">Spremi</button>
+                <a href="/main" class="btn btn-light mt-2 flex-grow-0">Nazad</a>
+            </div>
         </form>
     </div>
 
 
-    <a href="/main" class="btn btn-light mt-2">Nazad</a>
+
 
 
 </div>
@@ -331,7 +384,7 @@
             </div>
             <div class="modal-footer">
                 <form action="/main" method="get">
-                    <button type="submit" class="btn btn-primary" id="confirmSaveButton" th:text="'Potvrdi'">Potvrdi</button>
+                    <button type="submit" class="btn btn-primary" id="confirmSaveButton" th:text="'Potvrdi'"onclick="sessionStorage.setItem('showToast', 'true')">Potvrdi</button>
                     <button type="button" class="btn btn-light mt-2" id="cancelSaveButton" name="cancelSave" data-bs-dismiss="modal">Odustani</button>
                 </form>
             </div>
@@ -343,7 +396,7 @@
 
 <!-- Footer Section -->
 <footer class="bg-dark text-white text-center py-3 mt-4">
-    <p>&copy; 2025 ObnoviMe. Sva prava pridržana. | <a href="ObnoviMe_Information.html"
+    <p>&copy; 2025 DocAlert. Sva prava pridržana. | <a href="ObnoviMe_Information.html"
                                                        class="text-white text-decoration-underline">Informacije o aplikaciji</a></p>
 </footer>
 <script src="/scripts.js"></script>
