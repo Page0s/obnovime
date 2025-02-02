@@ -29,13 +29,26 @@ public class DataLoader implements CommandLineRunner {
     private void loadSampleData() {
         DokumentFile[] documents = {
             DokumentFile.builder()
-                .name("Defiblirator")
-                .number("OPR-2024-004")
-                .renewalDate(LocalDate.of(2024, 12, 1))
-                .renewalPeriod(60)
-                .status("Nema obnove")
-                .serviceProvider("TechServis d.o.o.")
-                .location("Zagreb")
+                .name("Aspirator na električni pogon")
+                .number("40174")
+                .renewalDate(LocalDate.of(2024, 10, 16))
+                .renewalPeriod(30)
+                .status("Aktivno")
+                .serviceProvider("Inel-medicinska tehnika d.o.o.")
+                .location("")
+                .department("Glavna Sestra")
+                .resourceType("Oprema")
+                .documentType("Licenca")
+                .arhiva(false)
+                .build(),
+            DokumentFile.builder()
+                .name("Benehaert R3 EKG aparat - Mindray")
+                .number("FK-26032761")
+                .renewalDate(LocalDate.of(2024, 04, 22))
+                .renewalPeriod(30)
+                .status("Aktivno")
+                .serviceProvider("Unicomp d.o.o.")
+                .location("")
                 .department("Glavna Sestra")
                 .resourceType("Oprema")
                 .documentType("Licenca")
@@ -43,114 +56,98 @@ public class DataLoader implements CommandLineRunner {
                 .build(),
             new DokumentFile(
                 null, // id will be generated
-                "Licenca za rad",
-                "LIC-2024-001",
-                LocalDate.of(2024, 12, 15),
-                60,
-                "Pokreni obnovu",
-                "",
-                "Zabok",
-                "Glavna Sestra",
-                "Radnik",
-                "Licenca",
-                false
-            ),
-            new DokumentFile(
-                null, // id will be generated
-                "Registracija vozila",
-                "REG-2024-002",
-                LocalDate.of(2024, 12, 20),
-                60,
-                "Obnova u tijeku",
-                "AutoTech d.o.o.",
-                "Zagreb",
-                "Vozni park",
-                "Vozilo",
-                "Registracija",
-                false
-            ),
-            new DokumentFile(
-                null, // id will be generated
-                "Periodički pregled vozila",
-                "CERT-2024-003",
-                LocalDate.of(2025, 2, 1),
-                60,
-                "Pokreni obnovu",
-                "AutoTech d.o.o.",
-                "Zagreb",
-                "Vozni park",
-                "Vozilo",
-                "Periodički pregled vozila",
-                false
-            ),
-            new DokumentFile(
-                null, // id will be generated
-                "Respirator",
-                "OPR-2024-004",
-                LocalDate.of(2025, 2, 15),
-                60,
-                "Pokreni obnovu",
-                "MedTech d.o.o.",
-                "Zabok",
-                "Glavna Sestra",
-                "Oprema",
-                "Licenca",
-                false
-            ),
-            new DokumentFile(
-                null, // id will be generated
-                "EKG aparat",
-                "OPR-2024-005",
-                LocalDate.of(2025, 2, 20),
-                60,
-                "Pokreni obnovu",
-                "MedTech d.o.o.",
-                "Zabok",
-                "Glavna Sestra",
-                "Oprema",
-                "Licenca",
-                false
-            ),
-            new DokumentFile(
-                null, // id will be generated
-                "Aspirator",
-                "OPR-2024-006",
-                LocalDate.of(2025, 2, 25),
-                60,
-                "Pokreni obnovu",
-                "MedTech d.o.o.",
-                "Zabok",
-                "Glavna Sestra",
-                "Oprema",
-                "Licenca",
-                false
-            ),
-            new DokumentFile(
-                null, // id will be generated
-                "Ventilator",
-                "OPR-2024-005",
-                LocalDate.of(2025, 3, 1),
-                0, // No renewal period for this one
-                "Nema obnove",
-                "MedTech d.o.o.",
-                "Zabok",
-                "Glavna Sestra",
-                "Oprema",
-                "Licenca",
-                false
-            ),
-            new DokumentFile(
-                null, // id will be generated
-                "Licenca za rad",
-                "DOZ-2024-006",
-                LocalDate.of(2025, 6, 30),
-                60,
+                "Tehnički pregled vozila",
+                "KR 686 - IO",
+                LocalDate.of(2025, 10, 11),
+                15,
                 "Aktivno",
+                "AutoTech d.o.o.",
+                "Krapina",
+                "Vozni park",
+                "Vozilo",
+                "Tehnički pregled vozila",
+                false
+            ),
+            new DokumentFile(
+                null, // id will be generated
+                "Tehnički pregled vozila",
+                "KR 687 - IO",
+                LocalDate.of(2025, 10, 11),
+                15,
+                "Aktivno",
+                "AutoTech d.o.o.",
+                "Krapina",
+                "Vozni park",
+                "Vozilo",
+                "Tehnički pregled vozila",
+                false
+            ),
+                DokumentFile.builder()
+                .name("Lifepak 15 Defibrilator - Fiziokontrol")
+                .number("47416358")
+                .renewalDate(LocalDate.of(2024, 11, 05))
+                .renewalPeriod(30)
+                .status("Aktivno")
+                .serviceProvider("Elektroničar d.o.o.")
+                .location("")
+                .department("Glavna Sestra")
+                .resourceType("Oprema")
+                .documentType("Licenca")
+                .arhiva(false)
+                .build(),
+                DokumentFile.builder()
+                .name("Mortara, ELI 230 EKG aparat - Mortara Instrument")
+                .number("113080154080")
+                .renewalDate(LocalDate.of(2024, 04, 22))
+                .renewalPeriod(30)
+                .status("Aktivno")
+                .serviceProvider("Unicomp d.o.o.")
+                .location("")
+                .department("Glavna Sestra")
+                .resourceType("Oprema")
+                .documentType("Licenca")
+                .arhiva(false)
+                .build(),
+            new DokumentFile(
+                null, // id will be generated
+                "Gučin K.",
+                "",
+                LocalDate.of(2025, 3, 1),
+                60,
+                "Pokreni obnovu",
                 "",
                 "Zabok",
                 "Glavna Sestra",
                 "Radnik",
-                "Licenca",
+                "Svjedodžba",
+                false
+            ),
+            new DokumentFile(
+                null, // id will be generated
+                "Celjak M.",
+                "",
+                LocalDate.of(2025, 3, 1),
+                60,
+                "Pokreni obnovu",
+                "",
+                "Zabok",
+                "Glavna Sestra",
+                "Radnik",
+                "Svjedodžba",
+                false
+            ),
+            new DokumentFile(
+                null, // id will be generated
+                "Turk N",
+                "",
+                LocalDate.of(2025, 3, 1),
+                60,
+                "Pokreni obnovu",
+                "",
+                "Zabok",
+                "Glavna Sestra",
+                "Radnik",
+                "Svjedodžba",
                 false
             )
         };

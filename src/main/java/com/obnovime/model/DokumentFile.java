@@ -11,8 +11,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @Entity
@@ -53,50 +51,12 @@ public class DokumentFile {
     @Transient
     public String getBadgeClass() {
         if ("Nema obnove".equals(status) || "Aktivno".equals(status)) {
-            return "bg-success";
+            return "badge-status-active";
         } else if ("Pokreni obnovu".equals(status)) {
             return "badge-renewal-progress";
         } else if ("Obnova u tijeku".equals(status)) {
             return "badge-renewal";
         }
         return "bg-secondary"; // default color
-    }
-
-    @Transient
-    public List<StatusOption> getStatusOptions() {
-        List<StatusOption> options = new ArrayList<>();
-        String color = getRowColor();
-
-        // Dokumenti u arhivi
-        if("Arhiva".equals(status)) {
-            return options; // Nema opcija
-        }
-
-        // Dokumenti koji se ne obnavljaju
-        if("Nema obnove".equals(status)) {
-            options.add(new StatusOption("Arhiva", "Arhiva"));
-            return options;
-        }
-
-        // Pravila za aktivne dokumente
-        if(color.equals("status-active")) {
-            options.add(new StatusOption("Arhiva", "Arhiva"));
-        } 
-        // Dokumenti u alarmnom periodu
-        else if(color.equals("status-renewal") || color.equals("status-expired")) {
-            options.add(new StatusOption("Arhiva", "Arhiva"));
-            
-            if(!"Obnova u tijeku".equals(status)) {
-                options.add(new StatusOption("Obnova u tijeku", "Obnova u tijeku"));
-            }
-        }
-
-        // Automatski postavi status za dokumente u alarmnom periodu
-        if((color.equals("status-renewal") || color.equals("status-expired")) 
-            && "Aktivno".equals(status)) {
-            this.status = "Pokreni obnovu";
-        }
-
-        return options;
     }
 }

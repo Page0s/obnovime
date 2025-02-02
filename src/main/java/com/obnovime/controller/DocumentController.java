@@ -7,14 +7,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.obnovime.model.DokumentFile;
 import com.obnovime.repository.DocumentRepository;
 
-import javax.swing.text.Document;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -26,9 +25,29 @@ public class DocumentController {
         this.documentRepository = documentRepository;
     }
 
+    private void updateDocumentStatus(DokumentFile document) {
+        LocalDate today = LocalDate.now();
+        LocalDate alertDate = document.getRenewalDate().minusDays(document.getRenewalPeriod());
+
+        if ((today.isAfter(alertDate) || today.equals(alertDate)) && "Aktivno".equals(document.getStatus())) {
+            document.setStatus("Pokreni obnovu");
+            documentRepository.save(document);
+        }
+
+        if (today.isBefore(alertDate) && "Pokreni obnovu".equals(document.getStatus())) {
+            document.setStatus("Aktivno");
+            documentRepository.save(document);
+        }
+    }
+
     @GetMapping("/main")
-    public String showDocument(Model model) {
-        model.addAttribute("documents", documentRepository.findAllByOrderByRenewalDateAsc());
+    public String showMainPage(Model model) {
+        List<DokumentFile> documents = documentRepository.findAllByOrderByRenewalDateAsc();
+
+        // Update status for each document and save if needed
+        documents.forEach(this::updateDocumentStatus);
+
+        model.addAttribute("documents", documents);
         return "ObnoviMe_Main";
     }
 
@@ -57,10 +76,16 @@ public class DocumentController {
         if (existingDoc.isPresent()) {
             DokumentFile existing = existingDoc.get();
 
-            // Update fields including archive status
-            existing.setStatus(status);
+            // Update status to "Aktivno" if renewal date is in the future
+            if (existing.getRenewalDate().isBefore(renewalDate)) {
+                existing.setStatus("Aktivno");
             existing.setRenewalDate(renewalDate);
+            }
+            else if (existing.getRenewalDate().isEqual(renewalDate)) {
+                // Update fields including archive status
+                existing.setStatus(status);
             existing.setArhiva(arhiva);
+            }
             
             documentRepository.save(existing);
             
@@ -69,17 +94,6 @@ public class DocumentController {
             redirectAttributes.addFlashAttribute("error", "Dokument nije pronađen");
         }
         
-        return "redirect:/main";
-    }
-
-    @PostMapping("/saveDocument")
-    public String saveDocument( RedirectAttributes redirectAttributes) {
-        // Logika za spremanje dokumenta u bazu podataka ili drugu obradu
-
-        // Dodavanje informacije za prikaz toast poruke
-        redirectAttributes.addFlashAttribute("showToast", true);
-
-        // Redirekcija na glavnu stranicu
         return "redirect:/main";
     }
 
@@ -124,10 +138,4 @@ public class DocumentController {
 
         return "redirect:/main";
     }
-
-
-
-
-
-
 }
