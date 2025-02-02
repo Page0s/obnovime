@@ -51,7 +51,7 @@ public class DokumentFile {
     @Transient
     public String getBadgeClass() {
         if ("Nema obnove".equals(status) || "Aktivno".equals(status)) {
-            return "bg-success";
+            return "badge-status-active";
         } else if ("Pokreni obnovu".equals(status)) {
             return "badge-renewal-progress";
         } else if ("Obnova u tijeku".equals(status)) {
