@@ -29,32 +29,31 @@ public class DataLoader implements CommandLineRunner {
     private void loadSampleData() {
         DokumentFile[] documents = {
             DokumentFile.builder()
-                .name("Defiblirator")
-                .number("OPR-2024-004")
-                .renewalDate(LocalDate.of(2024, 12, 1))
-                .renewalPeriod(60)
-                .status("Nema obnove")
-                .serviceProvider("TechServis d.o.o.")
-                .location("Zagreb")
+                .name("Aspirator na električni pogon")
+                .number("40174")
+                .renewalDate(LocalDate.of(2024, 10, 16))
+                .renewalPeriod(30)
+                .status("Aktivno")
+                .serviceProvider("Inel-medicinska tehnika d.o.o.")
+                .location("")
                 .department("Glavna Sestra")
                 .resourceType("Oprema")
                 .documentType("Licenca")
                 .arhiva(false)
                 .build(),
-            new DokumentFile(
-                null, // id will be generated
-                "Licenca za rad",
-                "LIC-2024-001",
-                LocalDate.of(2024, 12, 15),
-                60,
-                "Pokreni obnovu",
-                "",
-                "Zabok",
-                "Glavna Sestra",
-                "Radnik",
-                "Licenca",
-                false
-            ),
+            DokumentFile.builder()
+                .name("Benehaert R3 EKG aparat - Mindray")
+                .number("FK-26032761")
+                .renewalDate(LocalDate.of(2024, 04, 22))
+                .renewalPeriod(30)
+                .status("Aktivno")
+                .serviceProvider("Unicomp d.o.o.")
+                .location("")
+                .department("Glavna Sestra")
+                .resourceType("Oprema")
+                .documentType("Licenca")
+                .arhiva(false)
+                .build(),
             new DokumentFile(
                 null, // id will be generated
                 "Tehnički pregled vozila",
@@ -83,34 +82,32 @@ public class DataLoader implements CommandLineRunner {
                 "Tehnički pregled vozila",
                 false
             ),
-            new DokumentFile(
-                null, // id will be generated
-                "Respirator",
-                "OPR-2024-004",
-                LocalDate.of(2025, 2, 15),
-                60,
-                "Pokreni obnovu",
-                "MedTech d.o.o.",
-                "Zabok",
-                "Glavna Sestra",
-                "Oprema",
-                "Licenca",
-                false
-            ),
-            new DokumentFile(
-                null, // id will be generated
-                "EKG aparat",
-                "OPR-2024-005",
-                LocalDate.of(2025, 2, 20),
-                60,
-                "Pokreni obnovu",
-                "MedTech d.o.o.",
-                "Zabok",
-                "Glavna Sestra",
-                "Oprema",
-                "Licenca",
-                false
-            ),
+                DokumentFile.builder()
+                .name("Lifepak 15 Defibrilator - Fiziokontrol")
+                .number("47416358")
+                .renewalDate(LocalDate.of(2024, 11, 05))
+                .renewalPeriod(30)
+                .status("Aktivno")
+                .serviceProvider("Elektroničar d.o.o.")
+                .location("")
+                .department("Glavna Sestra")
+                .resourceType("Oprema")
+                .documentType("Licenca")
+                .arhiva(false)
+                .build(),
+                DokumentFile.builder()
+                .name("Mortara, ELI 230 EKG aparat - Mortara Instrument")
+                .number("113080154080")
+                .renewalDate(LocalDate.of(2024, 04, 22))
+                .renewalPeriod(30)
+                .status("Aktivno")
+                .serviceProvider("Unicomp d.o.o.")
+                .location("")
+                .department("Glavna Sestra")
+                .resourceType("Oprema")
+                .documentType("Licenca")
+                .arhiva(false)
+                .build(),
             new DokumentFile(
                 null, // id will be generated
                 "Gučin K.",
