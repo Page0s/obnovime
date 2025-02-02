@@ -98,6 +98,28 @@
 <div class="container">
     <!-- Action Buttons -->
     <div class="mb-4 d-flex justify-content-end">
+        <div class="dropdown me-2">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownFilter"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-funnel"></i> Filter
+            </button>
+            <ul class="dropdown-menu p-2" aria-labelledby="dropdownFilter">
+                <li><label class="dropdown-item"><input type="checkbox" class="category-checkbox"
+                                                        value="Tip dokumenata"> Tip dokumenata</label></li>
+                <li><label class="dropdown-item"><input type="checkbox" class="category-checkbox" value="Odjel">
+                    Odjel</label></li>
+                <li><label class="dropdown-item"><input type="checkbox" class="category-checkbox" value="Ispostava">
+                    Ispostava</label></li>
+                <li><label class="dropdown-item"><input type="checkbox" class="category-checkbox" value="Vrsta resursa">Vrsta
+                    resursa</label></li>
+                <li><label class="dropdown-item"><input type="checkbox" class="category-checkbox" value="Status"> Status</label>
+                </li>
+                <li class="filter-buttons d-flex gap-2 mt-2 px-2">
+                    <button class="btn btn-primary btn-sm" id="applyFilter">Filtriraj</button>
+                    <button class="btn btn-secondary btn-sm" id="clearFilter">Obriši filter</button>
+                </li>
+            </ul>
+        </div>
         <a href="/form" class="btn btn-success me-2 custom-newEntryBtn">
             <i class="bi bi-plus-circle"></i> Novi unos
         </a>
@@ -194,7 +216,7 @@
                         <td th:text="${document.department}">Odjel</td>
                         <td th:text="${document.resourceType}">Vrsta resursa</td>
                         <td th:text="${document.documentType}">Vrsta dokumenta</td>
-                        <td th:text="${#temporals.format(document.renewalDate, 'yyyy-MM-dd')}">Datum obnove</td>
+                        <td style="white-space: nowrap;" th:text="${#temporals.format(document.renewalDate, 'dd-MM-yyyy')}">Datum obnove</td>
                         <td>
                                     <span th:class="'badge ' + ${document.badgeClass}"
                                           th:text="${document.status}">Status</span>
