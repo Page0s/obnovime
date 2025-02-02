@@ -1,24 +1,19 @@
 function showForm() {
-    // Dohvati odabranu vrijednost iz drop-down izbornika
-    const selectedValue = document.getElementById("documentType").value;
+    var selectedValue = document.getElementById("documentType").value;
+    var forms = document.querySelectorAll(".form-container");
+    var backButton = document.querySelector(".container > a.btn-light");
 
     // Sakrij sve forme
-    document.querySelectorAll(".form-container").forEach(form => {
+    forms.forEach(function (form) {
         form.style.display = "none";
     });
 
-    // Dohvati tipku "Nazad"
-    const backButton = document.querySelector("a.btn-secondary"); // Ako je <a href="/main" class="btn btn-secondary">Nazad</a>
-
-    // Prikazivanje odgovarajuće forme i kontrola tipke "Nazad"
+    // Prikaži samo odabranu formu
     if (selectedValue) {
-        if (backButton) backButton.style.display = "inline-block"; // Prikaži "Nazad" samo kada je forma vidljiva
-        const formToShow = document.getElementById(`form-${selectedValue}`);
-        if (formToShow) {
-            formToShow.style.display = "block";
-        }
+        document.getElementById("form-" + selectedValue).style.display = "block";
+        if (backButton) backButton.style.display = "none"; // Sakrij dodatnu tipku
     } else {
-        if (backButton) backButton.style.display = "none"; // Sakrij "Nazad" ako nijedna forma nije odabrana
+        if (backButton) backButton.style.display = "block"; // Prikazati ako nema forme
     }
 }
 
