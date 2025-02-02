@@ -1,24 +1,27 @@
-    function showForm() {
-        // Dohvati odabranu vrijednost iz drop-down izbornika
-        const selectedValue = document.getElementById("documentType").value;
+function showForm() {
+    // Dohvati odabranu vrijednost iz drop-down izbornika
+    const selectedValue = document.getElementById("documentType").value;
 
-        // Sakrij sve forme
-        document.querySelectorAll(".form-container").forEach(form => {
-            form.style.display = "none";
-        });
+    // Sakrij sve forme
+    document.querySelectorAll(".form-container").forEach(form => {
+        form.style.display = "none";
+    });
 
-        // Sakrij ili prikaži tipku "Nazad"
-        const backButton = document.querySelector("button[type='nazad']");
-        if (selectedValue) {
-            backButton.style.display = "none"; // Sakrij "Nazad" ako je forma odabrana
-            const formToShow = document.getElementById(`form-${selectedValue}`);
-            if (formToShow) {
-                formToShow.style.display = "block";
-            }
-        } else {
-            backButton.style.display = "block"; // Prikaži "Nazad" ako nijedna forma nije odabrana
+    // Dohvati tipku "Nazad"
+    const backButton = document.querySelector("a.btn-secondary"); // Ako je <a href="/main" class="btn btn-secondary">Nazad</a>
+
+    // Prikazivanje odgovarajuće forme i kontrola tipke "Nazad"
+    if (selectedValue) {
+        if (backButton) backButton.style.display = "inline-block"; // Prikaži "Nazad" samo kada je forma vidljiva
+        const formToShow = document.getElementById(`form-${selectedValue}`);
+        if (formToShow) {
+            formToShow.style.display = "block";
         }
+    } else {
+        if (backButton) backButton.style.display = "none"; // Sakrij "Nazad" ako nijedna forma nije odabrana
     }
+}
+
             document.querySelectorAll('input[type="text"][id^="reminderDay"]').forEach(input => {
             input.addEventListener('input', function () {
                 const warning = this.nextElementSibling;
