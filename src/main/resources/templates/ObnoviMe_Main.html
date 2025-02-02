@@ -199,7 +199,7 @@
                                 </td>
                                 <td>
                                     <div class="d-flex gap-1">
-                                        <a href="/edit" class="btn btn-sm btn-secondary" title="Promijeni"><i class="bi bi-pencil-square"></i></a>
+                                        <a href="@{/edit/{id}(id=${document.id})}" class="btn btn-sm btn-secondary" title="Promijeni"><i class="bi bi-pencil-square"></i></a>
                                         <a th:href="@{/dokument/{id}/obnova(id=${document.id})}" class="btn btn-sm btn-secondary" title="Ažuriraj"><i class="bi bi-arrow-clockwise"></i></a>
                                         <a href="/history" class="btn btn-sm btn-secondary" title="Obnove"><i class="bi bi-clock-history"></i></a>
                                     </div>
@@ -224,13 +224,20 @@
              role="alert" aria-live="assertive" aria-atomic="true">
             <div class="d-flex">
                 <div class="toast-body">
-                    Dokument uspješno spremljen!
+                    Dokument uspješno spremljen.
                 </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto"
-                        data-bs-dismiss="toast" aria-label="Zatvori"></button>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Zatvori"></button>
             </div>
         </div>
     </div>
-    <script src="/scripts.js"></script>
+
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-3 mt-4">
+        <p class="mb-0">&copy; 2025 ObnoviMe. Sva prava pridržana. | <a href="ObnoviMe_Information.html" class="text-white text-decoration-underline">Informacije o aplikaciji</a></p>
+    </footer>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
