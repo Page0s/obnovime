@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.obnovime.model.DokumentFile;
@@ -32,6 +31,11 @@ public class DocumentController {
 
         if ((today.isAfter(alertDate) || today.equals(alertDate)) && "Aktivno".equals(document.getStatus())) {
             document.setStatus("Pokreni obnovu");
+            documentRepository.save(document);
+        }
+
+        if (today.isBefore(alertDate) && "Pokreni obnovu".equals(document.getStatus())) {
+            document.setStatus("Aktivno");
             documentRepository.save(document);
         }
     }
@@ -75,13 +79,12 @@ public class DocumentController {
             // Update status to "Aktivno" if renewal date is in the future
             if (existing.getRenewalDate().isBefore(renewalDate)) {
                 existing.setStatus("Aktivno");
-                existing.setRenewalDate(renewalDate);
+            existing.setRenewalDate(renewalDate);
             }
-            else{
+            else if (existing.getRenewalDate().isEqual(renewalDate)) {
                 // Update fields including archive status
                 existing.setStatus(status);
-                existing.setRenewalDate(renewalDate);
-                existing.setArhiva(arhiva);
+            existing.setArhiva(arhiva);
             }
             
             documentRepository.save(existing);
@@ -91,14 +94,6 @@ public class DocumentController {
             redirectAttributes.addFlashAttribute("error", "Dokument nije pronađen");
         }
         
-        return "redirect:/main";
-    }
-
-    @PostMapping("/saveDocument")
-    public String saveDocument(RedirectAttributes redirectAttributes) {
-        // Logika za spremanje dokumenta u bazu podataka ili drugu obradu
-        // Dodavanje informacije za prikaz toast poruke
-        redirectAttributes.addFlashAttribute("showToast", true);
         return "redirect:/main";
     }
 
@@ -143,10 +138,4 @@ public class DocumentController {
 
         return "redirect:/main";
     }
-
-
-
-
-
-
 }
