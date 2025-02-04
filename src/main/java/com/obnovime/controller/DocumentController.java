@@ -30,11 +30,11 @@ public class DocumentController {
         LocalDate alertDate = document.getRenewalDate().minusDays(document.getRenewalPeriod());
 
         if ((today.isAfter(alertDate) || today.equals(alertDate)) && "Aktivno".equals(document.getStatus())) {
-            document.setStatus("Pokreni obnovu");
+            document.setStatus("Vrijeme za obnovu");
             documentRepository.save(document);
         }
 
-        if (today.isBefore(alertDate) && "Pokreni obnovu".equals(document.getStatus())) {
+        if (today.isBefore(alertDate) && "Vrijeme za obnovu".equals(document.getStatus())) {
             document.setStatus("Aktivno");
             documentRepository.save(document);
         }
