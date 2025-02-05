@@ -1,6 +1,5 @@
 package com.obnovime.controller;
 
-import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.obnovime.model.DokumentFile;
+import com.obnovime.model.DocumentFile;
 import com.obnovime.repository.DocumentRepository;
 
 import java.time.LocalDate;
@@ -25,7 +24,7 @@ public class DocumentController {
         this.documentRepository = documentRepository;
     }
 
-    private void updateDocumentStatus(DokumentFile document) {
+    private void updateDocumentStatus(DocumentFile document) {
         LocalDate today = LocalDate.now();
         LocalDate alertDate = document.getRenewalDate().minusDays(document.getRenewalPeriod());
 
@@ -42,23 +41,23 @@ public class DocumentController {
 
     @GetMapping("/main")
     public String showMainPage(Model model) {
-        List<DokumentFile> documents = documentRepository.findAllByOrderByRenewalDateAsc();
+        List<DocumentFile> documents = documentRepository.findAllByOrderByRenewalDateAsc();
 
         // Update status for each document and save if needed
         documents.forEach(this::updateDocumentStatus);
 
         model.addAttribute("documents", documents);
-        return "ObnoviMe_Main";
+        return "DocumentMainForm";
     }
 
     @GetMapping("/dokument/{id}/obnova")
     public String showRenewalForm(@PathVariable Long id, Model model) {
         System.out.println("Received ID: " + id);
-        Optional<DokumentFile> document = documentRepository.findById(id);
+        Optional<DocumentFile> document = documentRepository.findById(id);
         
         if (document.isPresent()) {
             model.addAttribute("dokument", document.get());
-            return "ObnoviMe_Renewal";
+            return "DocumentRenewal";
         } else {
             return "redirect:/main";
         }
@@ -71,10 +70,10 @@ public class DocumentController {
                               @RequestParam(value = "arhiva", required = false, defaultValue = "false") Boolean arhiva,
                               RedirectAttributes redirectAttributes) {
         
-        Optional<DokumentFile> existingDoc = documentRepository.findById(id);
+        Optional<DocumentFile> existingDoc = documentRepository.findById(id);
         
         if (existingDoc.isPresent()) {
-            DokumentFile existing = existingDoc.get();
+            DocumentFile existing = existingDoc.get();
 
             // Update status to "Aktivno" if renewal date is in the future
             if (existing.getRenewalDate().isBefore(renewalDate)) {
@@ -98,11 +97,10 @@ public class DocumentController {
     }
 
     @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable Long id, Model model, HttpSession session) {
-        Optional<DokumentFile> dokument = documentRepository.findById(id);
+    public String showEditForm(@PathVariable Long id, Model model) {
+        Optional<DocumentFile> dokument = documentRepository.findById(id);
 
         if (dokument.isPresent()) {
-            session.setAttribute("editDokument", dokument.get()); // Pohrana u sesiju
             model.addAttribute("dokument", dokument.get());
             return "DocumentEditForm"; // Prikaz forme
         } else {
@@ -117,19 +115,18 @@ public class DocumentController {
             @RequestParam("renewalPeriod") Integer renewalPeriod,  // Broj dana za podsjetnik
             @RequestParam("location") String location,             // Ispostava
             @RequestParam("serviceProvider") String serviceProvider, // Serviser
-            RedirectAttributes redirectAttributes, HttpSession session) {
+            RedirectAttributes redirectAttributes) {
 
-        Optional<DokumentFile> existingDoc = documentRepository.findById(id);
+        Optional<DocumentFile> existingDoc = documentRepository.findById(id);
 
         if (existingDoc.isPresent()) {
-            DokumentFile dokument = existingDoc.get();
+            DocumentFile dokument = existingDoc.get();
             dokument.setName(name);
             dokument.setRenewalPeriod(renewalPeriod);
             dokument.setLocation(location);
             dokument.setServiceProvider(serviceProvider);
 
             documentRepository.save(dokument);
-            session.removeAttribute("editDokument");
 
             redirectAttributes.addFlashAttribute("successMessage", "Dokument uspješno uređen!");
         } else {

@@ -43,10 +43,18 @@ function showForm() {
         }
     function openConfirmationModal(event) {
         event.preventDefault();
-        formToSubmit = event.target;
+        window.formToSubmit = event.target; // Store the form globally
         const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
         confirmationModal.show();
     }
+
+    function confirmAndSubmitForm() {
+        if (window.formToSubmit) {
+            sessionStorage.setItem('showToast', 'true');
+            window.formToSubmit.submit();
+        }
+    }
+
 document.addEventListener("DOMContentLoaded", function() {
     if (sessionStorage.getItem("showToast") === "true") {
         const toastEl = document.getElementById("confirmationToast");

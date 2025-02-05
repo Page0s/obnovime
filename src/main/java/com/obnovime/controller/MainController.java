@@ -8,17 +8,17 @@ public class MainController {
 
     @GetMapping("/form")
     public String showForm() {
-        return "ObnoviMe_Form";
+        return "DocumentEntryForm";
     }
 
     @GetMapping("/archive")
     public String showArchive() {
-        return "ObnoviMe_Archive";
+        return "DocumentArchive";
     }
 
     @GetMapping("/history")
     public String showHistory() {
-        return "ObnoviMe_RenewalHistory";
+        return "DocumentRenewalHistory";
     }
 
     @GetMapping("/index")
