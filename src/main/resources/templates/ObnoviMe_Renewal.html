@@ -55,7 +55,7 @@
             <div class="mb-4" th:if="${dokument.status != 'Nema obnove' && dokument.status != 'Aktivno'}">
                 <label for="status" class="form-label">Status obnove</label>
                 <select class="form-select" id="status" name="status">
-                    <option value="Pokreni obnovu" th:selected="${dokument.status == 'Pokreni obnovu'}">Pokreni obnovu</option>
+                    <option value="Vrijeme za obnovu" th:selected="${dokument.status == 'Vrijeme za obnovu'}">Vrijeme za obnovu</option>
                     <option value="Obnova u tijeku" th:selected="${dokument.status == 'Obnova u tijeku'}">Obnova u tijeku</option>
                 </select>
             </div>

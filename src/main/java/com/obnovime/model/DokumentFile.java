@@ -52,9 +52,9 @@ public class DokumentFile {
     public String getBadgeClass() {
         if ("Nema obnove".equals(status) || "Aktivno".equals(status)) {
             return "badge-status-active";
-        } else if ("Pokreni obnovu".equals(status)) {
+        } else if ("Vrijeme za obnovu".equals(status)) {
             return "badge-renewal-progress";
-        } else if ("Obnova u tijeku".equals(status)) {
+        } else if ("Vrijeme za obnovu".equals(status)) {
             return "badge-renewal";
         }
         return "bg-secondary"; // default color

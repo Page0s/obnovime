@@ -163,7 +163,7 @@
                             <h6 class="card-title">Status obnove</h6>
                             <div class="d-flex flex-column gap-2">
                                 <div class="legend-row p-2" style="border: none;">
-                                    <span class="badge badge-renewal-progress">Pokreni obnovu</span>
+                                    <span class="badge badge-renewal-progress">Vrijeme za obnovu</span>
                                     Potrebno pokrenuti proces obnove
                                 </div>
                                 <div class="legend-row p-2" style="border: none;">
@@ -194,14 +194,13 @@
                     <thead class="table-light">
                     <tr>
                         <th>#</th>
-                        <th>Naziv dokumenta</th>
+                        <th>Naziv</th>
                         <th>Šifra</th>
                         <th>Partner</th>
                         <th>Ispostava</th>
-                        <th>Odjel</th>
                         <th>Vrsta resursa</th>
-                        <th>Tip dokumenta</th>
                         <th>Datum obnove</th>
+                        <th>Tip dokumenta</th>
                         <th>Status</th>
                         <th>Akcije</th>
                     </tr>
@@ -209,14 +208,13 @@
                     <tbody>
                     <tr th:each="document, iterStat : ${documents}" th:class="${document.rowColor}">
                         <td th:text="${iterStat.count}">ID</td>
-                        <td th:text="${document.name}">Naziv dokumenta</td>
+                        <td th:text="${document.name}">Naziv</td>
                         <td th:text="${document.number}">Šifra dokumenta</td>
                         <td th:text="${document.serviceProvider}">Partner</td>
                         <td th:text="${document.location}">Lokacija</td>
-                        <td th:text="${document.department}">Odjel</td>
                         <td th:text="${document.resourceType}">Vrsta resursa</td>
-                        <td th:text="${document.documentType}">Vrsta dokumenta</td>
                         <td style="white-space: nowrap;" th:text="${#temporals.format(document.renewalDate, 'dd-MM-yyyy')}">Datum obnove</td>
+                        <td th:text="${document.documentType}">Tip dokumenta</td>
                         <td>
                                     <span th:class="'badge ' + ${document.badgeClass}"
                                           th:text="${document.status}">Status</span>
@@ -224,8 +222,8 @@
                         <td>
                             <div class="d-flex gap-1">
                                 <a th:href="@{/edit/{id}(id=${document.id})}" class="btn btn-sm btn-secondary" title="Promijeni"><i class="bi bi-pencil-square"></i></a>
+                                <a href="/history" class="btn btn-sm btn-secondary" title="Povijest obnova"><i class="bi bi-clock-history"></i></a>
                                 <a th:href="@{/dokument/{id}/obnova(id=${document.id})}" class="btn btn-sm btn-secondary" title="Ažuriraj"><i class="bi bi-arrow-clockwise"></i></a>
-                                <a href="/history" class="btn btn-sm btn-secondary" title="Obnove"><i class="bi bi-clock-history"></i></a>
                             </div>
                         </td>
                     </tr>
