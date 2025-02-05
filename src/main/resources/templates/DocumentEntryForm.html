@@ -386,10 +386,8 @@
                 Jeste li sigurni da želite dodati ovaj dokument?
             </div>
             <div class="modal-footer">
-                <form action="/main" method="get">
-                    <button type="submit" class="btn btn-primary" id="confirmSaveButton" onclick="submitForm()">Potvrdi</button>
-                    <button type="button" class="btn btn-secondary" id="cancelSaveButton" name="cancelSave" data-bs-dismiss="modal">Nazad</button>
-                </form>
+                <button type="button" class="btn btn-primary" onclick="confirmAndSubmitForm()">Potvrdi</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Nazad</button>
             </div>
         </div>
     </div>

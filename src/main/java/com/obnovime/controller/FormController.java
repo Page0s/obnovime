@@ -4,7 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import com.obnovime.model.DokumentFile;
+import com.obnovime.model.DocumentFile;
 import com.obnovime.repository.DocumentRepository;
 import com.obnovime.dto.*;
 
@@ -20,7 +20,7 @@ public class FormController {
     @PostMapping("/saveLicense")
     public String saveLicense(@ModelAttribute LicenseDTO licenseDTO, RedirectAttributes redirectAttributes) {
         try {
-            DokumentFile document = new DokumentFile();
+            DocumentFile document = new DocumentFile();
             document.setName(licenseDTO.getName());
             document.setNumber(licenseDTO.getIdentificationNumber());
             document.setRenewalDate(licenseDTO.getRenewalDate());
@@ -45,8 +45,18 @@ public class FormController {
 
     @PostMapping("/savePeriodicCheck")
     public String savePeriodicCheck(@ModelAttribute PeriodicCheckDTO periodicCheckDTO, RedirectAttributes redirectAttributes) {
+        System.out.println("Entering savePeriodicCheck method!");
+        System.out.println("Entering savePeriodicCheck method!");
+        System.out.println("Entering savePeriodicCheck method!");
+        System.out.println("Entering savePeriodicCheck method!");
+        System.out.println("Entering savePeriodicCheck method!");
+        System.out.println("Entering savePeriodicCheck method!");
+        System.out.println("Entering savePeriodicCheck method!");
+        System.out.println("Entering savePeriodicCheck method!");
+        System.out.println("Entering savePeriodicCheck method!");
+        System.out.println("Entering savePeriodicCheck method!");
         try {
-            DokumentFile document = new DokumentFile();
+            DocumentFile document = new DocumentFile();
             document.setName(periodicCheckDTO.getNamePeriodic());
             document.setNumber(periodicCheckDTO.getRegistrationPeriodic());
             document.setRenewalDate(periodicCheckDTO.getRenewalDatePeriodic());
@@ -71,14 +81,25 @@ public class FormController {
 
     @PostMapping("/saveCertificate")
     public String saveCertificate(@ModelAttribute CertificateDTO certificateDTO, RedirectAttributes redirectAttributes) {
+        System.out.println("Entering saveCertificate method!");
         try {
-            DokumentFile document = new DokumentFile();
+            System.out.println("Attempting to save certificate with name: " + certificateDTO.getNameCertificate() + " " + certificateDTO.getSurnnameCertificate());
+            
+            DocumentFile document = new DocumentFile();
             document.setName(certificateDTO.getNameCertificate() + " " + certificateDTO.getSurnnameCertificate());
             document.setNumber(certificateDTO.getIdentificationNumberCertificate());
             document.setRenewalDate(certificateDTO.getRenewalDateCertificate());
             document.setLocation(certificateDTO.getOutpostCertificate());
-            document.setRenewalPeriod(certificateDTO.getReminderDayCertificate());
-            // Default value for this document type
+            
+            // Ensure reminderDay is properly parsed to Integer
+            try {
+                document.setRenewalPeriod(Integer.parseInt(String.valueOf(certificateDTO.getReminderDayCertificate())));
+            } catch (NumberFormatException e) {
+                System.err.println("Error parsing reminder day: " + certificateDTO.getReminderDayCertificate());
+                throw new RuntimeException("Invalid reminder day value");
+            }
+            
+            // Default values
             document.setDocumentType("Svjedodžba");
             document.setStatus("Aktivno");
             document.setArhiva(false);
@@ -86,10 +107,14 @@ public class FormController {
             document.setResourceType("Radnik");
             document.setServiceProvider("");
             
-            documentRepository.save(document);
+            DocumentFile savedDocument = documentRepository.save(document);
+            System.out.println("Successfully saved certificate with ID: " + savedDocument.getId());
+            
             redirectAttributes.addFlashAttribute("showToast", true);
             return "redirect:/main";
         } catch (Exception e) {
+            System.err.println("Error saving certificate: " + e.getMessage());
+            e.printStackTrace();
             redirectAttributes.addFlashAttribute("error", "Greška prilikom spremanja: " + e.getMessage());
             return "redirect:/form";
         }
@@ -98,7 +123,7 @@ public class FormController {
     @PostMapping("/saveTechnicalCheck")
     public String saveTechnicalCheck(@ModelAttribute TechnicalCheckDTO technicalCheckDTO, RedirectAttributes redirectAttributes) {
         try {
-            DokumentFile document = new DokumentFile();
+            DocumentFile document = new DocumentFile();
             document.setName(technicalCheckDTO.getVehicleTechnicalInspectionName());
             document.setNumber(technicalCheckDTO.getRegistrationTechnicalInspection());
             document.setRenewalDate(technicalCheckDTO.getRenewalDateTechnicalInspection());
@@ -124,7 +149,7 @@ public class FormController {
     @PostMapping("/vehicleInsurance")
     public String saveVehicleInsurance(@ModelAttribute VehicleInsuranceDTO insuranceDTO, RedirectAttributes redirectAttributes) {
         try {
-            DokumentFile document = new DokumentFile();
+            DocumentFile document = new DocumentFile();
             document.setName(insuranceDTO.getVehicleInsuranceName());
             document.setNumber(insuranceDTO.getVehicleInsuranceRegistration());
             document.setRenewalDate(insuranceDTO.getRenewalDateVehicleInsurance());
@@ -150,7 +175,7 @@ public class FormController {
     @PostMapping("/saveEmploymentcontract")
     public String saveEmploymentContract(@ModelAttribute EmploymentContractDTO contractDTO, RedirectAttributes redirectAttributes) {
         try {
-            DokumentFile document = new DokumentFile();
+            DocumentFile document = new DocumentFile();
             document.setName(contractDTO.getEmploymentContractName() + " " + contractDTO.getEmploymentContractSurname());
             document.setNumber(contractDTO.getIdentificationNumberEmploymentcontract());
             document.setRenewalDate(contractDTO.getRenewalDateEmploymentContract());

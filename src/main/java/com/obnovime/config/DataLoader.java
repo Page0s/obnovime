@@ -3,7 +3,7 @@ package com.obnovime.config;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import com.obnovime.model.DokumentFile;
+import com.obnovime.model.DocumentFile;
 import com.obnovime.repository.DocumentRepository;
 
 import java.time.LocalDate;
@@ -27,8 +27,8 @@ public class DataLoader implements CommandLineRunner {
     }
 
     private void loadSampleData() {
-        DokumentFile[] documents = {
-            DokumentFile.builder()
+        DocumentFile[] documents = {
+            DocumentFile.builder()
                 .name("Aspirator na električni pogon")
                 .number("40174")
                 .renewalDate(LocalDate.of(2024, 10, 16))
@@ -41,7 +41,7 @@ public class DataLoader implements CommandLineRunner {
                 .documentType("Licenca")
                 .arhiva(false)
                 .build(),
-            DokumentFile.builder()
+            DocumentFile.builder()
                 .name("Benehaert R3 EKG aparat - Mindray")
                 .number("FK-26032761")
                 .renewalDate(LocalDate.of(2024, 04, 22))
@@ -54,7 +54,7 @@ public class DataLoader implements CommandLineRunner {
                 .documentType("Licenca")
                 .arhiva(false)
                 .build(),
-            new DokumentFile(
+            new DocumentFile(
                 null, // id will be generated
                 "Tehnički pregled vozila",
                 "KR 686 - IO",
@@ -68,7 +68,7 @@ public class DataLoader implements CommandLineRunner {
                 "Tehnički pregled vozila",
                 false
             ),
-            new DokumentFile(
+            new DocumentFile(
                 null, // id will be generated
                 "Tehnički pregled vozila",
                 "KR 687 - IO",
@@ -82,7 +82,7 @@ public class DataLoader implements CommandLineRunner {
                 "Tehnički pregled vozila",
                 false
             ),
-                DokumentFile.builder()
+                DocumentFile.builder()
                 .name("Lifepak 15 Defibrilator - Fiziokontrol")
                 .number("47416358")
                 .renewalDate(LocalDate.of(2024, 11, 05))
@@ -95,7 +95,7 @@ public class DataLoader implements CommandLineRunner {
                 .documentType("Licenca")
                 .arhiva(false)
                 .build(),
-                DokumentFile.builder()
+                DocumentFile.builder()
                 .name("Mortara, ELI 230 EKG aparat - Mortara Instrument")
                 .number("113080154080")
                 .renewalDate(LocalDate.of(2024, 04, 22))
@@ -108,7 +108,7 @@ public class DataLoader implements CommandLineRunner {
                 .documentType("Licenca")
                 .arhiva(false)
                 .build(),
-            new DokumentFile(
+            new DocumentFile(
                 null, // id will be generated
                 "Gučin K.",
                 "",
@@ -122,7 +122,7 @@ public class DataLoader implements CommandLineRunner {
                 "Svjedodžba",
                 false
             ),
-            new DokumentFile(
+            new DocumentFile(
                 null, // id will be generated
                 "Celjak M.",
                 "",
@@ -136,7 +136,7 @@ public class DataLoader implements CommandLineRunner {
                 "Svjedodžba",
                 false
             ),
-            new DokumentFile(
+            new DocumentFile(
                 null, // id will be generated
                 "Turk N",
                 "",

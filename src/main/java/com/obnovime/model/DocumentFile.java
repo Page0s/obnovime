@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DokumentFile {
+public class DocumentFile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
