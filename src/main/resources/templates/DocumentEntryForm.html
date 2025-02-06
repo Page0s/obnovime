@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocAlert - Unos Dokumenata</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .form-container {
+            display: none; /* Skrivanje svih formi po defaultu */
+        }
+        .active {
+            display: block; /* Prikazuje samo aktivnu formu */
+        }
+        button[type='nazad'] {
+    display: block; /* Početno stanje - vidljivo */
+}
+        .toast-container {
+            position: fixed;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1055;
+        }
+    </style>
+</head>
+<body>
+<!-- Header Section -->
+<header class="bg-primary text-white text-center py-4 mb-4">
+    <h1>DocAlert</h1>
+    <p>Unos dokumenata, opreme i licenci</p>
+</header>
+
+<div class="container mt-5">
+    <h1 class="mb-4">Dodaj Novi Dokument</h1>
+
+    <!-- Drop-down izbornik -->
+    <div class="mb-4">
+        <label for="documentType" class="form-label">Odaberite tip dokumenta:</label>
+        <select id="documentType" class="form-select" onchange="showForm()">
+            <option value="">-- Odaberite --</option>
+            <option value="1">Licenca</option>
+            <option value="2">Periodički pregled vozila</option>
+            <option value="3">Svjedodžba</option>
+            <option value="4">Tehnički pregled vozila</option>
+            <option value="5">Osiguranje vozila</option>
+            <option value="6">Ugovor o radu</option>
+        </select>
+    </div>
+    <!-- Forma 1: Licenca -->
+    <div id="form-1" class="form-container">
+        <h2>Licenca</h2>
+        <form th:action="@{/saveLicense}" th:method="post" onsubmit="return openConfirmationModal(event)">
+            <div class="mb-3">
+                <label for="name" class="form-label">Naziv:</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Unesite naziv">
+            </div>
+            <div class="mb-3">
+                <label for="identificationNumber" class="form-label">Šifra:</label>
+                <input type="text" class="form-control" id="identificationNumber" name="identificationNumber"
+                       placeholder="Unesite šifru">
+            </div>
+            <div class="mb-3">
+                <label for="renewalDate" class="form-label">Datum obnove(Do kad vrijedi):</label>
+                <input type="date" class="form-control" name="renewalDate" id="renewalDate">
+            </div>
+            <div class="mb-3">
+                <label for="service" class="form-label">Partner:</label>
+                <input type="text" class="form-control" name="service" id="service" placeholder="Unesite partnera">
+            </div>
+            <div class="mb-3">
+                <label for="outpost" class="form-label">Ispostava:</label>
+                <select id="outpost" name="outpost" class="form-select">
+                    <option value="Krapina">Krapina</option>
+                    <option value="Donja Stubica">Donja Stubica</option>
+                    <option value="Zabok">Zabok</option>
+                    <option value="Zlatar">Zlatar </option>
+                    <option value="Klanjec">Klanjec</option>
+                    <option value="Konjščina">Konjščina</option>
+                    <option value="Marija Bistrica">Marija Bistrica</option>
+                    <option value="Pregrada">Pregrada</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="department" class="form-label">Odjel:</label>
+                <select id="department" name="department" class="form-select">
+                    <option value="Glavna Sestra">Glavna Sestra</option>
+                    <option value="Vozni park">Vozni park</option>
+                    <option value="Kadrovska">Kadrovska</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="resourceType" class="form-label">Vrsta resursa:</label>
+                <select id="resourceType" name="resourceType" class="form-select">
+                    <option value="Oprema">Oprema</option>
+                    <option value="Radnik">Radnik</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="reminderDay" class="form-label">Podsjetnik u danima(Istek licence):</label>
+                <input type="text" class="form-control" id="reminderDay" name="reminderDay"
+                       placeholder="Unesite broj dana">
+            </div>
+            <br><br>
+            <div class="d-flex justify-content-start align-items-end gap-2">
+                <button type="submit" class="btn btn-primary flex-grow-0" th:text="'Spremi'">Spremi</button>
+                <a href="/main" class="btn btn-secondary mt-2 flex-grow-0">Nazad</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Forma 2: Periodički pregled vozila -->
+    <div id="form-2" class="form-container">
+        <h2>Unos novog Periodičkog pregleda vozila</h2>
+        <form th:action="@{/savePeriodicCheck}" th:method="post" onsubmit="return openConfirmationModal(event)">
+            <div class="mb-3">
+                <label for="namePeriodic" class="form-label">Naziv vozila:</label>
+                <input type="text" class="form-control" id="namePeriodic" name="namePeriodic"
+                       placeholder="Unesite naziv vozila">
+            </div>
+            <div class="mb-3">
+                <label for="registrationPeriodic" class="form-label">Registracija:</label>
+                <input type="text" class="form-control" id="registrationPeriodic" name="registrationPeriodic"
+                       placeholder="Registracija">
+            </div>
+            <div class="mb-3">
+                <label for="renewalDatePeriodic" class="form-label">Datum obnove(Do kad vrijedi):</label>
+                <input type="date" class="form-control" name="renewalDatePeriodic" id="renewalDatePeriodic">
+            </div>
+            <div class="mb-3">
+                <label for="servicePeriodic" class="form-label">Partner:</label>
+                <input type="text" class="form-control" id="servicePeriodic" name="servicePeriodic"
+                       placeholder="Unesite partnera">
+            </div>
+            <div class="mb-3">
+                <label for="outpostPeriodic" class="form-label">Ispostava:</label>
+                <select id="outpostPeriodic" name="outpostPeriodic" class="form-select">
+                    <option value="Krapina">Krapina</option>
+                    <option value="Donja Stubica">Donja Stubica</option>
+                    <option value="Zabok">Zabok</option>
+                    <option value="Zlatar">Zlatar </option>
+                    <option value="Klanjec">Klanjec</option>
+                    <option value="Konjščina">Konjščina</option>
+                    <option value="Marija Bistrica">Marija Bistrica</option>
+                    <option value="Pregrada">Pregrada</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="periodicVehicleInspection" class="form-label">Starost vozila:</label>
+                <select id="periodicVehicleInspection" name="periodicVehicleInspection" class="form-select">
+                    <option value="Jednom godišnje za vozila mlađa od 6 godina">Jednom godišnje za vozila mlađa od 6 godina</option>
+                    <option value="Svakih 6 mjeseci za vozila starosti 6-10 godina">Svakih 6 mjeseci za vozila starosti 6-10 godina</option>
+                    <option value="Svakih 3 mjeseca za vozila starija od 10 godina">Svakih 3 mjeseca za vozila starija od 10 godina</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="reminderDayPeriodic" class="form-label">Podsjetnik u danima(Istek periodičkog pregleda):</label>
+                <input type="text" class="form-control" id="reminderDayPeriodic" name="reminderDayPeriodic"
+                       placeholder="Unesite broj dana">
+            </div>
+            <br><br>
+            <div class="d-flex justify-content-start align-items-end gap-2">
+                <button type="submit" class="btn btn-primary flex-grow-0" th:text="'Spremi'">Spremi</button>
+                <a href="/main" class="btn btn-secondary mt-2 flex-grow-0">Nazad</a>
+            </div>
+        </form>
+    </div>
+    <!-- Forma 3 : Svjedodžba -->
+    <div id="form-3" class="form-container">
+        <h2>Svjedodžba</h2>
+        <form th:action="@{/saveCertificate}" th:method="post" onsubmit="return openConfirmationModal(event)">
+            <div class="mb-3">
+                <label for="nameCertificate" class="form-label">Ime:</label>
+                <input type="text" class="form-control" id="nameCertificate" name="nameCertificate"
+                       placeholder="Unesite ime">
+            </div>
+            <div class="mb-3">
+                <label for="surnnameCertificate" class="form-label">Prezime:</label>
+                <input type="text" class="form-control" id="surnnameCertificate" name="surnnameCertificate"
+                       placeholder="Unesite prezime">
+            </div>
+            <div class="mb-3">
+                <label for="identificationNumberCertificate" class="form-label">OIB:</label>
+                <input type="text" class="form-control" id="identificationNumberCertificate"
+                       name="identificationNumberCertificate" placeholder="Unesite OIB">
+            </div>
+            <div class="mb-3">
+                <label for="renewalDateCertificate" class="form-label">Datum obnove(Do kad vrijedi):</label>
+                <input type="date" class="form-control" name="renewalDateCertificate" id="renewalDateCertificate">
+            </div>
+            <div class="mb-3">
+                <label for="outpostCertificate" class="form-label">Ispostava:</label>
+                <select id="outpostCertificate" name="outpostCertificate" class="form-select">
+                    <option value="Krapina">Krapina</option>
+                    <option value="Donja Stubica">Donja Stubica</option>
+                    <option value="Zabok">Zabok</option>
+                    <option value="Zlatar">Zlatar </option>
+                    <option value="Klanjec">Klanjec</option>
+                    <option value="Konjščina">Konjščina</option>
+                    <option value="Marija Bistrica">Marija Bistrica</option>
+                    <option value="Pregrada">Pregrada</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="reminderDayCertificate" class="form-label">Podsjetnik u danima(Istek licence):</label>
+                <input type="number" class="form-control" id="reminderDayCertificate" name="reminderDayCertificate"
+                       placeholder="Unesite broj dana">
+            </div>
+            <br><br>
+            <div class="d-flex justify-content-start align-items-end gap-2">
+                <button type="submit" class="btn btn-primary flex-grow-0" th:text="'Spremi'">Spremi</button>
+                <a href="/main" class="btn btn-secondary mt-2 flex-grow-0">Nazad</a>
+            </div>
+        </form>
+    </div>
+    <!-- Forma 4 : Tehnički pregled vozila -->
+    <div id="form-4" class="form-container">
+        <h2>Tehnički pregled vozila</h2>
+        <form th:action="@{/saveTechnicalCheck}" th:method="post" onsubmit="return openConfirmationModal(event)">
+            <div class="mb-3">
+                <label for="vehicleTechnicalInspectionName" class="form-label">Ime automobila:</label>
+                <input type="text" class="form-control" id="vehicleTechnicalInspectionName"
+                       name="vehicleTechnicalInspectionName" placeholder="Unesite naziv automobila">
+            </div>
+            <div class="mb-3">
+                <label for="registrationTechnicalInspection" class="form-label">Registracija:</label>
+                <input type="text" class="form-control" name="registrationTechnicalInspection"
+                       id="registrationTechnicalInspection"
+                       placeholder="Unesite registraciju">
+            </div>
+            <div class="mb-3">
+                <label for="renewalDateTechnicalInspection" class="form-label">Datum obnove(Do kad vrijedi):</label>
+                <input type="date" class="form-control" name="renewalDateTechnicalInspection"
+                       id="renewalDateTechnicalInspection">
+            </div>
+            <div class="mb-3">
+                <label for="serviceTechnicalInspection" class="form-label">Partner:</label>
+                <input type="text" class="form-control" id="serviceTechnicalInspection" name="serviceTechnicalInspection"
+                       placeholder="Unesite partnera">
+            </div>
+            <div class="mb-3">
+                <label for="outpostTechnicalInspection" class="form-label">Ispostava:</label>
+                <select id="outpostTechnicalInspection" name="outpostTechnicalInspection"
+                        class="form-select">
+                    <option value="Krapina">Krapina</option>
+                    <option value="Donja Stubica">Donja Stubica</option>
+                    <option value="Zabok">Zabok</option>
+                    <option value="Zlatar">Zlatar </option>
+                    <option value="Klanjec">Klanjec</option>
+                    <option value="Konjščina">Konjščina</option>
+                    <option value="Marija Bistrica">Marija Bistrica</option>
+                    <option value="Pregrada">Pregrada</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="reminderDayVehicleInspection" class="form-label">Podsjetnik u danima(Istek tehničkog pregleda):</label>
+                <input type="text" class="form-control" id="reminderDayVehicleInspection"
+                       name="reminderDayVehicleInspection" placeholder="Unesite broj dana">
+            </div>
+            <br><br>
+            <div class="d-flex justify-content-start align-items-end gap-2">
+                <button type="submit" class="btn btn-primary flex-grow-0" th:text="'Spremi'">Spremi</button>
+                <a href="/main" class="btn btn-secondary mt-2 flex-grow-0">Nazad</a>
+            </div>
+        </form>
+    </div>
+    <!-- Forma 5 :Osiguranje vozila -->
+    <div id="form-5" class="form-container">
+        <h2>Osiguranje vozila</h2>
+        <form th:action="@{/vehicleInsurance}" th:method="post" onsubmit="return openConfirmationModal(event)">
+            <div class="mb-3">
+                <label for="vehicleInsuranceName" class="form-label">Ime:</label>
+                <input type="text" class="form-control" id="vehicleInsuranceName" name="vehicleInsuranceName"
+                       placeholder="Unesite naziv automobila">
+            </div>
+            <div class="mb-3">
+                <label for="vehicleInsuranceRegistration" class="form-label">Registracija:</label>
+                <input type="text" class="form-control" name="vehicleInsuranceRegistration"
+                       id="vehicleInsuranceRegistration"
+                       placeholder="Unesite registraciju">
+            </div>
+            <div class="mb-3">
+                <label for="renewalDateVehicleInsurance" class="form-label">Datum obnove(Do kad vrijedi):</label>
+                <input type="date" class="form-control" name="renewalDateVehicleInsurance"
+                       id="renewalDateVehicleInsurance">
+            </div>
+            <div class="mb-3">
+                <label for="serviceVehicleInsurance" class="form-label">Partner:</label>
+                <input type="text" class="form-control" id="serviceVehicleInsurance" name="serviceVehicleInsurance"
+                       placeholder="Unesite partnera">
+            </div>
+            <div class="mb-3">
+                <label for="vehicleInsuranceOutpost" class="form-label">Ispostava:</label>
+                <select id="vehicleInsuranceOutpost" name="vehicleInsuranceOutpost" class="form-select">
+                    <option value="Krapina">Krapina</option>
+                    <option value="Donja Stubica">Donja Stubica</option>
+                    <option value="Zabok">Zabok</option>
+                    <option value="Zlatar">Zlatar </option>
+                    <option value="Klanjec">Klanjec</option>
+                    <option value="Konjščina">Konjščina</option>
+                    <option value="Marija Bistrica">Marija Bistrica</option>
+                    <option value="Pregrada">Pregrada</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="reminderDayVehicleInsurance" class="form-label">Podsjetnik u danima(Istek osiguranja):</label>
+                <input type="text" class="form-control" id="reminderDayVehicleInsurance"
+                       name="reminderDayVehicleInsurance" placeholder="Unesite broj dana">
+            </div>
+            <br><br>
+            <div class="d-flex justify-content-start align-items-end gap-2">
+                <button type="submit" class="btn btn-primary flex-grow-0" th:text="'Spremi'">Spremi</button>
+                <a href="/main" class="btn btn-secondary mt-2 flex-grow-0">Nazad</a>
+            </div>
+
+        </form>
+    </div>
+    <!-- Forma 6: Ugovor o radu -->
+    <div id="form-6" class="form-container">
+        <h2>Ugovor o radu</h2>
+        <form th:action="@{/saveEmploymentcontract}" th:method="post" onsubmit="return openConfirmationModal(event)">
+            <div class="mb-3">
+                <label for="employmentContractName" class="form-label">Ime:</label>
+                <input type="text" class="form-control" id="employmentContractName" name="employmentContractName"
+                       placeholder="Unesite ime">
+            </div>
+            <div class="mb-3">
+                <label for="employmentContractSurname" class="form-label">Prezime:</label>
+                <input type="text" class="form-control" id="employmentContractSurname" name="employmentContractSurname"
+                       placeholder="Unesite prezime">
+            </div>
+            <div class="mb-3">
+                <label for="identificationNumberEmploymentcontract" class="form-label">OIB:</label>
+                <input type="text" class="form-control" id="identificationNumberEmploymentcontract"
+                       name="identificationNumberEmploymentcontract" placeholder="Unesite OIB">
+            </div>
+            <div class="mb-3">
+                <label for="renewalDateEmploymentContract" class="form-label">Datum obnove(Do kad vrijedi):</label>
+                <input type="date" class="form-control" name="renewalDateEmploymentContract"
+                       id="renewalDateEmploymentContract">
+            </div>
+            <div class="mb-3">
+                <label for="outpostEmploymentContract" class="form-label">Ispostava:</label>
+                <select id="outpostEmploymentContract" name="outpostEmploymentContract" class="form-select">
+                    <option value="Krapina">Krapina</option>
+                    <option value="Donja Stubica">Donja Stubica</option>
+                    <option value="Zabok">Zabok</option>
+                    <option value="Zlatar">Zlatar </option>
+                    <option value="Klanjec">Klanjec</option>
+                    <option value="Konjščina">Konjščina</option>
+                    <option value="Marija Bistrica">Marija Bistrica</option>
+                    <option value="Pregrada">Pregrada</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="employmentContractDepartment" class="form-label">Odjel:</label>
+                <select id="employmentContractDepartment" name="employmentContractDepartment" class="form-select">
+                    <option value="Glavna Sestra">Glavna Sestra</option>
+                    <option value="Vozni park">Vozni park</option>
+                    <option value="Kadrovska">Kadrovska</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="reminderDayEmploymentContract" class="form-label">Podsjetnik u danima(Istek ugovora):</label>
+                <input type="text" class="form-control" id="reminderDayEmploymentContract"
+                       name="reminderDayEmploymentContract" placeholder="Unesite broj dana">
+            </div>
+            <br><br>
+            <div class="d-flex justify-content-start align-items-end gap-2">
+                <button type="submit" class="btn btn-primary flex-grow-0" th:text="'Spremi'">Spremi</button>
+                <a href="/main" class="btn btn-secondary mt-2 flex-grow-0">Nazad</a>
+            </div>
+        </form>
+    </div>
+    <a href="/main" class="btn btn-secondary mt-2 flex-grow-0">Nazad</a>
+</div>
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">Potvrda</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
+            </div>
+            <div class="modal-body">
+                Jeste li sigurni da želite dodati ovaj dokument?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="confirmAndSubmitForm()">Potvrdi</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Nazad</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<!-- Footer Section -->
+<footer class="bg-dark text-white text-center py-3 mt-4">
+    <p>&copy; 2025 DocAlert. Sva prava pridržana. | <a href="ObnoviMe_Information.html"
+                                                       class="text-white text-decoration-underline">Informacije o aplikaciji</a></p>
+</footer>
+<script src="/scripts.js"></script>
+</body>
+</html>
