@@ -1,31 +1,31 @@
-# Form Submission Bug Fix Documentation
+# Dokumentacija popravka greške u slanju obrasca
 
-## Issue Description
-When attempting to submit the "Svjedodžba" form (Certificate form) in the DocumentEntryForm, clicking the "Spremi" (Save) button and confirming in the modal dialog did not result in any data being saved. The form submission was not reaching the backend controller endpoint `/saveCertificate`.
+## Opis problema
+Prilikom pokušaja slanja obrasca "Svjedodžba" u DocumentEntryForm-u, klik na gumb "Spremi" i potvrda u modalnom dijalogu nisu rezultirali spremanjem podataka. Slanje obrasca nije dosezalo krajnju točku kontrolera `/saveCertificate`.
 
-## Root Cause Analysis
-The issue was traced to an incorrect implementation of the confirmation modal and form submission logic. There were two main problems:
+## Analiza uzroka problema
+Problem je pronađen u neispravnoj implementaciji modalnog dijaloga za potvrdu i logici slanja obrasca. Postojala su dva glavna problema:
 
-1. **Modal Form Conflict**
-   - The confirmation modal contained its own `<form>` element with a different action
+1. **Konflikt modalnog obrasca**
+   - Modalni dijalog za potvrdu sadržavao je vlastiti `<form>` element s drugačijom akcijom
    ```html
    <div class="modal-footer">
-       <form action="/main" method="get">  <!-- This was incorrect -->
+       <form action="/main" method="get">  <!-- Ovo je bilo neispravno -->
            <button type="submit" class="btn btn-primary" onclick="submitForm()">Potvrdi</button>
            ...
        </form>
    </div>
    ```
-   - This nested form was intercepting the submission and redirecting to `/main` without sending the form data
+   - Ovaj ugniježđeni obrazac presretao je slanje i preusmjeravao na `/main` bez slanja podataka obrasca
 
-2. **JavaScript Implementation**
-   - The `openConfirmationModal()` function stored the form reference incorrectly
-   - The `submitForm()` function referenced in the modal button's onclick event was not properly implemented
-   - There was no proper mechanism to submit the original form after confirmation
+2. **JavaScript implementacija**
+   - Funkcija `openConfirmationModal()` je neispravno pohranjivala referencu na obrazac
+   - Funkcija `submitForm()` navedena u onclick događaju modalnog gumba nije bila pravilno implementirana
+   - Nije postojao pravilan mehanizam za slanje izvornog obrasca nakon potvrde
 
-## Solution Implementation
+## Implementacija rješenja
 
-### 1. JavaScript Fixes (scripts.js)
+### 1. JavaScript ispravci (scripts.js)
 ```javascript
 function openConfirmationModal(event) {
     event.preventDefault();
@@ -43,7 +43,7 @@ function confirmAndSubmitForm() {
 }
 ```
 
-### 2. Modal HTML Fixes (DocumentEntryForm.html)
+### 2. Ispravci modalnog HTML-a (DocumentEntryForm.html)
 ```html
 <div class="modal-footer">
     <button type="button" class="btn btn-primary" onclick="confirmAndSubmitForm()">Potvrdi</button>
@@ -51,42 +51,42 @@ function confirmAndSubmitForm() {
 </div>
 ```
 
-## Key Changes Made
-1. Removed the nested form from the modal dialog
-2. Implemented proper form reference storage using `window.formToSubmit`
-3. Created a new `confirmAndSubmitForm()` function to handle the actual form submission
-4. Updated the modal's confirm button to call the correct submission function
-5. Maintained the toast notification functionality using sessionStorage
+## Ključne promjene
+1. Uklonjen ugniježđeni obrazac iz modalnog dijaloga
+2. Implementirano pravilno pohranjivanje reference obrasca koristeći `window.formToSubmit`
+3. Stvorena nova funkcija `confirmAndSubmitForm()` za upravljanje stvarnim slanjem obrasca
+4. Ažuriran gumb za potvrdu u modalnom dijalogu da poziva ispravnu funkciju za slanje
+5. Održana funkcionalnost obavijesti o uspjehu koristeći sessionStorage
 
-## Testing Verification
-After implementing these changes:
-1. The form submission successfully reaches the backend controller
-2. Data is properly saved to the database
-3. User is redirected to the main page after submission
-4. Success toast notification is displayed
+## Provjera testiranjem
+Nakon implementacije ovih promjena:
+1. Slanje obrasca uspješno doseže kontroler na backend-u
+2. Podaci se ispravno spremaju u bazu podataka
+3. Korisnik se preusmjerava na glavnu stranicu nakon slanja
+4. Prikazuje se obavijest o uspjehu
 
-## Technical Impact
-- Improved form submission reliability
-- Eliminated conflicting form actions
-- Maintained user experience with confirmation modal
-- Preserved success notification functionality
+## Tehnički utjecaj
+- Poboljšana pouzdanost slanja obrasca
+- Eliminirane konfliktne akcije obrazaca
+- Održano korisničko iskustvo s modalnim dijalogom za potvrdu
+- Očuvana funkcionalnost obavijesti o uspjehu
 
-## Best Practices Learned
-1. Avoid nesting forms in HTML as it can lead to unexpected behavior
-2. Use global window object carefully when needed to store temporary form references
-3. Implement proper event prevention and handling for modal confirmations
-4. Maintain clear separation between modal UI and form submission logic
+## Naučene najbolje prakse
+1. Izbjegavati ugnježđivanje obrazaca u HTML-u jer može dovesti do neočekivanog ponašanja
+2. Pažljivo koristiti globalni window objekt kada je potrebno za privremeno pohranjivanje referenci obrazaca
+3. Implementirati pravilno sprječavanje i rukovanje događajima za modalne potvrde
+4. Održavati jasno odvajanje između modalnog korisničkog sučelja i logike slanja obrazaca
 
-## Related Files
+## Povezane datoteke
 - `src/main/resources/templates/DocumentEntryForm.html`
 - `src/main/resources/static/scripts.js`
 - `src/main/java/com/obnovime/controller/FormController.java`
 
-## Future Considerations
-1. Consider implementing a more robust form handling system for multiple forms
-2. Add client-side validation before form submission
-3. Implement better error handling and user feedback
-4. Consider using AJAX for form submissions to prevent full page reloads
+## Buduća razmatranja
+1. Razmotriti implementaciju robusnijeg sustava za rukovanje s više obrazaca
+2. Dodati validaciju na strani klijenta prije slanja obrasca
+3. Implementirati bolje rukovanje pogreškama i povratne informacije korisnicima
+4. Razmotriti korištenje AJAX-a za slanje obrazaca kako bi se izbjegli potpuni osvježi stranice
 
 ---
-*Document created: February 5, 2025*
+*Dokument kreiran: 5. veljače 2025.*
