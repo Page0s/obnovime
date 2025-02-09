@@ -1,10 +1,6 @@
 package com.obnovime.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +13,7 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "document_files")
 public class DocumentFile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,13 +23,32 @@ public class DocumentFile {
     private String number;
     private LocalDate renewalDate;
     private Integer renewalPeriod;
-    private String status;
     private String serviceProvider;
-    private String location;
-    private String department;
-    private String resourceType;
-    private String documentType;
     private Boolean arhiva;
+
+    @ManyToOne
+    @JoinColumn(name = "document_type_id")
+    private DocumentType documentType;
+
+    @ManyToOne
+    @JoinColumn(name = "location_id")
+    private Location location;
+
+    @ManyToOne
+    @JoinColumn(name = "resource_type_id")
+    private ResourceType resourceType;
+
+    @ManyToOne
+    @JoinColumn(name = "status_id")
+    private DocumentStatus status;
+
+    @ManyToOne
+    @JoinColumn(name = "vehicle_inspection_period_id")
+    private VehicleInspectionPeriod vehicleInspectionPeriod;
+
+    @ManyToOne
+    @JoinColumn(name = "created_by")
+    private AppUser createdBy;
 
     @Transient
     public String getRowColor() {
@@ -50,12 +66,12 @@ public class DocumentFile {
 
     @Transient
     public String getBadgeClass() {
-        if ("Nema obnove".equals(status) || "Aktivno".equals(status)) {
-            return "badge-status-active";
-        } else if ("Vrijeme za obnovu".equals(status)) {
-            return "badge-renewal-progress";
-        } else if ("Vrijeme za obnovu".equals(status)) {
-            return "badge-renewal";
+        if (status != null) {
+            if ("Nema obnove".equals(status.getName()) || "Aktivno".equals(status.getName())) {
+                return "badge-status-active";
+            } else if ("Vrijeme za obnovu".equals(status.getName())) {
+                return "badge-renewal-progress";
+            }
         }
         return "bg-secondary"; // default color
     }
