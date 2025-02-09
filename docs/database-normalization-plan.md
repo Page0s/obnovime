@@ -250,9 +250,6 @@ public class VehicleInspectionPeriod {
     
     @Column(name = "days_until_renewal", nullable = false)
     private Integer daysUntilRenewal;
-    
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
 }
 ```
 
