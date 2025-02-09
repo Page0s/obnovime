@@ -55,7 +55,7 @@ From the DocumentEntryForm.html, we've identified several sets of hardcoded valu
 
 ### 1. Users Table
 ```sql
-CREATE TABLE users (
+CREATE TABLE app_user (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
@@ -145,7 +145,7 @@ CREATE TABLE document_files (
 ### 1. Korisnici (Users)
 ```sql
 -- Unos korisnika
-INSERT INTO users (email, password, user_type) VALUES
+INSERT INTO app_user (email, password, user_type) VALUES
 ('glavna.sestra@gmail.com', 'gs123', 'CLIENT'),
 ('kadrovska@gmail.com', 'ka123', 'CLIENT'),
 ('vozni.park@gmail.com', 'vp123', 'CLIENT');
