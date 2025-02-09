@@ -59,6 +59,39 @@
         .custom-newEntryBtn {
             background-color: #6C757D !important;
         }
+        .filter-section {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+
+        .filter-header {
+            cursor: pointer;
+        }
+
+        .filter-header:hover {
+            background-color: #f8f9fa;
+        }
+
+        .date-input {
+            width: 100px;
+            height: 30px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 5px;
+            font-size: 14px;
+        }
+
+        .date-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        label {
+            margin-bottom: 0;
+        }
     </style>
 </head>
 <body>
@@ -97,30 +130,162 @@
 
 <div class="container">
     <!-- Action Buttons -->
-    <div class="mb-4 d-flex justify-content-end">
-        <div class="dropdown me-2">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownFilter"
-                    data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-funnel"></i> Filter
-            </button>
-            <ul class="dropdown-menu p-2" aria-labelledby="dropdownFilter">
-                <li><label class="dropdown-item"><input type="checkbox" class="category-checkbox"
-                                                        value="Tip dokumenata"> Tip dokumenata</label></li>
-                <li><label class="dropdown-item"><input type="checkbox" class="category-checkbox" value="Odjel">
-                    Odjel</label></li>
-                <li><label class="dropdown-item"><input type="checkbox" class="category-checkbox" value="Ispostava">
-                    Ispostava</label></li>
-                <li><label class="dropdown-item"><input type="checkbox" class="category-checkbox" value="Vrsta resursa">Vrsta
-                    resursa</label></li>
-                <li><label class="dropdown-item"><input type="checkbox" class="category-checkbox" value="Status"> Status</label>
-                </li>
-                <li class="filter-buttons d-flex gap-2 mt-2 px-2">
-                    <button class="btn btn-primary btn-sm" id="applyFilter">Filtriraj</button>
-                    <button class="btn btn-secondary btn-sm" id="clearFilter">Obriši filter</button>
-                </li>
-            </ul>
+    <div class="mb-4 d-flex justify-content-end gap-2">
+        <!-- Filter Header -->
+        <button class="btn btn-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#filterDrawer" aria-controls="filterDrawer">
+            <i class="bi bi-funnel"></i> Filter
+        </button>
+
+        <!-- Filter Drawer -->
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="filterDrawer" aria-labelledby="filterDrawerLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="filterDrawerLabel">Filter</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <form id="filterForm">
+                    <!-- Tip dokumenta -->
+                    <div class="filter-section">
+                        <div class="filter-header" data-bs-toggle="collapse" data-bs-target="#tipDokumentaCollapse" aria-expanded="false">
+                            Tip dokumenta
+                        </div>
+                        <div id="tipDokumentaCollapse" class="collapse">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="licenca" value="Licenca">
+                                <label class="form-check-label" for="licenca">Licenca</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="periodicki" value="Periodički pregled vozila">
+                                <label class="form-check-label" for="periodicki">Periodički pregled vozila</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="svjedodzba" value="Svjedodžba">
+                                <label class="form-check-label" for="svjedodzba">Svjedodžba</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="tehnički pregled vozila" value="Tehnički pregled vozila">
+                                <label class="form-check-label" for="tehnički pregled vozila">Tehnički pregled vozila</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="osiguranje vozila" value="Osiguranje vozila">
+                                <label class="form-check-label" for="osiguranje vozila">Osiguranje vozila</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="ugovor o radu" value="Ugovor o radu">
+                                <label class="form-check-label" for="ugovor o radu">Ugovor o radu</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vrijeme obnove -->
+                    <div class="row mt-2">
+                        <div class="col-auto">
+                            <label for="od">Od:</label>
+                            <input type="date" class="form-control" id="od">
+                        </div>
+                        <div class="col-auto">
+                            <label for="do">Do:</label>
+                            <input type="date" class="form-control" id="do">
+                        </div>
+                    </div>
+
+
+                    <!-- Resursi -->
+                    <div class="filter-section">
+                        <div class="filter-header" data-bs-toggle="collapse" data-bs-target="#resursiCollapse" aria-expanded="false">
+                            Resursi
+                        </div>
+                        <div id="resursiCollapse" class="collapse">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="oprema" value="Oprema">
+                                <label class="form-check-label" for="oprema">Oprema</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="radnik" value="Radnik">
+                                <label class="form-check-label" for="radnik">Radnik</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="vozilo" value="Vozilo">
+                                <label class="form-check-label" for="vozilo">Vozilo</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="filter-section">
+                        <div class="filter-header" data-bs-toggle="collapse" data-bs-target="#statusCollapse" aria-expanded="false">
+                            Status
+                        </div>
+                        <div id="statusCollapse" class="collapse">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="vrijemeZaObnovu" value="Vrijeme za obnovu">
+                                <label class="form-check-label" for="vrijemeZaObnovu">Vrijeme za obnovu</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="obnovaUTijeku" value="Obnova u tijeku">
+                                <label class="form-check-label" for="obnovaUTijeku">Obnova u tijeku</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="aktivno" value="Aktivno">
+                                <label class="form-check-label" for="aktivno">Aktivno</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="nemaObnove" value="Nema obnove">
+                                <label class="form-check-label" for="nemaObnove">Nema obnove</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ispostava -->
+                    <div class="filter-section">
+                        <div class="filter-header" data-bs-toggle="collapse" data-bs-target="#ispostavaCollapse" aria-expanded="false">
+                            Ispostava
+                        </div>
+                        <div id="ispostavaCollapse" class="collapse">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="krapina" value="Krapina">
+                                <label class="form-check-label" for="krapina">Krapina</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="donjaStubica" value="Donja Stubica">
+                                <label class="form-check-label" for="donjaStubica">Donja Stubica</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="zabok" value="Zabok">
+                                <label class="form-check-label" for="zabok">Zabok</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="zlatar" value="Zlatar">
+                                <label class="form-check-label" for="zlatar">Zlatar</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="klanjec" value="Klanjec">
+                                <label class="form-check-label" for="klanjec">Klanjec</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="konjscina" value="Konjščina">
+                                <label class="form-check-label" for="konjscina">Konjščina</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="marijaBistrica" value="Marija Bistrica">
+                                <label class="form-check-label" for="marijaBistrica">Marija Bistrica</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="pregrada" value="Pregrada">
+                                <label class="form-check-label" for="pregrada">Pregrada</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Akcijske tipke -->
+                    <div class="d-flex justify-content-between mt-4">
+                        <button type="button" class="btn btn-primary" id="applyFilter">Filtriraj</button>
+                        <button type="reset" class="btn btn-secondary" id="clearFilter">Obriši filter</button>
+                    </div>
+                </form>
+            </div>
         </div>
-        <a href="/form" class="btn btn-success me-2 custom-newEntryBtn">
+        <a href="/form" class="btn btn-secondary">
             <i class="bi bi-plus-circle"></i> Novi unos
         </a>
         <a href="/archive" class="btn btn-secondary">
