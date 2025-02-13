@@ -111,15 +111,15 @@
                     <small class="d-block text-white mb-1">Prijavljeni korisnik</small>
                     <div class="dropdown">
                         <button class="btn btn-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">
-                            <i class="bi bi-person"></i> Glavna sestra
+                            <i class="bi bi-person"></i> <span th:text="${session.user.email}">Korisnik</span>
                         </button>
                         <ul class="dropdown-menu">
                             <li><h6 class="dropdown-header">Korisnik</h6></li>
-                            <li><a class="dropdown-item" href="#">Glavna sestra</a></li>
+                            <li><a class="dropdown-item" href="#"><span th:text="${session.user.email}">Korisnik</span></a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item text-danger" href="/index">Odjavi se</a></li>
+                            <li><a class="dropdown-item text-danger" href="/logout">Odjavi se</a></li>
                         </ul>
                     </div>
                 </div>
@@ -371,18 +371,18 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="document, iterStat : ${documents}" th:class="${document.rowColor}">
-                        <td th:text="${iterStat.count}">ID</td>
+                        <tr th:each="document, iterStat : ${documents}" th:class="${document.rowColor}">
+                        <td th:text="${iterStat.count}">1</td>
                         <td th:text="${document.name}">Naziv</td>
                         <td th:text="${document.number}">Šifra dokumenta</td>
                         <td th:text="${document.serviceProvider}">Partner</td>
-                        <td th:text="${document.location}">Lokacija</td>
-                        <td th:text="${document.resourceType}">Vrsta resursa</td>
-                        <td style="white-space: nowrap;" th:text="${#temporals.format(document.renewalDate, 'dd-MM-yyyy')}">Datum obnove</td>
-                        <td th:text="${document.documentType}">Tip dokumenta</td>
+                        <td th:text="${document.locationName}">Lokacija</td>
+                        <td th:text="${document.resourceTypeName}">Vrsta resursa</td>
+                        <td style="white-space: nowrap;" th:text="${document.renewalDate != T(java.time.LocalDate).MIN} ? ${#temporals.format(document.renewalDate, 'dd.MM.yyyy.')} : 'N/A'">Datum obnove</td>
+                        <td th:text="${document.documentTypeName}">Tip dokumenta</td>
                         <td>
-                                    <span th:class="'badge ' + ${document.badgeClass}"
-                                          th:text="${document.status}">Status</span>
+                            <span class="badge" th:classappend="${document.badgeClass}"
+                                  th:text="${document.statusName}">Status</span>
                         </td>
                         <td>
                             <div class="d-flex gap-1">

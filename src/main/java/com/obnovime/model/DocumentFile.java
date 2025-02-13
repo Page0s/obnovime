@@ -1,10 +1,6 @@
 package com.obnovime.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +13,7 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "document_files")
 public class DocumentFile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,37 +23,30 @@ public class DocumentFile {
     private String number;
     private LocalDate renewalDate;
     private Integer renewalPeriod;
-    private String status;
     private String serviceProvider;
-    private String location;
-    private String department;
-    private String resourceType;
-    private String documentType;
     private Boolean arhiva;
 
-    @Transient
-    public String getRowColor() {
-        LocalDate today = LocalDate.now();
-        LocalDate alertDate = renewalDate.minusDays(renewalPeriod);
+    @ManyToOne
+    @JoinColumn(name = "document_type_id")
+    private DocumentType documentType;
 
-        if(today.isAfter(renewalDate)) {
-            return "status-expired"; // Crvena
-        } else if(!today.isBefore(alertDate)) {
-            return "status-renewal"; // Narančasta
-        } else {
-            return "status-active"; // Bijela
-        }
-    }
+    @ManyToOne
+    @JoinColumn(name = "location_id")
+    private Location location;
 
-    @Transient
-    public String getBadgeClass() {
-        if ("Nema obnove".equals(status) || "Aktivno".equals(status)) {
-            return "badge-status-active";
-        } else if ("Vrijeme za obnovu".equals(status)) {
-            return "badge-renewal-progress";
-        } else if ("Vrijeme za obnovu".equals(status)) {
-            return "badge-renewal";
-        }
-        return "bg-secondary"; // default color
-    }
+    @ManyToOne
+    @JoinColumn(name = "resource_type_id")
+    private ResourceType resourceType;
+
+    @ManyToOne
+    @JoinColumn(name = "status_id")
+    private DocumentStatus status;
+
+    @ManyToOne
+    @JoinColumn(name = "vehicle_inspection_period_id")
+    private VehicleInspectionPeriod vehicleInspectionPeriod;
+
+    @ManyToOne
+    @JoinColumn(name = "created_by")
+    private AppUser createdBy;
 }
