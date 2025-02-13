@@ -1,5 +1,6 @@
 package com.obnovime.dto;
 
+import com.obnovime.enums.DocumentStatus;
 import com.obnovime.model.*;
 import lombok.Data;
 import java.time.LocalDate;
@@ -49,18 +50,12 @@ public class DocumentFileDTO {
         
         if (entity.getStatus() != null) {
             // update the status name and badge class
-            dto.setStatusName(entity.getStatus().getName() != null ? 
-                entity.getStatus().getName() : "N/A");
-                
+            String statusName = entity.getStatus().getName();
+            dto.setStatusName(statusName != null ? statusName : "N/A");
+            
             // Set badge class based on status
-            if ("Nema obnove".equals(entity.getStatus().getName()) || 
-                "Aktivno".equals(entity.getStatus().getName())) {
-                dto.setBadgeClass("badge-status-active");
-            } else if ("Vrijeme za obnovu".equals(entity.getStatus().getName())) {
-                dto.setBadgeClass("badge-renewal-progress");
-            } else {
-                dto.setBadgeClass("bg-secondary");
-            }
+            DocumentStatus documentStatus = DocumentStatus.fromDisplayName(statusName);
+            dto.setBadgeClass(documentStatus.getBadgeClass());
         }
 
         // Calculate row color based on renewal date and period
