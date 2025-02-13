@@ -49,30 +49,4 @@ public class DocumentFile {
     @ManyToOne
     @JoinColumn(name = "created_by")
     private AppUser createdBy;
-
-    @Transient
-    public String getRowColor() {
-        LocalDate today = LocalDate.now();
-        LocalDate alertDate = renewalDate.minusDays(renewalPeriod);
-
-        if(today.isAfter(renewalDate)) {
-            return "status-expired"; // Crvena
-        } else if(!today.isBefore(alertDate)) {
-            return "status-renewal"; // Narančasta
-        } else {
-            return "status-active"; // Bijela
-        }
-    }
-
-    @Transient
-    public String getBadgeClass() {
-        if (status != null) {
-            if ("Nema obnove".equals(status.getName()) || "Aktivno".equals(status.getName())) {
-                return "badge-status-active";
-            } else if ("Vrijeme za obnovu".equals(status.getName())) {
-                return "badge-renewal-progress";
-            }
-        }
-        return "bg-secondary"; // default color
-    }
 }

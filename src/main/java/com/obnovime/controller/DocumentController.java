@@ -10,10 +10,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.obnovime.model.*;
 import com.obnovime.repository.*;
+import com.obnovime.dto.DocumentFileDTO;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+
+import java.util.stream.Collectors;
+
+import java.util.Objects;
 
 @Controller
 public class DocumentController {
@@ -35,47 +40,38 @@ public class DocumentController {
     }
 
     private void updateDocumentStatus(DocumentFile document) {
-        LocalDate today = LocalDate.now();
-        LocalDate alertDate = document.getRenewalDate().minusDays(Optional.ofNullable(document.getRenewalPeriod()).orElse(0));
+            LocalDate today = LocalDate.now();
+            LocalDate alertDate = document.getRenewalDate().minusDays(Optional.ofNullable(document.getRenewalPeriod()).orElse(0));
 
         DocumentStatus activeStatus = documentStatusRepository.findById(1L).orElseThrow(); // Aktivno
         DocumentStatus renewalStatus = documentStatusRepository.findById(2L).orElseThrow(); // Vrijeme za obnovu
 
-        if ((today.isAfter(alertDate) || today.equals(alertDate)) && activeStatus.getName().equals(document.getStatus().getName())) {
-            document.setStatus(renewalStatus);
-            documentRepository.save(document);
-        }
+            if ((today.isAfter(alertDate) || today.equals(alertDate)) && 
+                activeStatus.getName().equalsIgnoreCase(document.getStatus().getName())) {
+                document.setStatus(renewalStatus);
+                documentRepository.save(document);
+            }
 
-        if (today.isBefore(alertDate) && renewalStatus.getName().equals(document.getStatus().getName())) {
-            document.setStatus(activeStatus);
-            documentRepository.save(document);
+            if (today.isBefore(alertDate) && 
+                renewalStatus.getName().equalsIgnoreCase(document.getStatus().getName())) {
+                document.setStatus(activeStatus);
+                documentRepository.save(document);
         }
-    }
-
+}
+    
     @GetMapping("/main")
     public String showMainPage(Model model) {
         List<DocumentFile> documents = documentRepository.findAllByOrderByRenewalDateAsc();
         documents.forEach(this::updateDocumentStatus);
-        model.addAttribute("documents", documents);
         
-        documents.forEach(document -> {
-            System.out.println("ID: " + document.getId() + " DATE: ");
-            System.out.println("Name: " + Optional.ofNullable(document.getRenewalDate()).orElse(LocalDate.MIN));
-            System.out.println("Name: " + Optional.ofNullable(document.getName()).orElse("N/A"));
-            System.out.println("Number: " + Optional.ofNullable(document.getNumber()).orElse("N/A"));
-            System.out.println("Status: " + Optional.ofNullable(document.getStatus()).map(DocumentStatus::getName).orElse("N/A"));
-            System.out.println("Location: " + Optional.ofNullable(document.getLocation()).map(Location::getName).orElse("N/A"));
-
-            System.out.println("Resource Type: " + Optional.ofNullable(document.getResourceType()).map(ResourceType::getName).orElse("N/A"));
-            System.out.println("Service Provider: " + Optional.ofNullable(document.getServiceProvider()).orElse("N/A"));
-            System.out.println("Renewal Period: " + Optional.ofNullable(document.getRenewalPeriod()).orElse(0));
-            System.out.println("Archive: " + Optional.ofNullable(document.getArhiva()).orElse(false));
-            System.out.println("Document Type: " + Optional.ofNullable(document.getDocumentType()).map(DocumentType::getName).orElse("N/A"));
-            System.out.println("Created By: " + Optional.ofNullable(document.getCreatedBy()).map(AppUser::getEmail).orElse("N/A"));
-        });
-
-        return "redirect:/index.html";
-        // return "DocumentMainForm";
+        List<DocumentFileDTO> documentDtos = documents.stream()
+                .filter(Objects::nonNull)
+                .map(DocumentFileDTO::fromEntity)
+                .collect(Collectors.toList());
+                
+        model.addAttribute("documents", documentDtos);
+        
+        return "DocumentMainForm";
     }
 
     @GetMapping("/dokument/{id}/obnova")

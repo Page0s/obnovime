@@ -371,18 +371,18 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="document, iterStat : ${documents}" th:class="${document.rowColor}">
-                        <td th:text="${iterStat.count}">ID</td>
+                        <tr th:each="document, iterStat : ${documents}" th:class="${document.rowColor}">
+                        <td th:text="${iterStat.count}">1</td>
                         <td th:text="${document.name}">Naziv</td>
                         <td th:text="${document.number}">Šifra dokumenta</td>
                         <td th:text="${document.serviceProvider}">Partner</td>
-                        <td th:text="${document.location}">Lokacija</td>
-                        <td th:text="${document.resourceType}">Vrsta resursa</td>
-                        <td style="white-space: nowrap;" th:text="${#temporals.format(document.renewalDate, 'dd-MM-yyyy')}">Datum obnove</td>
-                        <td th:text="${document.documentType}">Tip dokumenta</td>
+                        <td th:text="${document.locationName}">Lokacija</td>
+                        <td th:text="${document.resourceTypeName}">Vrsta resursa</td>
+                        <td style="white-space: nowrap;" th:text="${document.renewalDate != T(java.time.LocalDate).MIN} ? ${#temporals.format(document.renewalDate, 'dd.MM.yyyy.')} : 'N/A'">Datum obnove</td>
+                        <td th:text="${document.documentTypeName}">Tip dokumenta</td>
                         <td>
-                                    <span th:class="'badge ' + ${document.badgeClass}"
-                                          th:text="${document.status}">Status</span>
+                            <span class="badge" th:classappend="${document.badgeClass}"
+                                  th:text="${document.statusName}">Status</span>
                         </td>
                         <td>
                             <div class="d-flex gap-1">
