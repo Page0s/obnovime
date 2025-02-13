@@ -26,4 +26,6 @@ public class AppUser {
     private String lastName;
     private String phoneNumber;
     private String address;
+
+
 }

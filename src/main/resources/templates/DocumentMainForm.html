@@ -111,15 +111,15 @@
                     <small class="d-block text-white mb-1">Prijavljeni korisnik</small>
                     <div class="dropdown">
                         <button class="btn btn-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">
-                            <i class="bi bi-person"></i> Glavna sestra
+                            <i class="bi bi-person"></i> <span th:text="${session.user.email}">Korisnik</span>
                         </button>
                         <ul class="dropdown-menu">
                             <li><h6 class="dropdown-header">Korisnik</h6></li>
-                            <li><a class="dropdown-item" href="#">Glavna sestra</a></li>
+                            <li><a class="dropdown-item" href="#"><span th:text="${session.user.email}">Korisnik</span></a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item text-danger" href="/index">Odjavi se</a></li>
+                            <li><a class="dropdown-item text-danger" href="/logout">Odjavi se</a></li>
                         </ul>
                     </div>
                 </div>
