@@ -59,7 +59,7 @@ public class DocumentFileDTO {
             } else if ("Vrijeme za obnovu".equals(entity.getStatus().getName())) {
                 dto.setBadgeClass("badge-renewal-progress");
             } else {
-                dto.setBadgeClass("bg-secondary");
+                dto.setBadgeClass("badge-renewal-progress");
             }
         }
 

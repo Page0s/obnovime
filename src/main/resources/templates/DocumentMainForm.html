@@ -12,12 +12,23 @@
             display: inline-block;
             text-align: center;
         }
+
+        th, td {
+            text-align: center; /* Centriranje teksta unutar th ili td */
+        }
+
         .status-expired { background-color: #e5989b !important; }
         .status-renewal { background-color: #ffcdb2 !important; }
         .status-active { background-color: #ffffff !important; }
-        .badge-renewal { background-color: #00798c !important; }
-        .badge-renewal-progress { background-color: #004073 !important; }
-        .badge-status-active { background-color: #6096ba !important; }
+
+
+
+        .status-picture {
+            width: 30px;  /* Promijeni veličinu po želji */
+            height: 30px; /* Promijeni veličinu po želji */
+            background-size: contain; /* Podesi veličinu slike unutar okvira */
+            display: inline-block; /* Održava element u liniji s tekstom */
+        }
 
         .color-indicator {
             display: inline-block;
@@ -381,8 +392,12 @@
                         <td style="white-space: nowrap;" th:text="${document.renewalDate != T(java.time.LocalDate).MIN} ? ${#temporals.format(document.renewalDate, 'dd.MM.yyyy.')} : 'N/A'">Datum obnove</td>
                         <td th:text="${document.documentTypeName}">Tip dokumenta</td>
                         <td>
-                            <span class="badge" th:classappend="${document.badgeClass}"
-                                  th:text="${document.statusName}">Status</span>
+                            <span class="badge" th:classappend="${document.badgeClass}">
+                                <img th:if="${document.statusName == 'Vrijeme za obnovu'}" class="status-picture" th:src="@{/renewal.png}">
+                                <img th:if="${document.statusName == 'Aktivno'}" class="status-picture" th:src="@{/active.png}">
+                                <img th:if="${document.statusName == 'Nema obnove'}" class="status-picture" th:src="@{/active.png}">
+                                <img th:if="${document.statusName == 'Obnova u tijeku'}" class="status-picture" th:src="@{/renewal-progress.png}">
+                            </span>
                         </td>
                         <td>
                             <div class="d-flex gap-1">
