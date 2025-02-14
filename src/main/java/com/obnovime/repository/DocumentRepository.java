@@ -12,4 +12,7 @@ public interface DocumentRepository extends JpaRepository<DocumentFile, Long> {
 
     @Query("SELECT d FROM DocumentFile d ORDER BY d.renewalDate ASC")
     List<DocumentFile> findAllByOrderByRenewalDateAsc();
+
+
+    List<DocumentFile> findAllByCreatedByIdOrderByRenewalDateAsc(Long createdById);
 }
