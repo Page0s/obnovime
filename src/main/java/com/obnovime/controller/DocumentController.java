@@ -79,8 +79,13 @@ public class DocumentController {
         Optional<DocumentFile> document = documentRepository.findById(id);
         
         if (document.isPresent()) {
-            model.addAttribute("dokument", document.get());
-            model.addAttribute("statuses", documentStatusRepository.findAll());
+            DocumentFileDTO documentDto = DocumentFileDTO.fromEntity(document.get());
+            List<DocumentStatus> statuses = documentStatusRepository.findAll().stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+                
+            model.addAttribute("dokument", documentDto);
+            model.addAttribute("statuses", statuses);
             return "DocumentRenewal";
         } else {
             return "redirect:/main";
