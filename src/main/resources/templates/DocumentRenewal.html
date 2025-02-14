@@ -27,21 +27,18 @@
                         <p><strong>Naziv dokumenta:</strong> <span th:text="${dokument.name}"></span></p>
                     </div>
                     <div class="col-md-4">
-                        <p><strong>Serijski broj:</strong> <span th:text="${dokument.number}"></span></p>
+                        <p><strong>Šifra:</strong> <span th:text="${dokument.number}"></span></p>
                     </div>
                     <div class="col-md-4">
-                        <p><strong>Tip dokumenta:</strong> <span th:text="${dokument.documentType}"></span></p>
+                        <p><strong>Tip dokumenta:</strong> <span th:text="${dokument.documentTypeName}"></span></p>
                     </div>
                 </div>
                 <div class="row mt-3">
                     <div class="col-md-4">
-                        <p><strong>Lokacija:</strong> <span th:text="${dokument.location}"></span></p>
+                        <p><strong>Ispostava:</strong> <span th:text="${dokument.locationName}"></span></p>
                     </div>
                     <div class="col-md-4">
-                        <p><strong>Odjel:</strong> <span th:text="${dokument.department}"></span></p>
-                    </div>
-                    <div class="col-md-4">
-                        <p><strong>Pružatelj usluge:</strong> <span th:text="${dokument.serviceProvider}"></span></p>
+                        <p><strong>Partner:</strong> <span th:text="${dokument.serviceProviderName}"></span></p>
                     </div>
                 </div>
             </div>

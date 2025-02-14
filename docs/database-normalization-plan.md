@@ -62,59 +62,41 @@ CREATE TABLE app_user (
     user_type VARCHAR(20) NOT NULL, -- CLIENT or ADMIN
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-```
 
-### 2. Document Types Table
-```sql
 CREATE TABLE document_types (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
     code VARCHAR(50) NOT NULL UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-```
 
-### 3. Vehicle Inspection Periods Table
-```sql
 CREATE TABLE vehicle_inspection_periods (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     description VARCHAR(100) NOT NULL,
     days_until_renewal INTEGER NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-```
 
-### 4. Locations Table
-```sql
 CREATE TABLE locations (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL UNIQUE,
     active BOOLEAN DEFAULT true,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-```
 
-### 5. Resource Types Table
-```sql
 CREATE TABLE resource_types (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL UNIQUE,
     active BOOLEAN DEFAULT true,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-```
 
-### 6. Document Statuses Table
-```sql
 CREATE TABLE document_statuses (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-```
 
-### 7. Modified DocumentFile Table
-```sql
 CREATE TABLE document_files (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
@@ -142,48 +124,40 @@ CREATE TABLE document_files (
 
 ## Initial Data Population
 
-### 1. Korisnici (Users)
 ```sql
 -- Unos korisnika
 INSERT INTO app_user (email, password, user_type) VALUES
 ('glavna.sestra@gmail.com', 'gs123', 'CLIENT'),
 ('kadrovska@gmail.com', 'ka123', 'CLIENT'),
 ('vozni.park@gmail.com', 'vp123', 'CLIENT');
-```
 
-### 2. Lokacije (Locations)
-```sql
 -- Unos lokacija
 INSERT INTO locations (name) VALUES
-('Krapina'), ('Donja Stubica'), ('Zabok'), ('Zlatar'),
+('N/A'), ('Krapina'), ('Donja Stubica'), ('Zabok'), ('Zlatar'),
 ('Klanjec'), ('Konjščina'), ('Marija Bistrica'), ('Pregrada');
-```
 
-### 3. Periodi pregleda vozila (Vehicle Inspection Periods)
-```sql
--- Unos perioda pregleda vozila
-INSERT INTO vehicle_inspection_periods (description, days_until_renewal) VALUES
-('Jednom godišnje za vozila mlađa od 6 godina', 365),
-('Svakih 6 mjeseci za vozila starosti 6-10 godina', 182),
-('Svakih 3 mjeseca za vozila starija od 10 godina', 90);
-```
-
-### 4. Statusi dokumenata (Document Statuses)
-```sql
--- Unos statusa dokumenata
-INSERT INTO document_statuses (name) VALUES
-('Aktivno'), ('Vrijeme za obnovu'), ('Nema obnove'), ('Obnova u tijeku');
-```
-
-### 5. Vrste resursa (Resource Types)
-```sql
 -- Unos vrsta resursa
 INSERT INTO resource_types (name) VALUES
 ('Oprema'), ('Radnik'), ('Vozilo');
-```
 
-### 6. Vrste dokumenata (Document Types)
-```sql
+-- Unos statusa dokumenata
+INSERT INTO document_statuses (name) VALUES
+('Aktivno'), ('Vrijeme za obnovu'), ('Nema obnove'), ('Obnova u tijeku');
+-- Unos perioda pregleda vozila
+INSERT INTO vehicle_inspection_periods (description, days_until_renewal) VALUES
+('N/A', 0),
+('Jednom godišnje za vozila mlađa od 6 godina', 365),
+('Svakih 6 mjeseci za vozila starosti 6-10 godina', 182),
+('Svakih 3 mjeseca za vozila starija od 10 godina', 90);
+
+-- Unos statusa dokumenata
+INSERT INTO document_statuses (name) VALUES
+('Aktivno'), ('Vrijeme za obnovu'), ('Nema obnove'), ('Obnova u tijeku');
+
+-- Unos vrsta resursa
+INSERT INTO resource_types (name) VALUES
+('Oprema'), ('Radnik'), ('Vozilo');
+
 -- Unos vrsta dokumenata
 INSERT INTO document_types (name) VALUES
 ('Licenca'),
@@ -192,10 +166,7 @@ INSERT INTO document_types (name) VALUES
 ('Tehnički pregled vozila'),
 ('Osiguranje vozila'),
 ('Ugovor o radu');
-```
 
-### 7. Inicijalni dokumenti (Initial Documents)
-```sql
 -- Unos podataka u tablicu document_files
 INSERT INTO document_files (id, name, number, service_provider, location_id, resource_type_id, renewal_date, document_type_id, status_id) VALUES
 (1, 'Benehaert R3 EKG aparat - Mindray', 'FK-26032761', 'Unicomp d.o.o.', NULL, (SELECT id FROM resource_types WHERE name = 'Oprema'), '2024-04-22', (SELECT id FROM document_types WHERE name = 'Licenca'), (SELECT id FROM document_statuses WHERE name = 'Vrijeme za obnovu')),
@@ -207,6 +178,19 @@ INSERT INTO document_files (id, name, number, service_provider, location_id, res
 (7, 'Turk N', NULL, NULL, (SELECT id FROM locations WHERE name = 'Zabok'), (SELECT id FROM resource_types WHERE name = 'Radnik'), '2025-03-01', (SELECT id FROM document_types WHERE name = 'Svjedodžba'), (SELECT id FROM document_statuses WHERE name = 'Vrijeme za obnovu')),
 (8, 'Tehnički pregled vozila', 'KR 686 - IO', 'AutoTech d.o.o.', (SELECT id FROM locations WHERE name = 'Krapina'), (SELECT id FROM resource_types WHERE name = 'Vozilo'), '2025-10-11', (SELECT id FROM document_types WHERE name = 'Tehnički pregled vozila'), (SELECT id FROM document_statuses WHERE name = 'Aktivno')),
 (9, 'Tehnički pregled vozila', 'KR 687 - IO', 'AutoTech d.o.o.', (SELECT id FROM locations WHERE name = 'Krapina'), (SELECT id FROM resource_types WHERE name = 'Vozilo'), '2025-10-11', (SELECT id FROM document_types WHERE name = 'Tehnički pregled vozila'), (SELECT id FROM document_statuses WHERE name = 'Aktivno'));
+
+--- NEW DATA FOR DOCUMENT FILES
+INSERT INTO PUBLIC.DOCUMENT_FILES (ARHIVA,NAME,"NUMBER",RENEWAL_DATE,RENEWAL_PERIOD,SERVICE_PROVIDER,CREATED_BY,DOCUMENT_TYPE_ID,LOCATION_ID,RESOURCE_TYPE_ID,STATUS_ID,VEHICLE_INSPECTION_PERIOD_ID) VALUES
+	 (true,'Benehaert R3 EKG aparat - Mindray','FK-26032761','2024-04-22',60,'Unicomp d.o.o.',1,1,1,1,2,1),
+	 (true,'Mortara, ELI 230 EKG aparat - Mortara Instrument','113080154080','2024-04-22',60,'Unicomp d.o.o.',1,1,1,1,2,1),
+	 (true,'Aspirator na električni pogon','40174','2024-10-16',60,'Inel-medicinska tehnika d.o.o.',1,1,1,1,2,1),
+	 (true,'Lifepak 15 Defibrilator - Fiziokontrol','47416358','2024-11-05',60,'Elektroničar d.o.o.',1,1,1,1,2,1),
+	 (true,'Gučin K.','N/A','2025-03-01',60,'N/A',2,3,3,2,2,1),
+	 (true,'Celjak M.','N/A','2025-03-01',60,'N/A',2,3,3,2,2,1),
+	 (true,'Turk N','N/A','2025-03-01',60,'N/A',2,3,3,2,2,1),
+	 (true,'Vozilo','KR 686 - IO','2025-10-11',60,'AutoTech d.o.o.',3,4,1,3,1,1),
+	 (true,'Vozilo','KR 687 - IO','2025-10-11',60,'AutoTech d.o.o.',3,4,1,3,1,1);
+
 ```
 
 ## Implementation Steps
