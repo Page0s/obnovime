@@ -1,8 +1,10 @@
 -- Unos korisnika
 INSERT INTO app_user (email, password, user_type) VALUES
+('N/A', '1234', 'CLIENT'),
 ('glavna.sestra@gmail.com', 'gs123', 'CLIENT'),
 ('kadrovska@gmail.com', 'ka123', 'CLIENT'),
-('vozni.park@gmail.com', 'vp123', 'CLIENT');
+('vozni.park@gmail.com', 'vp123', 'CLIENT'),
+('ravnatelj@gmail.com', 'rv123', 'CLIENT');
 
 -- Unos lokacija
 INSERT INTO locations (name) VALUES
@@ -33,14 +35,21 @@ INSERT INTO document_types (name) VALUES
 ('Osiguranje vozila'),
 ('Ugovor o radu');
 
+-- Unos Odgovorne osobe
+INSERT INTO responsible_person (department, position, app_user_id) VALUES 
+('N/A', 'N/A', 1),
+('N/A', 'N/A', 2),
+('N/A', 'N/A', 3),
+('N/A', 'N/A', 4);
+
 -- Unos dokumenata
-INSERT INTO document_files (arhiva, name, number, renewal_date, renewal_period, service_provider, created_by, document_type_id, location_id, resource_type_id, status_id, vehicle_inspection_period_id) VALUES
-(true, 'Benehaert R3 EKG aparat - Mindray', 'FK-26032761', '2024-04-22', 60, 'Unicomp d.o.o.', 1, 1, 1, 1, 2, 1),
-(true, 'Mortara, ELI 230 EKG aparat - Mortara Instrument', '113080154080', '2024-04-22', 60, 'Unicomp d.o.o.', 1, 1, 1, 1, 2, 1),
-(true, 'Aspirator na električni pogon', '40174', '2024-10-16', 60, 'Inel-medicinska tehnika d.o.o.', 1, 1, 1, 1, 2, 1),
-(true, 'Lifepak 15 Defibrilator - Fiziokontrol', '47416358', '2024-11-05', 60, 'Elektroničar d.o.o.', 1, 1, 1, 1, 2, 1),
-(true, 'Gučin K.', 'N/A', '2025-03-01', 60, 'N/A', 2, 3, 3, 2, 2, 1),
-(true, 'Celjak M.', 'N/A', '2025-03-01', 60, 'N/A', 2, 3, 3, 2, 2, 1),
-(true, 'Turk N', 'N/A', '2025-03-01', 60, 'N/A', 2, 3, 3, 2, 2, 1),
-(true, 'Vozilo', 'KR 686 - IO', '2025-10-11', 60, 'AutoTech d.o.o.', 3, 4, 1, 3, 1, 1),
-(true, 'Vozilo', 'KR 687 - IO', '2025-10-11', 60, 'AutoTech d.o.o.', 3, 4, 1, 3, 1, 1);
+INSERT INTO document_files (arhiva, name, number, renewal_date, renewal_period, service_provider, created_by, document_type_id, location_id, resource_type_id, responsible_person_id, status_id, vehicle_inspection_period_id) VALUES
+(true, 'Benehaert R3 EKG aparat - Mindray', 'FK-26032761', '2024-04-22', 60, 'Unicomp d.o.o.', 1, 1, 1, 1, 1, 2, 1),
+(true, 'Mortara, ELI 230 EKG aparat - Mortara Instrument', '113080154080', '2024-04-22', 60, 'Unicomp d.o.o.', 1, 1, 1, 1, 1, 2, 1),
+(true, 'Aspirator na električni pogon', '40174', '2024-10-16', 60, 'Inel-medicinska tehnika d.o.o.', 1, 1, 1, 1, 1, 2, 1),
+(true, 'Lifepak 15 Defibrilator - Fiziokontrol', '47416358', '2024-11-05', 60, 'Elektroničar d.o.o.', 1, 1, 1, 1, 1, 2, 1),
+(true, 'Gučin K.', 'N/A', '2025-03-01', 60, 'N/A', 2, 3, 3, 2, 1, 2, 1),
+(true, 'Celjak M.', 'N/A', '2025-03-01', 60, 'N/A', 2, 3, 3, 2, 1, 2, 1),
+(true, 'Turk N', 'N/A', '2025-03-01', 60, 'N/A', 2, 3, 3, 2, 1, 2, 1),
+(true, 'Vozilo', 'KR 686 - IO', '2025-10-11', 60, 'AutoTech d.o.o.', 3, 4, 1, 3, 1, 1, 1),
+(true, 'Vozilo', 'KR 687 - IO', '2025-10-11', 60, 'AutoTech d.o.o.', 3, 4, 1, 3, 1, 1, 1);

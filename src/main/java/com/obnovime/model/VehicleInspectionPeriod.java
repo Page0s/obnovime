@@ -1,5 +1,6 @@
 package com.obnovime.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,6 +20,7 @@ public class VehicleInspectionPeriod {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    @Column(columnDefinition = "TEXT DEFAULT 'N/A'")
     private String description;
     private Integer daysUntilRenewal;
 }

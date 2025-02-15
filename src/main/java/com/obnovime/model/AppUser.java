@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,13 +20,18 @@ public class AppUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    @Column(columnDefinition = "TEXT DEFAULT 'N/A'")
     private String email;
+    @Column(columnDefinition = "TEXT DEFAULT ''")
     private String password;
+    @Column(columnDefinition = "TEXT DEFAULT 'N/A'")
     private String userType;
+    @Column(columnDefinition = "TEXT DEFAULT 'N/A'")
     private String firstName;
+    @Column(columnDefinition = "TEXT DEFAULT 'N/A'")
     private String lastName;
+    @Column(columnDefinition = "TEXT DEFAULT 'N/A'")
     private String phoneNumber;
+    @Column(columnDefinition = "TEXT DEFAULT 'N/A'")
     private String address;
-
-
 }
