@@ -1,5 +1,6 @@
 package com.obnovime.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,13 +12,14 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "resource_types")
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "resource_types")
 public class ResourceType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    @Column(columnDefinition = "TEXT DEFAULT 'N/A'")
     private String name;
 }
