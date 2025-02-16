@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface DocumentRepository extends JpaRepository<DocumentFile, Long> {
+public interface DocumentRepository extends JpaRepository<DocumentFile, Long>, DocumentRepositoryCustom {
 
     @Query("SELECT d FROM DocumentFile d ORDER BY d.renewalDate ASC")
     List<DocumentFile> findAllByOrderByRenewalDateAsc();
