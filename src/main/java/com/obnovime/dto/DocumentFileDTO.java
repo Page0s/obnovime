@@ -54,6 +54,14 @@ public class DocumentFileDTO {
             dto.setStatusName(statusName != null ? statusName : "N/A");
             
             // Set badge class based on status
+            if ("Nema obnove".equals(entity.getStatus().getName()) || 
+                "Aktivno".equals(entity.getStatus().getName())) {
+                dto.setBadgeClass("badge-status-active");
+            } else if ("Vrijeme za obnovu".equals(entity.getStatus().getName())) {
+                dto.setBadgeClass("badge-renewal-progress");
+            } else {
+                dto.setBadgeClass("badge-renewal-progress");
+            }
             DocumentStatus documentStatus = DocumentStatus.fromDisplayName(statusName);
             dto.setBadgeClass(documentStatus.getBadgeClass());
         }

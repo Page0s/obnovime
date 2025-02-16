@@ -72,7 +72,7 @@ public class FormController {
             document.setStatus(activeStatus);
             
             // Set created by user
-            AppUser user = userRepository.findByEmail("glavna.sestra@gmail.com")
+            AppUser user = userRepository.findByEmailIgnoreCase("glavna.sestra@gmail.com")
                 .orElseThrow(() -> new RuntimeException("Default user not found"));
             document.setCreatedBy(user);
             
@@ -129,7 +129,7 @@ public class FormController {
             document.setStatus(activeStatus);
             
             // Set created by user
-            AppUser user = userRepository.findByEmail("vozni.park@gmail.com")
+            AppUser user = userRepository.findByEmailIgnoreCase("vozni.park@gmail.com")
                 .orElseThrow(() -> new RuntimeException("Default user not found"));
             document.setCreatedBy(user);
             
@@ -180,7 +180,7 @@ public class FormController {
             document.setStatus(activeStatus);
             
             // Set created by user
-            AppUser user = userRepository.findByEmail("glavna.sestra@gmail.com")
+            AppUser user = userRepository.findByEmailIgnoreCase("glavna.sestra@gmail.com")
                 .orElseThrow(() -> new RuntimeException("Default user not found"));
             document.setCreatedBy(user);
             
@@ -234,7 +234,7 @@ public class FormController {
             document.setStatus(activeStatus);
             
             // Set created by user
-            AppUser user = userRepository.findByEmail("vozni.park@gmail.com")
+            AppUser user = userRepository.findByEmailIgnoreCase("vozni.park@gmail.com")
                 .orElseThrow(() -> new RuntimeException("Default user not found"));
             document.setCreatedBy(user);
             
@@ -282,7 +282,7 @@ public class FormController {
             document.setStatus(activeStatus);
             
             // Set created by user
-            AppUser user = userRepository.findByEmail("vozni.park@gmail.com")
+            AppUser user = userRepository.findByEmailIgnoreCase("vozni.park@gmail.com")
                 .orElseThrow(() -> new RuntimeException("Default user not found"));
             document.setCreatedBy(user);
             
@@ -334,7 +334,7 @@ public class FormController {
             document.setStatus(activeStatus);
             
             // Set created by user
-            AppUser user = userRepository.findByEmail("glavna.sestra@gmail.com")
+            AppUser user = userRepository.findByEmailIgnoreCase("glavna.sestra@gmail.com")
                 .orElseThrow(() -> new RuntimeException("Default user not found"));
             document.setCreatedBy(user);
             

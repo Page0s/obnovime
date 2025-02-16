@@ -8,5 +8,4 @@ import java.util.Optional;
 @Repository
 public interface VehicleInspectionPeriodRepository extends JpaRepository<VehicleInspectionPeriod, Long> {
     Optional<VehicleInspectionPeriod> findByDescription(String description);
-    Optional<VehicleInspectionPeriod> findById(Long id);
 }

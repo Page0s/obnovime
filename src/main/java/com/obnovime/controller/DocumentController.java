@@ -1,5 +1,6 @@
 package com.obnovime.controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,19 +59,22 @@ public class DocumentController {
                 documentRepository.save(document);
         }
 }
-    
+
     @GetMapping("/main")
-    public String showMainPage(Model model) {
-        List<DocumentFile> documents = documentRepository.findAllByOrderByRenewalDateAsc();
+    public String showMainPage(Model model, HttpSession session) {
+
+        AppUser user = (AppUser) session.getAttribute("user");
+
+        List<DocumentFile> documents = documentRepository.findAllByCreatedByIdOrderByRenewalDateAsc(user.getId());
         documents.forEach(this::updateDocumentStatus);
-        
+
         List<DocumentFileDTO> documentDtos = documents.stream()
                 .filter(Objects::nonNull)
                 .map(DocumentFileDTO::fromEntity)
                 .collect(Collectors.toList());
-                
+
         model.addAttribute("documents", documentDtos);
-        
+
         return "DocumentMainForm";
     }
 
@@ -79,8 +83,13 @@ public class DocumentController {
         Optional<DocumentFile> document = documentRepository.findById(id);
         
         if (document.isPresent()) {
-            model.addAttribute("dokument", document.get());
-            model.addAttribute("statuses", documentStatusRepository.findAll());
+            DocumentFileDTO documentDto = DocumentFileDTO.fromEntity(document.get());
+            List<DocumentStatus> statuses = documentStatusRepository.findAll().stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+                
+            model.addAttribute("dokument", documentDto);
+            model.addAttribute("statuses", statuses);
             return "DocumentRenewal";
         } else {
             return "redirect:/main";
