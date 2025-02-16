@@ -24,21 +24,21 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-4">
-                        <p><strong>Naziv dokumenta:</strong> <span th:text="${dokument.name}"></span></p>
+                        <p><strong>Naziv dokumenta:</strong> <span th:text="${document.name}"></span></p>
                     </div>
                     <div class="col-md-4">
-                        <p><strong>Šifra:</strong> <span th:text="${dokument.number}"></span></p>
+                        <p><strong>Šifra:</strong> <span th:text="${document.number}"></span></p>
                     </div>
                     <div class="col-md-4">
-                        <p><strong>Tip dokumenta:</strong> <span th:text="${dokument.documentTypeName}"></span></p>
+                        <p><strong>Tip dokumenta:</strong> <span th:text="${document.documentType.name}"></span></p>
                     </div>
                 </div>
                 <div class="row mt-3">
                     <div class="col-md-4">
-                        <p><strong>Ispostava:</strong> <span th:text="${dokument.locationName}"></span></p>
+                        <p><strong>Ispostava:</strong> <span th:text="${document.location?.name ?: 'N/A'}"></span></p>
                     </div>
                     <div class="col-md-4">
-                        <p><strong>Partner:</strong> <span th:text="${dokument.serviceProviderName}"></span></p>
+                        <p><strong>Partner:</strong> <span th:text="${document.serviceProvider}"></span></p>
                     </div>
                 </div>
             </div>
@@ -46,30 +46,32 @@
 
         <!-- Form Section -->
         <form class="border rounded p-4 shadow" th:action="@{/spremi-obnovu}" method="post" id="renewalForm">
-            <input type="hidden" name="id" th:value="${dokument.id}" />
+            <input type="hidden" name="id" th:value="${document.id}" />
 
             <!-- Status dropdown - visible based on current status -->
-            <div class="mb-4" th:if="${dokument.status != 'Nema obnove' && dokument.status != 'Aktivno'}">
-                <label for="status" class="form-label">Status obnove</label>
-                <select class="form-select" id="status" name="status">
-                    <option value="Vrijeme za obnovu" th:selected="${dokument.status == 'Vrijeme za obnovu'}">Vrijeme za obnovu</option>
-                    <option value="Obnova u tijeku" th:selected="${dokument.status == 'Obnova u tijeku'}">Obnova u tijeku</option>
+            <div class="mb-4" th:if="${document.status?.name != 'Nema obnove' && document.status?.name != 'Aktivno'}">
+                <label for="statusId" class="form-label">Status obnove</label>
+                <select class="form-select" id="statusId" name="statusId">
+                    <option th:each="status : ${statuses}"
+                            th:value="${status.id}"
+                            th:text="${status.name}"
+                            th:selected="${document.status?.id == status.id}">Status</option>
                 </select>
             </div>
 
             <!-- New renewal date - visible based on status -->
-            <div class="mb-4" th:if="${dokument.status != 'Nema obnove' && dokument.status != 'Aktivno'}">
+            <div class="mb-4" th:if="${document.status?.name != 'Nema obnove' && document.status?.name != 'Aktivno'}">
                 <label for="renewalDate" class="form-label">Novi datum obnove</label>
                 <input type="date" class="form-control" id="renewalDate" name="renewalDate"
-                    th:value="${dokument.renewalDate}">
-                <div class="form-text">Unesite datum do kojeg će vrijediti obnovljeni dokument</div>
+                    th:value="${document.renewalDate}">
+                <div class="form-text">Unesite datum do kojegćeće vrijediti obnovljeni dokument</div>
             </div>
 
             <!-- Arhiva checkbox -->
             <div class="mb-4">
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="arhiva" name="arhiva"
-                        th:checked="${dokument.arhiva}">
+                        th:checked="${document.arhiva}">
                     <label class="form-check-label" for="arhiva">
                         Arhiva
                     </label>

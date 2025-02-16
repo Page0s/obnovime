@@ -1,6 +1,5 @@
 package com.obnovime.controller;
 
-
 import org.springframework.format.annotation.DateTimeFormat;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -78,17 +77,19 @@ public class DocumentController {
         return "DocumentMainForm";
     }
 
-    @GetMapping("/dokument/{id}/obnova")
+    @GetMapping("/document/{id}/obnova")
     public String showRenewalForm(@PathVariable Long id, Model model) {
-        Optional<DocumentFile> document = documentRepository.findById(id);
+        Optional<DocumentFile> documentOpt = documentRepository.findById(id);
         
-        if (document.isPresent()) {
-            DocumentFileDTO documentDto = DocumentFileDTO.fromEntity(document.get());
+        if (documentOpt.isPresent()) {
+            DocumentFile document = documentOpt.get();
+            System.out.println("ID OF THE DOCUMENT: " + document.getId());
+            System.out.println("NAME OF THE DOCUMENT: " + document.getName());
             List<DocumentStatus> statuses = documentStatusRepository.findAll().stream()
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
-                
-            model.addAttribute("dokument", documentDto);
+            
+            model.addAttribute("document", document);
             model.addAttribute("statuses", statuses);
             return "DocumentRenewal";
         } else {
@@ -109,16 +110,23 @@ public class DocumentController {
         if (existingDoc.isPresent()) {
             DocumentFile existing = existingDoc.get();
 
-            // if (existing.getRenewalDate().isBefore(renewalDate)) {
-            //     DocumentStatus activeStatus = documentStatusRepository.findByName("Aktivno");
-            //     existing.setStatus(activeStatus);
-            //     existing.setRenewalDate(renewalDate);
-            // } else if (existing.getRenewalDate().isEqual(renewalDate)) {
-            //     existing.setStatus(newStatus);
-            //     existing.setArhiva(arhiva);
-            // }
+            System.out.println("DOCUMENT ID: " + existing.getId());
+            System.out.println("DOCUMENT NAME: " + existing.getName());
+            System.out.println("RENEWAL DATE: " + existing.getRenewalDate());
+            System.out.println("NEW RENEWAL DATE: " + renewalDate);
+            System.out.println("STATUS ID: " + existing.getStatus().getId());
+            System.out.println("NEW STATUS ID: " + statusId);
+
+            if (existing.getRenewalDate().isBefore(renewalDate)) {
+                DocumentStatus activeStatus = documentStatusRepository.findByName("Aktivno");
+                existing.setStatus(activeStatus);
+                existing.setRenewalDate(renewalDate);
+            } else if (existing.getRenewalDate().isEqual(renewalDate)) {
+                DocumentStatus activeStatus = documentStatusRepository.findByName("Aktivno");
+                existing.setStatus(activeStatus);
+                existing.setArhiva(arhiva);
+            }
             
-            // existing.setUpdatedAt(LocalDateTime.now());
             documentRepository.save(existing);
             
             redirectAttributes.addFlashAttribute("message", "Dokument uspješno ažuriran");
