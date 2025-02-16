@@ -48,7 +48,11 @@ dependencies {
 	
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	//testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	// Selenium
+	testImplementation 'org.seleniumhq.selenium:selenium-java:4.9.1'
+	// WebDriverManager
+	testImplementation 'io.github.bonigarcia:webdrivermanager:5.5.0'
 }
 
 tasks.named('test') {
