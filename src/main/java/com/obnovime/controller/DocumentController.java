@@ -1,6 +1,5 @@
 package com.obnovime.controller;
 
-import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -61,11 +60,9 @@ public class DocumentController {
 }
 
     @GetMapping("/main")
-    public String showMainPage(Model model, HttpSession session) {
+    public String showMainPage(Model model) {
 
-        AppUser user = (AppUser) session.getAttribute("user");
-
-        List<DocumentFile> documents = documentRepository.findAllByCreatedByIdOrderByRenewalDateAsc(user.getId());
+        List<DocumentFile> documents = documentRepository.findAllByOrderByRenewalDateAsc();
         documents.forEach(this::updateDocumentStatus);
 
         List<DocumentFileDTO> documentDtos = documents.stream()
