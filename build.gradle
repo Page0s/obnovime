@@ -53,6 +53,9 @@ dependencies {
 	testImplementation 'org.seleniumhq.selenium:selenium-java:4.9.1'
 	// WebDriverManager
 	testImplementation 'io.github.bonigarcia:webdrivermanager:5.5.0'
+	testImplementation 'io.cucumber:cucumber-java:7.13.0'
+	testImplementation 'io.cucumber:cucumber-junit:7.13.0'
+	testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.9.3'
 }
 
 tasks.named('test') {
