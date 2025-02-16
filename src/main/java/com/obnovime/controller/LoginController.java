@@ -35,7 +35,7 @@ public class LoginController {
             return "login";
         }
 
-        Optional<AppUser> user = appUserRepository.findByEmail(email);
+        Optional<AppUser> user = appUserRepository.findByEmailIgnoreCase(email.toLowerCase());
 
         if (user.isPresent() && user.get().getPassword().equals(password)) {
             session.setAttribute("user", user.get());
