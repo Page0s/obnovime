@@ -1,5 +1,7 @@
 package com.obnovime.controller;
 
+
+import org.springframework.format.annotation.DateTimeFormat;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -175,5 +177,57 @@ public class DocumentController {
         }
 
         return "redirect:/main";
+    }
+    @GetMapping("/filter")
+    public String filterDocuments(
+            @RequestParam(name = "documentTypes", required = false) List<String> documentTypes,
+            @RequestParam(name = "resourceTypeName", required = false) List<String> resourceTypeName,
+            @RequestParam(name = "statusName", required = false) List<String> statusName,
+            @RequestParam(name = "locationName", required = false) List<String> locationName,
+            @RequestParam(name = "startDate", required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(name = "endDate", required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam(required = false, name = "clear") String clear,
+            Model model
+    ) {
+        if ("true".equals(clear)) {
+            // Vrati punu listu
+            List<DocumentFile> allDocs = documentRepository.findAllByOrderByRenewalDateAsc();
+            model.addAttribute("documents", allDocs);
+
+            // ... i postavi docTypes, resourceTypes i sve ostalo na null (ili prazno)
+            documentTypes = null;
+            resourceTypeName = null;
+            statusName = null;
+            locationName = null;
+            startDate = null;
+            endDate = null;
+        } else {
+            // Inače, filtriraj
+        // Poziv metode u DocumentRepository koja radi filtriranje
+        List<DocumentFile> filteredDocs = documentRepository.searchDocuments(
+                documentTypes,
+                resourceTypeName,
+                statusName,
+                locationName,
+                startDate,
+                endDate
+        );
+            model.addAttribute("documents", filteredDocs);
+        List<DocumentFileDTO> documentDtos = filteredDocs.stream()
+                .map(DocumentFileDTO::fromEntity)
+                .collect(Collectors.toList());
+
+        model.addAttribute("documents", documentDtos);
+            model.addAttribute("selectedDocumentTypes", documentTypes);
+            model.addAttribute("selectedResourceTypes", resourceTypeName);
+            model.addAttribute("selectedStatuses", statusName);
+            model.addAttribute("selectedLocations", locationName);
+            model.addAttribute("startDate", startDate);
+            model.addAttribute("endDate", endDate);
+            System.out.println("docTypes = " + documentTypes);
+        }
+        return "DocumentMainForm";
     }
 }
