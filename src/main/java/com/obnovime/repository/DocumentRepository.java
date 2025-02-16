@@ -14,5 +14,5 @@ public interface DocumentRepository extends JpaRepository<DocumentFile, Long> {
     List<DocumentFile> findAllByOrderByRenewalDateAsc();
 
 
-    List<DocumentFile> findAllByCreatedByIdOrderByRenewalDateAsc(Long createdById);
+//    List<DocumentFile> findAllByCreatedByIdOrderByRenewalDateAsc(Long createdById);
 }
