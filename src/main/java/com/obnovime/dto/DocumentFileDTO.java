@@ -52,18 +52,23 @@ public class DocumentFileDTO {
             // update the status name and badge class
             String statusName = entity.getStatus().getName();
             dto.setStatusName(statusName != null ? statusName : "N/A");
-            
+
+            dto.setBadgeClass("badge-renewal-progress");
+
             // Set badge class based on status
-            if ("Nema obnove".equals(entity.getStatus().getName()) || 
-                "Aktivno".equals(entity.getStatus().getName())) {
-                dto.setBadgeClass("badge-status-active");
-            } else if ("Vrijeme za obnovu".equals(entity.getStatus().getName())) {
-                dto.setBadgeClass("badge-renewal-progress");
-            } else {
-                dto.setBadgeClass("badge-renewal-progress");
-            }
-            DocumentStatus documentStatus = DocumentStatus.fromDisplayName(statusName);
-            dto.setBadgeClass(documentStatus.getBadgeClass());
+//            if ("Nema obnove".equals(entity.getStatus().getName()) ||
+//                "Aktivno".equals(entity.getStatus().getName())) {
+//                dto.setBadgeClass("badge-status-active");
+//            } else if ("Vrijeme za obnovu".equals(entity.getStatus().getName())) {
+//                dto.setBadgeClass("badge-renewal-progress");
+//            } else if ("Obnova u tijeku".equals(entity.getStatus().getName())) {
+//                dto.setBadgeClass("badge-renewal-progress");
+//            }
+//            else {
+//                dto.setBadgeClass("badge-renewal-progress");
+//            }
+//            DocumentStatus documentStatus = DocumentStatus.fromDisplayName(statusName);
+//            dto.setBadgeClass(documentStatus.getBadgeClass());
         }
 
         // Calculate row color based on renewal date and period
