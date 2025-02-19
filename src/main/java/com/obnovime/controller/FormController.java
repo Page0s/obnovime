@@ -14,7 +14,6 @@ public class FormController {
     private final LocationRepository locationRepository;
     private final ResourceTypeRepository resourceTypeRepository;
     private final DocumentStatusRepository documentStatusRepository;
-    private final VehicleInspectionPeriodRepository vehicleInspectionPeriodRepository;
     private final AppUserRepository userRepository;
 
     public FormController(
@@ -30,19 +29,18 @@ public class FormController {
         this.locationRepository = locationRepository;
         this.resourceTypeRepository = resourceTypeRepository;
         this.documentStatusRepository = documentStatusRepository;
-        this.vehicleInspectionPeriodRepository = vehicleInspectionPeriodRepository;
         this.userRepository = userRepository;
     }
 
     @PostMapping("/saveDocument")
-    public String saveLicense(
+    public String saveDocument(
             @RequestParam String name,
             @RequestParam String identificationNumber,
             @RequestParam LocalDate renewalDate,
             @RequestParam String service,
-            @RequestParam Long outpostId,
-            @RequestParam Long resourceTypeId,
-            @RequestParam Integer reminderDay,
+            @RequestParam("locationId") Long locationId,  // OVDJE JE SAD PRAVILNO
+            @RequestParam("resourceTypeId") Long resourceTypeId,
+            @RequestParam("documentTypeId") Long documentTypeId,
             RedirectAttributes redirectAttributes) {
         try {
             DocumentFile document = new DocumentFile();
@@ -50,34 +48,25 @@ public class FormController {
             document.setNumber(identificationNumber);
             document.setRenewalDate(renewalDate);
             document.setServiceProvider(service);
-            document.setRenewalPeriod(reminderDay);
-            
-            // Set document type
-            DocumentType licenseType = documentTypeRepository.findByName("Licenca")
-                .orElseThrow(() -> new RuntimeException("Document type 'Licenca' not found"));
-            document.setDocumentType(licenseType);
-            
-            // Set location
-            Location location = locationRepository.findById(outpostId)
-                .orElseThrow(() -> new RuntimeException("Location not found"));
+
+            // Dohvati lokaciju
+            Location location = locationRepository.findById(locationId)
+                    .orElseThrow(() -> new RuntimeException("Location not found"));
             document.setLocation(location);
-            
-            // Set resource type
+
+            // Dohvati resurs
             ResourceType resourceType = resourceTypeRepository.findById(resourceTypeId)
-                .orElseThrow(() -> new RuntimeException("Resource type not found"));
+                    .orElseThrow(() -> new RuntimeException("ResourceType not found"));
             document.setResourceType(resourceType);
-            
-            // Set status
+
+            // Dohvati i postavi tip dokumenta
+            DocumentType documentType = documentTypeRepository.findById(documentTypeId)
+                    .orElseThrow(() -> new RuntimeException("DocumentType not found"));
+            document.setDocumentType(documentType);
+
             DocumentStatus activeStatus = documentStatusRepository.findByName("Aktivno");
             document.setStatus(activeStatus);
-            
-            // Set created by user
-            AppUser user = userRepository.findByEmailIgnoreCase("glavna.sestra@gmail.com")
-                .orElseThrow(() -> new RuntimeException("Default user not found"));
-            document.setCreatedBy(user);
-            
-            document.setArhiva(false);
-            
+
             documentRepository.save(document);
             redirectAttributes.addFlashAttribute("showToast", true);
             return "redirect:/main";
@@ -86,66 +75,6 @@ public class FormController {
             return "redirect:/error";
         }
     }
-
-    @PostMapping("/savePeriodicCheck")
-    public String savePeriodicCheck(
-            @RequestParam String namePeriodic,
-            @RequestParam String registrationPeriodic,
-            @RequestParam LocalDate renewalDatePeriodic,
-            @RequestParam String servicePeriodic,
-            @RequestParam Long outpostId,
-            @RequestParam String vehicleAge,
-            RedirectAttributes redirectAttributes) {
-        try {
-            DocumentFile document = new DocumentFile();
-            document.setName(namePeriodic);
-            document.setNumber(registrationPeriodic);
-            document.setRenewalDate(renewalDatePeriodic);
-            document.setServiceProvider(servicePeriodic);
-            
-            // Set document type
-            DocumentType periodicType = documentTypeRepository.findByName("Periodički pregled vozila")
-                .orElseThrow(() -> new RuntimeException("Document type 'Periodički pregled vozila' not found"));
-            document.setDocumentType(periodicType);
-            
-            // Set location
-            Location location = locationRepository.findById(outpostId)
-                .orElseThrow(() -> new RuntimeException("Location not found"));
-            document.setLocation(location);
-            
-            // Set resource type (always "Vozilo" for periodic checks)
-            ResourceType vehicleType = resourceTypeRepository.findByName("Vozilo")
-                .orElseThrow(() -> new RuntimeException("Resource type 'Vozilo' not found"));
-            document.setResourceType(vehicleType);
-            
-            // Set vehicle inspection period based on age
-            VehicleInspectionPeriod period = vehicleInspectionPeriodRepository.findByDescription(vehicleAge)
-                .orElseThrow(() -> new RuntimeException("Vehicle inspection period not found"));
-            document.setVehicleInspectionPeriod(period);
-            document.setRenewalPeriod(period.getDaysUntilRenewal());
-            
-            // Set status
-            DocumentStatus activeStatus = documentStatusRepository.findByName("Aktivno");
-            document.setStatus(activeStatus);
-            
-            // Set created by user
-            AppUser user = userRepository.findByEmailIgnoreCase("vozni.park@gmail.com")
-                .orElseThrow(() -> new RuntimeException("Default user not found"));
-            document.setCreatedBy(user);
-            
-            document.setArhiva(false);
-            
-            documentRepository.save(document);
-            redirectAttributes.addFlashAttribute("showToast", true);
-            return "redirect:/main";
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Greška prilikom spremanja: " + e.getMessage());
-            return "redirect:/error";
-        }
-    }
-
-
-
 
 
 

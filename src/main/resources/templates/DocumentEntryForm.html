@@ -5,14 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DocAlert - Unos Dokumenata</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .form-container {
-            display: none;
-        }
-        .form-container.active {
-            display: block;
-        }
-    </style>
 </head>
 <body>
 <!-- Header Section -->
@@ -24,159 +16,90 @@
 <div class="container mt-5">
     <h1 class="mb-4">Dodaj Novi Dokument</h1>
 
-    <div class="mb-4">
-        <label for="documentType" class="form-label">Odaberite tip dokumenta:</label>
-        <select id="documentType" class="form-select" onchange="showForm()">
-            <option value="">-- Odaberite --</option>
-            <option value="general">Općeniti tip dokumenta</option>
-            <option disabled>Posebne vrste dokumenta:</option>
-            <option value="periodic">Periodički pregled vozila</option>
-        </select>
-    </div>
-
-    <!-- Forma za općeniti tip dokumenta -->
-    <div id="generalForm" class="form-container">
-        <h2>Općeniti tip dokumenta</h2>
+    <!-- Forma za općeniti tip dokumenta (odmah vidljiva) -->
+    <div id="generalForm">
         <form th:action="@{/saveDocument}" method="post">
-            <!-- Dodani select za tip dokumenta -->
+            <!-- Tip dokumenta -->
             <div class="mb-3">
                 <label for="documentCategory" class="form-label">Tip dokumenta:</label>
-                <select class="form-select" id="documentCategory" name="documentCategory" required>
+                <select class="form-select" id="documentCategory" name="documentTypeId" required>
                     <option value="">Odaberite tip dokumenta</option>
-                    <option value="Licenca">Licenca</option>
-                    <option value="Svjedodžba">Svjedodžba</option>
-                    <option value="Tehnički pregled vozila">Tehnički pregled vozila</option>
-                    <option value="Osiguranje vozila">Osiguranje vozila</option>
-                    <option value="Ugovor o radu">Ugovor o radu</option>
+                    <option th:each="type : ${document_types}"
+                            th:value="${type.id}"
+                            th:text="${type.name}"
+                            th:selected="${document.documentType?.id == type.id}">
+                    </option>
                 </select>
             </div>
-            <!-- Ostatak postojeće forme -->
+
+
+
+            <!-- Naziv -->
             <div class="mb-3">
                 <label for="name" class="form-label">Naziv:</label>
-                <input type="text" class="form-control" id="name" name="name" required>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Unesite naziv dokumenta" required>
             </div>
+
+            <!-- Šifra -->
             <div class="mb-3">
                 <label for="identificationNumber" class="form-label">Šifra:</label>
-                <input type="text" class="form-control" id="identificationNumber" name="identificationNumber" required>
+                <input type="text" class="form-control" id="identificationNumber" name="identificationNumber" placeholder="Unesite šifru dokumenta" required>
             </div>
+
+            <!-- Datum obnove -->
             <div class="mb-3">
-                <label for="renewalDate" class="form-label">Datum obnove(Do kad vrijedi):</label>
+                <label for="renewalDate" class="form-label">Datum obnove (Do kad vrijedi):</label>
                 <input type="date" class="form-control" id="renewalDate" name="renewalDate" required>
             </div>
+
+            <!-- Partner -->
             <div class="mb-3">
                 <label for="service" class="form-label">Partner:</label>
-                <input type="text" class="form-control" id="service" name="service" required>
+                <input type="text" class="form-control" id="service" name="service" placeholder="Unesite naziv partnera" required>
             </div>
+
             <div class="mb-3">
-                <label for="branchGeneral" class="form-label">Ispostava:</label>
-                <select class="form-select" id="branchGeneral" name="outpostId" required>
+                <label for="location" class="form-label">Ispostava:</label>
+                <select class="form-select" id="location" name="locationId" required>
                     <option value="">Odaberite ispostavu</option>
-                    <option value="2">Krapina</option>
-                    <option value="3">Donja Stubica</option>
-                    <option value="4">Zabok</option>
-                    <option value="5">Zlatar</option>
-                    <option value="6">Klanjec</option>
-                    <option value="7">Konjščina</option>
-                    <option value="8">Marija Bistrica</option>
-                    <option value="9">Pregrada</option>
+                    <option th:each="loc : ${locations}"
+                            th:value="${loc.id}"
+                            th:text="${loc.name}"
+                            th:selected="${document.location?.id == loc.id}">
+                    </option>
                 </select>
+
             </div>
+
+
             <div class="mb-3">
                 <label for="resourceType" class="form-label">Vrsta resursa:</label>
-                <select id="resourceType" name="resourceTypeId" class="form-select" required>
+                <select class="form-select" id="resourceType" name="resourceTypeId" required>
                     <option value="">Odaberite vrstu resursa</option>
-                    <option value="1">Oprema</option>
-                    <option value="2">Radnik</option>
-                    <option value="3">Vozilo</option>
+                    <option th:each="res : ${resource_types}"
+                            th:value="${res.id}"
+                            th:text="${res.name}"
+                            th:selected="${document.resourceType?.id == res.id}">
+                    </option>
                 </select>
-            </div>
-            <div class="mb-3">
-                <label for="reminderDay" class="form-label">Podsjetnik (u danima):</label>
-                <input type="number" class="form-control" id="reminderDay" name="reminderDay" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Spremi</button>
-        </form>
-    </div>
 
-    <!-- Forma za periodički pregled vozila -->
-    <div id="periodicForm" class="form-container">
-        <h2>Unos novog Periodičkog pregleda vozila</h2>
-        <form th:action="@{/savePeriodicCheck}" th:method="post" onsubmit="return openConfirmationModal(event)">
-            <div class="mb-3">
-                <label for="namePeriodic" class="form-label">Naziv vozila:</label>
-                <input type="text" class="form-control" id="namePeriodic" name="namePeriodic"
-                       placeholder="Unesite naziv vozila">
-            </div>
-            <div class="mb-3">
-                <label for="registrationPeriodic" class="form-label">Registracija:</label>
-                <input type="text" class="form-control" id="registrationPeriodic" name="registrationPeriodic"
-                       placeholder="Registracija">
-            </div>
-            <div class="mb-3">
-                <label for="renewalDatePeriodic" class="form-label">Datum obnove(Do kad vrijedi):</label>
-                <input type="date" class="form-control" name="renewalDatePeriodic" id="renewalDatePeriodic">
-            </div>
-            <div class="mb-3">
-                <label for="servicePeriodic" class="form-label">Partner:</label>
-                <input type="text" class="form-control" id="servicePeriodic" name="servicePeriodic"
-                       placeholder="Unesite partnera">
-            </div>
-            <div class="mb-3">
-                <label for="branchGeneral" class="form-label">Ispostava:</label>
-                <select class="form-select" id="branchGeneral" name="outpostId" required>
-                    <option value="">Odaberite ispostavu</option>
-                    <option value="2">Krapina</option>
-                    <option value="3">Donja Stubica</option>
-                    <option value="4">Zabok</option>
-                    <option value="5">Zlatar</option>
-                    <option value="6">Klanjec</option>
-                    <option value="7">Konjščina</option>
-                    <option value="8">Marija Bistrica</option>
-                    <option value="9">Pregrada</option>
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label for="vehicleAge" class="form-label">Starost vozila:</label>
-                <select id="vehicleAge" name="vehicleAge" class="form-select" required>
-                    <option value="">Odaberite starost vozila</option>
-                    <option value="Jednom godišnje za vozila mlađa od 6 godina">Jednom godišnje za vozila mlađa od 6 godina</option>
-                    <option value="Svakih 6 mjeseci za vozila starosti 6-10 godina">Svakih 6 mjeseci za vozila starosti 6-10 godina</option>
-                    <option value="Svakih 3 mjeseca za vozila starija od 10 godina">Svakih 3 mjeseca za vozila starija od 10 godina</option>
-                </select>
             </div>
 
 
-            <div class="mb-3">
-                <label for="reminderDayPeriodic" class="form-label">Podsjetnik u danima(Istek periodičkog pregleda):</label>
-                <input type="text" class="form-control" id="reminderDayPeriodic" name="reminderDayPeriodic"
-                       placeholder="Unesite broj dana">
-            </div>
-            <br><br>
+            <!-- Akcijske tipke -->
             <div class="d-flex justify-content-start align-items-end gap-2">
-                <button type="submit" class="btn btn-primary flex-grow-0" th:text="'Spremi'">Spremi</button>
-                <a href="/main" class="btn btn-secondary mt-2 flex-grow-0">Nazad</a>
+                <button type="submit" class="btn btn-primary flex-grow-0">Spremi</button>
+                <a href="/main" class="btn btn-secondary flex-grow-0">Nazad</a>
             </div>
         </form>
     </div>
 </div>
+
 <!-- Footer Section -->
 <footer class="bg-dark text-white text-center py-3 mt-4">
     <p>&copy; 2025 DocAlert. Sva prava pridržana. | <a href="ObnoviMe_Information.html" class="text-white text-decoration-underline">Informacije o aplikaciji</a></p>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    function showForm() {
-        const formType = document.getElementById('documentType').value;
-        document.getElementById('generalForm').classList.remove('active');
-        document.getElementById('periodicForm').classList.remove('active');
-        if (formType === 'general') {
-            document.getElementById('generalForm').classList.add('active');
-        } else if (formType === 'periodic') {
-            document.getElementById('periodicForm').classList.add('active');
-        }
-    }
-</script>
 </body>
 </html>
