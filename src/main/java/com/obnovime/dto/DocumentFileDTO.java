@@ -77,15 +77,19 @@ public class DocumentFileDTO {
             LocalDate renewalDate = entity.getRenewalDate();
             LocalDate alertDate = renewalDate.minusDays(entity.getRenewalPeriod());
 
+
+
+
             if (today.isAfter(renewalDate)) {
-                dto.setRowColor("status-expired");
-            } else if (!today.isBefore(alertDate)) {
-                dto.setRowColor("status-renewal");
-            } else {
-                dto.setRowColor("status-active");
+                if (dto.getStatusName().equals("Vrijeme za obnovu")) {
+                    dto.setStatusName("Vrijeme za obnovu isteklo");
+                } else if (dto.getStatusName().equals("Obnova u tijeku")) {
+                    dto.setStatusName("Obnova u tijeku isteklo");
+                }
+            } else if (!today.isBefore(alertDate) && !dto.getStatusName().equals("Obnova u tijeku isteklo") && !dto.getStatusName().equals("Vrijeme za obnovu isteklo")) {
+                dto.setStatusName("Vrijeme za obnovu");
             }
-        } else {
-            dto.setRowColor("status-active"); // default color if dates are null
+
         }
         
         return dto;

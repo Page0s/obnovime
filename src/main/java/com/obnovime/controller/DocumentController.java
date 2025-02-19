@@ -47,6 +47,8 @@ public class DocumentController {
 
         DocumentStatus activeStatus = documentStatusRepository.findById(1L).orElseThrow(); // Aktivno
         DocumentStatus renewalStatus = documentStatusRepository.findById(2L).orElseThrow(); // Vrijeme za obnovu
+        DocumentStatus renewalStatusExpired = documentStatusRepository.findById(6L).orElseThrow();
+        DocumentStatus renewalInProgressExpired = documentStatusRepository.findById(5L).orElseThrow();
 
             if ((today.isAfter(alertDate) || today.equals(alertDate)) && 
                 activeStatus.getName().equalsIgnoreCase(document.getStatus().getName())) {
@@ -58,6 +60,18 @@ public class DocumentController {
                 renewalStatus.getName().equalsIgnoreCase(document.getStatus().getName())) {
                 document.setStatus(activeStatus);
                 documentRepository.save(document);
+
+            if(today.isBefore(alertDate) &&
+                    renewalStatusExpired.getName().equalsIgnoreCase(document.getStatus().getName())){
+                document.setStatus(activeStatus);
+                documentRepository.save(document);
+            }
+
+            if(today.isBefore(alertDate) &&
+                    renewalInProgressExpired.getName().equalsIgnoreCase(document.getStatus().getName())){
+                document.setStatus(activeStatus);
+                documentRepository.save(document);
+            }
         }
 }
 
