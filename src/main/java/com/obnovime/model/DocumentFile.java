@@ -24,7 +24,6 @@ public class DocumentFile {
     @Column(columnDefinition = "TEXT DEFAULT '-'")
     private String number;
     private LocalDate renewalDate;
-    private Integer renewalPeriod;
     @Column(columnDefinition = "TEXT DEFAULT '-'")
     private String serviceProvider;
     private Boolean arhiva;

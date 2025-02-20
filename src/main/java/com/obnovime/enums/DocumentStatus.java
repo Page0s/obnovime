@@ -4,7 +4,7 @@ public enum DocumentStatus {
     NO_RENEWAL("Nema obnove", "badge-status-active"),
     ACTIVE("Aktivno", "badge-status-active"),
     RENEWAL_TIME("Vrijeme za obnovu", "badge-renewal-progress"),
-    DEFAULT("N/A", "bg-secondary");
+    DEFAULT("-", "bg-secondary");
 
     private final String displayName;
     private final String badgeClass;
