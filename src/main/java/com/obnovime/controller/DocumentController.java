@@ -41,38 +41,42 @@ public class DocumentController {
     }
 
     private void updateDocumentStatus(DocumentFile document) {
-            LocalDate today = LocalDate.now();
-            LocalDate alertDate = document.getRenewalDate().minusDays(Optional.ofNullable(document.getDocumentType().getRenewalPeriod()).orElse(0));
+        LocalDate today = LocalDate.now();
+        LocalDate renewalDate = document.getRenewalDate();
+        LocalDate alertDate = renewalDate.minusDays(
+            Optional.ofNullable(document.getDocumentType().getRenewalPeriod()).orElse(0)
+        );
 
         DocumentStatus activeStatus = documentStatusRepository.findById(1L).orElseThrow(); // Aktivno
         DocumentStatus renewalStatus = documentStatusRepository.findById(2L).orElseThrow(); // Vrijeme za obnovu
-        DocumentStatus renewalStatusExpired = documentStatusRepository.findById(6L).orElseThrow();
-        DocumentStatus renewalInProgressExpired = documentStatusRepository.findById(5L).orElseThrow();
+        DocumentStatus renewalStatusExpired = documentStatusRepository.findById(6L).orElseThrow(); // Vrijeme za obnovu isteklo
+        DocumentStatus renewalInProgressExpired = documentStatusRepository.findById(5L).orElseThrow(); // Obnova u tijeku isteklo
 
-            if ((today.isAfter(alertDate) || today.equals(alertDate)) && 
-                activeStatus.getName().equalsIgnoreCase(document.getStatus().getName())) {
-                document.setStatus(renewalStatus);
-                documentRepository.save(document);
-            }
-
-            if (today.isBefore(alertDate) && 
-                renewalStatus.getName().equalsIgnoreCase(document.getStatus().getName())) {
-                document.setStatus(activeStatus);
-                documentRepository.save(document);
-
-            if(today.isBefore(alertDate) &&
-                    renewalStatusExpired.getName().equalsIgnoreCase(document.getStatus().getName())){
-                document.setStatus(activeStatus);
-                documentRepository.save(document);
-            }
-
-            if(today.isBefore(alertDate) &&
-                    renewalInProgressExpired.getName().equalsIgnoreCase(document.getStatus().getName())){
+        // If we're between alert date and renewal date, and status is Active -> set to Renewal
+        if (!today.isBefore(alertDate) && today.isBefore(renewalDate) && 
+            activeStatus.getName().equalsIgnoreCase(document.getStatus().getName())) {
+            document.setStatus(renewalStatus);
+            documentRepository.save(document);
+        }
+        
+        // If we're before alert date and status is Renewal -> set back to Active
+        if (today.isBefore(alertDate)) {
+            if (renewalStatus.getName().equalsIgnoreCase(document.getStatus().getName()) ||
+                renewalStatusExpired.getName().equalsIgnoreCase(document.getStatus().getName()) ||
+                renewalInProgressExpired.getName().equalsIgnoreCase(document.getStatus().getName())) {
                 document.setStatus(activeStatus);
                 documentRepository.save(document);
             }
         }
-}
+
+        // If we're after renewal date and status is Renewal -> set to Expired
+        if (today.isAfter(renewalDate)) {
+            if (renewalStatus.getName().equalsIgnoreCase(document.getStatus().getName())) {
+                document.setStatus(renewalStatusExpired);
+                documentRepository.save(document);
+            }
+        }
+    }
 
     @GetMapping("/main")
     public String showMainPage(Model model) {
