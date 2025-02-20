@@ -49,6 +49,7 @@ public class FormController {
             document.setNumber(identificationNumber);
             document.setRenewalDate(renewalDate);
             document.setServiceProvider(service);
+            document.setArhiva(false);
 
             // Dohvati lokaciju
             Location location = locationRepository.findById(locationId)
