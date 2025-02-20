@@ -20,13 +20,13 @@ INSERT INTO document_statuses (name) VALUES
 ('Aktivno'), ('Vrijeme za obnovu'), ('Nema obnove'), ('Obnova u tijeku'), ('Obnova u tijeku isteklo'), ('Vrijeme za obnovu isteklo');
 
 -- Unos vrsta dokumenata
-INSERT INTO document_types (name) VALUES
-('Licenca'),
-('Periodički pregled vozila'),
-('Svjedodžba'),
-('Tehnički pregled vozila'),
-('Osiguranje vozila'),
-('Ugovor o radu');
+INSERT INTO document_types (name, renewal_period) VALUES
+('Licenca', 60),
+('Periodički pregled vozila', 30),
+('Svjedodžba', 60),
+('Tehnički pregled vozila', 365),
+('Osiguranje vozila', 365),
+('Ugovor o radu', 60);
 
 -- First add your existing inserts for users, locations, resource types, statuses, and document types
 
@@ -36,7 +36,6 @@ INSERT INTO document_files (
     name, 
     number, 
     renewal_date, 
-    renewal_period, 
     service_provider, 
     created_by, 
     document_type_id, 
@@ -45,12 +44,12 @@ INSERT INTO document_files (
     responsible_person_id, 
     status_id
 ) VALUES
-(false, 'Benehaert R3 EKG aparat - Mindray', 'FK-26032761', '2024-04-22', 60, 'Unicomp d.o.o.', 1, 1, 1, 1, 1, 2),
-(false, 'Mortara, ELI 230 EKG aparat - Mortara Instrument', '113080154080', '2024-04-22', 60, 'Unicomp d.o.o.', 1, 1, 1, 1, 1, 2),
-(false, 'Aspirator na električni pogon', '40174', '2024-10-16', 60, 'Inel-medicinska tehnika d.o.o.', 1, 1, 1, 1, 1, 2),
-(false, 'Lifepak 15 Defibrilator - Fiziokontrol', '47416358', '2024-11-05', 60, 'Elektroničar d.o.o.', 1, 1, 1, 1, 1, 2),
-(false, 'Gučin K.', '-', '2025-03-01', 60, '-', 2, 3, 3, 2, 1, 2),
-(false, 'Celjak M.', '-', '2025-03-01', 60, '-', 2, 3, 3, 2, 1, 2),
-(false, 'Turk N', '-', '2025-03-01', 60, '-', 2, 3, 3, 2, 1, 2),
-(false, 'Vozilo', 'KR 686 - IO', '2025-10-11', 60, 'AutoTech d.o.o.', 3, 4, 1, 3, 1, 1),
-(false, 'Vozilo', 'KR 687 - IO', '2025-10-11', 60, 'AutoTech d.o.o.', 3, 4, 1, 3, 1, 1);
+(false, 'Benehaert R3 EKG aparat - Mindray', 'FK-26032761', '2024-04-22', 'Unicomp d.o.o.', 1, 1, 1, 1, 1, 2),
+(false, 'Mortara, ELI 230 EKG aparat - Mortara Instrument', '113080154080', '2024-04-22', 'Unicomp d.o.o.', 1, 1, 1, 1, 1, 2),
+(false, 'Aspirator na električni pogon', '40174', '2024-10-16', 'Inel-medicinska tehnika d.o.o.', 1, 1, 1, 1, 1, 2),
+(false, 'Lifepak 15 Defibrilator - Fiziokontrol', '47416358', '2024-11-05', 'Elektroničar d.o.o.', 1, 1, 1, 1, 1, 2),
+(false, 'Gučin K.', '-', '2025-03-01', '-', 2, 3, 3, 2, 1, 2),
+(false, 'Celjak M.', '-', '2025-03-01', '-', 2, 3, 3, 2, 1, 2),
+(false, 'Turk N', '-', '2025-03-01', '-', 2, 3, 3, 2, 1, 2),
+(false, 'Vozilo', 'KR 686 - IO', '2025-10-11', 'AutoTech d.o.o.', 3, 4, 1, 3, 1, 1),
+(false, 'Vozilo', 'KR 687 - IO', '2025-10-11', 'AutoTech d.o.o.', 3, 4, 1, 3, 1, 1);

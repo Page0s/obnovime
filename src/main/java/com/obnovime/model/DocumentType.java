@@ -22,4 +22,7 @@ public class DocumentType {
     
     @Column(columnDefinition = "TEXT DEFAULT '-'")
     private String name;
+    
+    @Column(columnDefinition = "INTEGER DEFAULT 0")
+    private Integer renewalPeriod;
 }
