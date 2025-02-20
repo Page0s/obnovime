@@ -10,6 +10,7 @@ public class DocumentFileDTO {
     private String name = "-";
     private String number = "-";
     private LocalDate renewalDate = LocalDate.MIN;
+    private Integer renewalPeriod = 0;
     private String serviceProvider = "-";
     private Boolean arhiva = false;
     private String documentTypeName = "-";
@@ -33,8 +34,10 @@ public class DocumentFileDTO {
         if (entity.getDocumentType() != null) {
             dto.setDocumentTypeName(entity.getDocumentType().getName() != null ? 
                 entity.getDocumentType().getName() : "-");
+            dto.setRenewalPeriod(entity.getDocumentType().getRenewalPeriod() != null ? 
+                entity.getDocumentType().getRenewalPeriod() : 0);
         }
-        
+
         if (entity.getLocation() != null) {
             dto.setLocationName(entity.getLocation().getName() != null ? 
                 entity.getLocation().getName() : "-");
@@ -51,41 +54,7 @@ public class DocumentFileDTO {
             dto.setStatusName(statusName != null ? statusName : "-");
 
             dto.setBadgeClass("badge-renewal-progress");
-
-            // Set badge class based on status
-//            if ("Nema obnove".equals(entity.getStatus().getName()) ||
-//                "Aktivno".equals(entity.getStatus().getName())) {
-//                dto.setBadgeClass("badge-status-active");
-//            } else if ("Vrijeme za obnovu".equals(entity.getStatus().getName())) {
-//                dto.setBadgeClass("badge-renewal-progress");
-//            } else if ("Obnova u tijeku".equals(entity.getStatus().getName())) {
-//                dto.setBadgeClass("badge-renewal-progress");
-//            }
-//            else {
-//                dto.setBadgeClass("badge-renewal-progress");
-//            }
-//            DocumentStatus documentStatus = DocumentStatus.fromDisplayName(statusName);
-//            dto.setBadgeClass(documentStatus.getBadgeClass());
         }
-
-        // Calculate row color based on renewal date and period
-        if (entity.getRenewalDate() != null) {
-            LocalDate today = LocalDate.now();
-            LocalDate renewalDate = entity.getRenewalDate();
-//            LocalDate alertDate = renewalDate.minusDays(entity.getRenewalPeriod());
-
-//            if (today.isAfter(renewalDate)) {
-//                if (dto.getStatusName().equals("Vrijeme za obnovu")) {
-//                    dto.setStatusName("Vrijeme za obnovu isteklo");
-//                } else if (dto.getStatusName().equals("Obnova u tijeku")) {
-//                    dto.setStatusName("Obnova u tijeku isteklo");
-//                }
-//            } else if (!today.isBefore(alertDate) && !dto.getStatusName().equals("Obnova u tijeku isteklo") && !dto.getStatusName().equals("Vrijeme za obnovu isteklo")) {
-//                dto.setStatusName("Vrijeme za obnovu");
-//            }
-
-        }
-        
         return dto;
     }
 }
