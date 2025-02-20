@@ -7,15 +7,15 @@ import java.time.LocalDate;
 @Data
 public class DocumentFileDTO {
     private Long id;
-    private String name = "N/A";
-    private String number = "N/A";
+    private String name = "-";
+    private String number = "-";
     private LocalDate renewalDate = LocalDate.MIN;
     private String serviceProvider = "-";
     private Boolean arhiva = false;
-    private String documentTypeName = "N/A";
-    private String locationName = "N/A";
-    private String resourceTypeName = "N/A";
-    private String statusName = "N/A";
+    private String documentTypeName = "-";
+    private String locationName = "-";
+    private String resourceTypeName = "-";
+    private String statusName = "-";
     private String badgeClass = "bg-secondary";
     private String rowColor = "";
 
@@ -23,8 +23,8 @@ public class DocumentFileDTO {
         DocumentFileDTO dto = new DocumentFileDTO();
         
         dto.setId(entity.getId());
-        dto.setName(entity.getName() != null ? entity.getName() : "N/A");
-        dto.setNumber(entity.getNumber() != null ? entity.getNumber() : "N/A");
+        dto.setName(entity.getName() != null ? entity.getName() : "-");
+        dto.setNumber(entity.getNumber() != null ? entity.getNumber() : "-");
         dto.setRenewalDate(entity.getRenewalDate() != null ? entity.getRenewalDate() : LocalDate.MIN);
         dto.setServiceProvider(entity.getServiceProvider() != null ? entity.getServiceProvider() : "-");
         dto.setArhiva(entity.getArhiva() != null ? entity.getArhiva() : false);
@@ -32,23 +32,23 @@ public class DocumentFileDTO {
         // Handle nested objects
         if (entity.getDocumentType() != null) {
             dto.setDocumentTypeName(entity.getDocumentType().getName() != null ? 
-                entity.getDocumentType().getName() : "N/A");
+                entity.getDocumentType().getName() : "-");
         }
         
         if (entity.getLocation() != null) {
             dto.setLocationName(entity.getLocation().getName() != null ? 
-                entity.getLocation().getName() : "N/A");
+                entity.getLocation().getName() : "-");
         }
         
         if (entity.getResourceType() != null) {
             dto.setResourceTypeName(entity.getResourceType().getName() != null ? 
-                entity.getResourceType().getName() : "N/A");
+                entity.getResourceType().getName() : "-");
         }
         
         if (entity.getStatus() != null) {
             // update the status name and badge class
             String statusName = entity.getStatus().getName();
-            dto.setStatusName(statusName != null ? statusName : "N/A");
+            dto.setStatusName(statusName != null ? statusName : "-");
 
             dto.setBadgeClass("badge-renewal-progress");
 
