@@ -14,94 +14,50 @@
         }
 
         th, td {
-            text-align: center; /* Centriranje teksta unutar th ili td */
+            text-align: center;
         }
-
-        .status-expired { background-color: #ffffff !important; }
-        .status-renewal { background-color: #ffffff !important; }
-        .status-active { background-color: #ffffff !important; }
-
-
 
         .status-picture {
-            width: 30px;  /* Promijeni veličinu po želji */
-            height: 30px; /* Promijeni veličinu po želji */
-            background-size: contain; /* Podesi veličinu slike unutar okvira */
-            display: inline-block; /* Održava element u liniji s tekstom */
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
         }
 
-        .color-indicator {
-            display: inline-block;
-            width: 15px;
-            height: 15px;
-            margin-left: 5px;
-            border-radius: 4px;
-            border: 1px solid #000;
-        }
         .legend-toggle {
             cursor: pointer;
             user-select: none;
         }
+
         .legend-toggle:hover {
             opacity: 0.8;
         }
-        .color-indicators {
-            display: inline-flex;
-            gap: 5px;
-            margin-left: 10px;
-            vertical-align: middle;
-        }
+
         .legend-row {
-            border: 1px solid #000;
-            border-radius: 4px;
-        }
-        .legend-card {
-            height: 100%;
-        }
-        .legend-card .card-body {
-            height: 100%;
-        }
-        .custom-header {
-            background-color: #0D6EFD !important;
-        }
-        .custom-footer {
-            background-color: #212529 !important;
-        }
-        .custom-newEntryBtn {
-            background-color: #6C757D !important;
-        }
-        .filter-section {
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            padding: 10px;
-        }
-
-        .filter-header {
-            cursor: pointer;
-        }
-
-        .filter-header:hover {
-            background-color: #f8f9fa;
-        }
-
-        .date-input {
-            width: 100px;
-            height: 30px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            padding: 5px;
-            font-size: 14px;
-        }
-
-        .date-row {
             display: flex;
             align-items: center;
             gap: 10px;
+            padding: 8px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
         }
 
-        label {
-            margin-bottom: 0;
+        .legend-row img {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+        }
+
+        .legend-row span {
+            font-size: 16px;
+            color: #00000;
+        }
+
+        .custom-header {
+            background-color: #0D6EFD !important;
+        }
+
+        .custom-footer {
+            background-color: #212529 !important;
         }
     </style>
 </head>
@@ -122,7 +78,7 @@
                     <small class="d-block text-white mb-1">Prijavljeni korisnik</small>
                     <div class="dropdown">
                         <button class="btn btn-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">
-                            <i class="bi bi-person"></i> <span th:text="${session.user.email}">Korisnik</span>
+                            <i class="bi bi-person"></i>
                         </button>
                         <ul class="dropdown-menu">
                             <li><h6 class="dropdown-header">Korisnik</h6></li>
@@ -308,7 +264,7 @@
     <!-- Legends Toggle -->
     <div class="mb-4">
         <h5 class="legend-toggle" data-bs-toggle="collapse" data-bs-target="#legendsSection" aria-expanded="false">
-            <i class="bi bi-info-circle me-2"></i>Legenda o stranici
+            <i class="bi bi-info-circle me-2"></i>Legenda
             <i class="bi bi-chevron-down ms-2"></i>
         </h5>
         <div id="legendsSection" class="collapse">
@@ -316,44 +272,27 @@
                 <div class="col-md-6">
                     <div class="card legend-card">
                         <div class="card-body">
-                            <h6 class="card-title">Status dokumenta</h6>
+                            <h6 class="card-title">Status</h6>
                             <div class="d-flex flex-column gap-2">
-                                <div class="legend-row p-2" style="border: none;">
-                                    <span class="color-indicator status-expired"></span>
-                                    Dokument zahtijeva obnovu
+                                <div class="legend-row">
+                                    <img src="/renewal.png" alt="Vrijeme za obnovu">
+                                    <span>Vrijeme za obnovu</span>
                                 </div>
-                                <div class="legend-row p-2" style="border: none;">
-                                    <span class="color-indicator status-renewal"></span>
-                                    Dokument u periodu za obnovu
+                                <div class="legend-row">
+                                    <img src="/renewal-progress.png" alt="Obnova u tijeku">
+                                    <span>Obnova u tijeku</span>
                                 </div>
-                                <div class="legend-row p-2" style="border: none;">
-                                    <span class="color-indicator status-active"></span>
-                                    Dokument aktivan
+                                <div class="legend-row">
+                                    <img src="/active.png" alt="Aktivno/Nema obnove">
+                                    <span>Nije potrebno poduzimati nikakve radnje</span>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card legend-card">
-                        <div class="card-body">
-                            <h6 class="card-title">Status obnove</h6>
-                            <div class="d-flex flex-column gap-2">
-                                <div class="legend-row p-2" style="border: none;">
-                                    <span class="badge badge-renewal-progress">Vrijeme za obnovu</span>
-                                    Potrebno pokrenuti proces obnove
+                                <div class="legend-row">
+                                    <img src="/renewal-red.png" alt="Isteklo i nije pokrenuta obnova">
+                                    <span>Isteklo i nije pokrenuta obnova</span>
                                 </div>
-                                <div class="legend-row p-2" style="border: none;">
-                                    <span class="badge badge-renewal">Obnova u tijeku</span>
-                                    Proces obnove je u tijeku
-                                </div>
-                                <div class="legend-row p-2" style="border: none;">
-                                    <span class="badge badge-status-active">Nema obnove</span>
-                                    Dokument ne zahtijeva obnovu
-                                </div>
-                                <div class="legend-row p-2" style="border: none;">
-                                    <span class="badge badge-status-active">Aktivno</span>
-                                    Dokument je važeći
+                                <div class="legend-row">
+                                    <img src="/renewal-progress-red.png" alt="Isteklo i pokrenuta obnova">
+                                    <span>Isteklo i pokrenuta obnova</span>
                                 </div>
                             </div>
                         </div>
@@ -363,14 +302,14 @@
         </div>
     </div>
 
+
     <!-- Documents Table -->
     <div class="card mb-4">
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-hover mb-0">
+                <table class="table table-hover mb-0 table-striped">
                     <thead class="table-light">
                     <tr>
-                        <th>#</th>
                         <th>Naziv</th>
                         <th>Šifra</th>
                         <th>Partner</th>
@@ -384,7 +323,6 @@
                     </thead>
                     <tbody>
                         <tr th:each="document, iterStat : ${documents}" th:class="${document.rowColor}">
-                        <td th:text="${iterStat.count}">1</td>
                         <td th:text="${document.name}">Naziv</td>
                         <td th:text="${document.number}">Šifra dokumenta</td>
                         <td th:text="${document.serviceProvider}">Partner</td>
@@ -398,6 +336,8 @@
                                 <img th:if="${document.statusName == 'Aktivno'}" class="status-picture" th:src="@{/active.png}">
                                 <img th:if="${document.statusName == 'Nema obnove'}" class="status-picture" th:src="@{/active.png}">
                                 <img th:if="${document.statusName == 'Obnova u tijeku'}" class="status-picture" th:src="@{/renewal-progress.png}">
+                                <img th:if="${document.statusName == 'Obnova u tijeku isteklo'}" class="status-picture" th:src="@{/renewal-progress-red.png}">
+                                <img th:if="${document.statusName == 'Vrijeme za obnovu isteklo'}" class="status-picture" th:src="@{/renewal-red.png}">
                             </span>
                         </td>
                         <td>
@@ -415,7 +355,7 @@
     </div>
     <!-- Footer -->
     <footer class="custom-footer text-white text-center py-3 mt-4">
-        <p class="mb-0">&copy; 2025 DocAlert. Sva prava pridržana. | <a href="ObnoviMe_Information.html" class="text-white text-decoration-underline">Informacije o aplikaciji</a></p>
+        <p class="mb-0">&copy; 2025 DocAlert. Sva prava pridržana. | <a href="/index" class="text-white text-decoration-underline">Informacije o aplikaciji</a></p>
     </footer>
 
     <!-- Bootstrap JS and dependencies -->
