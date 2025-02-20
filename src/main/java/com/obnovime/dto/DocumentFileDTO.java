@@ -10,8 +10,7 @@ public class DocumentFileDTO {
     private String name = "N/A";
     private String number = "N/A";
     private LocalDate renewalDate = LocalDate.MIN;
-    private Integer renewalPeriod = 0;
-    private String serviceProvider = "N/A";
+    private String serviceProvider = "-";
     private Boolean arhiva = false;
     private String documentTypeName = "N/A";
     private String locationName = "N/A";
@@ -27,8 +26,7 @@ public class DocumentFileDTO {
         dto.setName(entity.getName() != null ? entity.getName() : "N/A");
         dto.setNumber(entity.getNumber() != null ? entity.getNumber() : "N/A");
         dto.setRenewalDate(entity.getRenewalDate() != null ? entity.getRenewalDate() : LocalDate.MIN);
-        dto.setRenewalPeriod(entity.getRenewalPeriod() != null ? entity.getRenewalPeriod() : 0);
-        dto.setServiceProvider(entity.getServiceProvider() != null ? entity.getServiceProvider() : "N/A");
+        dto.setServiceProvider(entity.getServiceProvider() != null ? entity.getServiceProvider() : "-");
         dto.setArhiva(entity.getArhiva() != null ? entity.getArhiva() : false);
         
         // Handle nested objects
@@ -71,23 +69,20 @@ public class DocumentFileDTO {
         }
 
         // Calculate row color based on renewal date and period
-        if (entity.getRenewalDate() != null && entity.getRenewalPeriod() != null) {
+        if (entity.getRenewalDate() != null) {
             LocalDate today = LocalDate.now();
             LocalDate renewalDate = entity.getRenewalDate();
-            LocalDate alertDate = renewalDate.minusDays(entity.getRenewalPeriod());
+//            LocalDate alertDate = renewalDate.minusDays(entity.getRenewalPeriod());
 
-
-
-
-            if (today.isAfter(renewalDate)) {
-                if (dto.getStatusName().equals("Vrijeme za obnovu")) {
-                    dto.setStatusName("Vrijeme za obnovu isteklo");
-                } else if (dto.getStatusName().equals("Obnova u tijeku")) {
-                    dto.setStatusName("Obnova u tijeku isteklo");
-                }
-            } else if (!today.isBefore(alertDate) && !dto.getStatusName().equals("Obnova u tijeku isteklo") && !dto.getStatusName().equals("Vrijeme za obnovu isteklo")) {
-                dto.setStatusName("Vrijeme za obnovu");
-            }
+//            if (today.isAfter(renewalDate)) {
+//                if (dto.getStatusName().equals("Vrijeme za obnovu")) {
+//                    dto.setStatusName("Vrijeme za obnovu isteklo");
+//                } else if (dto.getStatusName().equals("Obnova u tijeku")) {
+//                    dto.setStatusName("Obnova u tijeku isteklo");
+//                }
+//            } else if (!today.isBefore(alertDate) && !dto.getStatusName().equals("Obnova u tijeku isteklo") && !dto.getStatusName().equals("Vrijeme za obnovu isteklo")) {
+//                dto.setStatusName("Vrijeme za obnovu");
+//            }
 
         }
         

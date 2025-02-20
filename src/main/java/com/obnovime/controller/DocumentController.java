@@ -42,7 +42,7 @@ public class DocumentController {
 
     private void updateDocumentStatus(DocumentFile document) {
             LocalDate today = LocalDate.now();
-            LocalDate alertDate = document.getRenewalDate().minusDays(Optional.ofNullable(document.getRenewalPeriod()).orElse(0));
+            LocalDate alertDate = document.getRenewalDate().minusDays(Optional.ofNullable(document.getDocumentType().getRenewalPeriod()).orElse(0));
 
         DocumentStatus activeStatus = documentStatusRepository.findById(1L).orElseThrow(); // Aktivno
         DocumentStatus renewalStatus = documentStatusRepository.findById(2L).orElseThrow(); // Vrijeme za obnovu
@@ -168,10 +168,12 @@ public class DocumentController {
     public String updateDocument(
             @RequestParam("id") Long id,
             @RequestParam("name") String name,
-            @RequestParam("renewalPeriod") Integer renewalPeriod,
+            @RequestParam("number") String number,
+            @RequestParam("renewalDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate renewalDate,
+            @RequestParam("serviceProvider") String serviceProvider,
+            @RequestParam("arhiva") Boolean arhiva,
             @RequestParam("locationId") Long locationId,
             @RequestParam("resourceTypeId") Long resourceTypeId,
-            @RequestParam("serviceProvider") String serviceProvider,
             RedirectAttributes redirectAttributes) {
 
         Optional<DocumentFile> existingDoc = documentRepository.findById(id);
@@ -179,7 +181,10 @@ public class DocumentController {
         if (existingDoc.isPresent()) {
             DocumentFile dokument = existingDoc.get();
             dokument.setName(name);
-            dokument.setRenewalPeriod(renewalPeriod);
+            dokument.setNumber(number);
+            dokument.setRenewalDate(renewalDate);
+            dokument.setServiceProvider(serviceProvider);
+            dokument.setArhiva(arhiva);
             
             Location location = locationRepository.findById(locationId)
                 .orElseThrow(() -> new RuntimeException("Location not found"));
@@ -189,8 +194,6 @@ public class DocumentController {
                 .orElseThrow(() -> new RuntimeException("Resource type not found"));
             dokument.setResourceType(resourceType);
             
-            dokument.setServiceProvider(serviceProvider);     
-
             documentRepository.save(dokument);
             redirectAttributes.addFlashAttribute("successMessage", "Dokument uspješno uređen!");
         } else {
