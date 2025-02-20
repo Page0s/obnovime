@@ -172,12 +172,8 @@ public class DocumentController {
     public String updateDocument(
             @RequestParam("id") Long id,
             @RequestParam("name") String name,
-            @RequestParam("number") String number,
-            @RequestParam("renewalDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate renewalDate,
             @RequestParam("serviceProvider") String serviceProvider,
-            @RequestParam("arhiva") Boolean arhiva,
             @RequestParam("locationId") Long locationId,
-            @RequestParam("resourceTypeId") Long resourceTypeId,
             RedirectAttributes redirectAttributes) {
 
         Optional<DocumentFile> existingDoc = documentRepository.findById(id);
@@ -185,18 +181,12 @@ public class DocumentController {
         if (existingDoc.isPresent()) {
             DocumentFile dokument = existingDoc.get();
             dokument.setName(name);
-            dokument.setNumber(number);
-            dokument.setRenewalDate(renewalDate);
             dokument.setServiceProvider(serviceProvider);
-            dokument.setArhiva(arhiva);
             
             Location location = locationRepository.findById(locationId)
                 .orElseThrow(() -> new RuntimeException("Location not found"));
             dokument.setLocation(location);
-            
-            ResourceType resourceType = resourceTypeRepository.findById(resourceTypeId)
-                .orElseThrow(() -> new RuntimeException("Resource type not found"));
-            dokument.setResourceType(resourceType);
+
             
             documentRepository.save(dokument);
             redirectAttributes.addFlashAttribute("successMessage", "Dokument uspješno uređen!");
