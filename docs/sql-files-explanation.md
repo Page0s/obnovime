@@ -17,31 +17,27 @@ U Spring Boot aplikacijama, `schema.sql` i `data.sql` su posebne SQL datoteke ko
 U našem projektu, `schema.sql` kreira sljedeće tablice:
 
 1. `app_user` - Tablica za korisnike sustava
-   - Sadrži informacije o email-u, lozinci i tipu korisnika (CLIENT/ADMIN)
+   - Sadrži informacije o email-u, lozinci, tipu korisnika, odjelu, imenu i prezimenu
    - Ima automatski generirani ID
+   - Sva polja imaju zadanu vrijednost '-' osim lozinke koja ima ''
 
 2. `document_types` - Tablica za vrste dokumenata
    - Definira različite vrste dokumenata u sustavu (Licenca, Svjedodžba, itd.)
-   - Ima jedinstveno ime
+   - Ima zadanu vrijednost '-' za ime
 
-3. `vehicle_inspection_periods` - Tablica za periode tehničkog pregleda
-   - Definira različite periode inspekcije vozila
-   - Sadrži opis i broj dana do obnove
-   - Koristi se specifično za dokumente tipa "Periodički pregled vozila"
-
-4. `locations` - Tablica za lokacije
+3. `locations` - Tablica za lokacije
    - Pohranjuje različite lokacije u sustavu
-   - Ima jedinstveno ime
+   - Ima zadanu vrijednost '-' za ime
 
-5. `resource_types` - Tablica za vrste resursa
+4. `resource_types` - Tablica za vrste resursa
    - Definira različite vrste resursa (Oprema, Radnik, Vozilo)
-   - Ima jedinstveno ime
+   - Ima zadanu vrijednost '-' za ime
 
-6. `document_statuses` - Tablica za statuse dokumenata
+5. `document_statuses` - Tablica za statuse dokumenata
    - Definira moguće statuse dokumenata u sustavu
-   - Trenutno podržava: Aktivno, Vrijeme za obnovu, Nema obnove, Obnova u tijeku
+   - Trenutno podržava: Aktivno, Vrijeme za obnovu, Nema obnove, Obnova u tijeku, Obnova u tijeku isteklo, Vrijeme za obnovu isteklo
 
-7. `document_files` - Glavna tablica za dokumente
+6. `document_files` - Glavna tablica za dokumente
    - Povezuje sve ostale tablice kroz strane ključeve
    - Sadrži detalje o dokumentima kao što su ime, broj, datum obnove
    - Sadrži reference na:
@@ -49,7 +45,8 @@ U našem projektu, `schema.sql` kreira sljedeće tablice:
      * Lokaciju (location_id)
      * Vrstu resursa (resource_type_id)
      * Status dokumenta (status_id)
-     * Period pregleda vozila (vehicle_inspection_period_id) - samo za vozila
+     * Odgovornu osobu (responsible_person_id) - referenca na app_user
+     * Kreatora (created_by) - referenca na app_user
 
 ## data.sql
 
@@ -59,83 +56,59 @@ U našem projektu, `schema.sql` kreira sljedeće tablice:
 ### Kada se izvršava?
 - Izvršava se **automatski** nakon `schema.sql`
 - Izvršava se samo jednom pri inicijalnom pokretanju aplikacije
-- Neće se izvršiti ako podaci već postoje u tablicama (zbog UNIQUE ograničenja)
+- Neće se izvršiti ako podaci već postoje u tablicama
 
 ### Što konkretno radi naš data.sql?
 U našem projektu, `data.sql` unosi sljedeće početne podatke:
 
 1. **Korisnike sustava** (app_user)
    ```sql
-   -- Tri osnovna korisnička računa
    INSERT INTO app_user (email, password, user_type) VALUES
+   ('-', '1234', 'CLIENT'),
    ('glavna.sestra@gmail.com', 'gs123', 'CLIENT'),
    ('kadrovska@gmail.com', 'ka123', 'CLIENT'),
-   ('vozni.park@gmail.com', 'vp123', 'CLIENT');
+   ('vozni.park@gmail.com', 'vp123', 'CLIENT'),
+   ('ravnatelj@gmail.com', 'rv123', 'CLIENT');
    ```
 
 2. **Lokacije** (locations)
    ```sql
-   -- 8 lokacija Zavoda
    INSERT INTO locations (name) VALUES
-   ('Krapina'), ('Donja Stubica'), ('Zabok'), ('Zlatar'),
+   ('-'), ('Krapina'), ('Donja Stubica'), ('Zabok'), ('Zlatar'),
    ('Klanjec'), ('Konjščina'), ('Marija Bistrica'), ('Pregrada');
    ```
 
-3. **Periode tehničkog pregleda vozila** (vehicle_inspection_periods)
+3. **Vrste resursa** (resource_types)
    ```sql
-   -- Tri perioda ovisno o starosti vozila
-   INSERT INTO vehicle_inspection_periods (description, days_until_renewal) VALUES
-   ('Jednom godišnje za vozila mlađa od 6 godina', 365),
-   ('Svakih 6 mjeseci za vozila starosti 6-10 godina', 182),
-   ('Svakih 3 mjeseca za vozila starija od 10 godina', 90);
-   ```
-
-4. **Statuse dokumenata** (document_statuses)
-   ```sql
-   -- Četiri moguća statusa dokumenta
-   INSERT INTO document_statuses (name) VALUES
-   ('Aktivno'), ('Vrijeme za obnovu'), ('Nema obnove'), ('Obnova u tijeku');
-   ```
-
-5. **Vrste resursa** (resource_types)
-   ```sql
-   -- Tri vrste resursa
    INSERT INTO resource_types (name) VALUES
    ('Oprema'), ('Radnik'), ('Vozilo');
    ```
 
-6. **Vrste dokumenata** (document_types)
+4. **Statuse dokumenata** (document_statuses)
    ```sql
-   -- Šest vrsta dokumenata
-   INSERT INTO document_types (name) VALUES
-   ('Licenca'),
-   ('Periodički pregled vozila'),
-   ('Svjedodžba'),
-   ('Tehnički pregled vozila'),
-   ('Osiguranje vozila'),
-   ('Ugovor o radu');
+   INSERT INTO document_statuses (name) VALUES
+   ('Aktivno'), ('Vrijeme za obnovu'), ('Nema obnove'), ('Obnova u tijeku'),
+   ('Obnova u tijeku isteklo'), ('Vrijeme za obnovu isteklo');
    ```
 
-7. **Inicijalni dokumenti** (document_files)
-   - 4 licence za medicinsku opremu (EKG aparati, aspirator, defibrilator)
-   - 3 svjedodžbe za radnike
-   - 2 tehnička pregleda za vozila
+5. **Vrste dokumenata** (document_types)
+   ```sql
+   INSERT INTO document_types (name) VALUES
+   ('Licenca'), ('Periodički pregled vozila'), ('Svjedodžba'),
+   ('Tehnički pregled vozila'), ('Osiguranje vozila'), ('Ugovor o radu');
+   ```
 
 ## Važne napomene
-1. Ove datoteke se izvršavaju **samo** ako su prisutne u `src/main/resources` direktoriju
-2. Redoslijed izvršavanja je uvijek: prvo `schema.sql`, zatim `data.sql`
+1. Sve tablice koriste BIGINT GENERATED BY DEFAULT AS IDENTITY kao primarni ključ
+2. Većina tekstualnih polja ima zadanu vrijednost '-'
 3. Ako dođe do greške tijekom izvršavanja bilo koje od ovih datoteka, aplikacija neće uspješno startati
 4. Preporučljivo je koristiti `IF NOT EXISTS` u `schema.sql` kako bi se izbjeglo dupliciranje tablica
 5. U `data.sql` je dobro koristiti `INSERT IGNORE` ili `ON DUPLICATE KEY UPDATE` ako želimo izbjeći greške kod ponovnog pokretanja
 
 ## Konfiguracija
-U `application.properties` datoteci imamo sljedeće postavke:
+Izvršavanje ovih datoteka kontrolira se kroz `application.properties`:
 
 ```properties
-spring.sql.init.mode=always           # always, embedded, never
-spring.jpa.defer-datasource-initialization=true
-spring.jpa.hibernate.ddl-auto=none    # none, update, create, create-drop
+spring.sql.init.mode=never           # Kontrolira izvršavanje SQL datoteka (never, always, embedded)
+spring.jpa.hibernate.ddl-auto=none   # Kontrolira JPA automatsko generiranje sheme
 ```
-
----
-*Dokument ažuriran: 9. veljače 2025.*

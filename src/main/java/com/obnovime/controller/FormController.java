@@ -14,7 +14,6 @@ public class FormController {
     private final LocationRepository locationRepository;
     private final ResourceTypeRepository resourceTypeRepository;
     private final DocumentStatusRepository documentStatusRepository;
-    private final VehicleInspectionPeriodRepository vehicleInspectionPeriodRepository;
     private final AppUserRepository userRepository;
 
     public FormController(
@@ -23,14 +22,12 @@ public class FormController {
             LocationRepository locationRepository,
             ResourceTypeRepository resourceTypeRepository,
             DocumentStatusRepository documentStatusRepository,
-            VehicleInspectionPeriodRepository vehicleInspectionPeriodRepository,
             AppUserRepository userRepository) {
         this.documentRepository = documentRepository;
         this.documentTypeRepository = documentTypeRepository;
         this.locationRepository = locationRepository;
         this.resourceTypeRepository = resourceTypeRepository;
         this.documentStatusRepository = documentStatusRepository;
-        this.vehicleInspectionPeriodRepository = vehicleInspectionPeriodRepository;
         this.userRepository = userRepository;
     }
 
@@ -117,12 +114,6 @@ public class FormController {
             ResourceType vehicleType = resourceTypeRepository.findByName("Vozilo")
                 .orElseThrow(() -> new RuntimeException("Resource type 'Vozilo' not found"));
             document.setResourceType(vehicleType);
-            
-            // Set vehicle inspection period based on age
-            VehicleInspectionPeriod period = vehicleInspectionPeriodRepository.findByDescription(vehicleAge)
-                .orElseThrow(() -> new RuntimeException("Vehicle inspection period not found"));
-            document.setVehicleInspectionPeriod(period);
-            document.setRenewalPeriod(period.getDaysUntilRenewal());
             
             // Set status
             DocumentStatus activeStatus = documentStatusRepository.findByName("Aktivno");
