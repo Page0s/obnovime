@@ -19,13 +19,13 @@ public class DocumentFile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "TEXT DEFAULT 'N/A'")
+    @Column(columnDefinition = "TEXT DEFAULT '-'")
     private String name;
-    @Column(columnDefinition = "TEXT DEFAULT 'N/A'")
+    @Column(columnDefinition = "TEXT DEFAULT '-'")
     private String number;
     private LocalDate renewalDate;
     private Integer renewalPeriod;
-    @Column(columnDefinition = "TEXT DEFAULT 'N/A'")
+    @Column(columnDefinition = "TEXT DEFAULT '-'")
     private String serviceProvider;
     private Boolean arhiva;
 
@@ -43,16 +43,12 @@ public class DocumentFile {
 
     @ManyToOne
     @JoinColumn(name = "responsible_person_id")
-    private ResponsiblePerson responsiblePerson;
+    private AppUser responsiblePerson;
 
     @ManyToOne
     @JoinColumn(name = "status_id")
     private DocumentStatus status;
-
-    @ManyToOne
-    @JoinColumn(name = "vehicle_inspection_period_id")
-    private VehicleInspectionPeriod vehicleInspectionPeriod;
-
+    
     @ManyToOne
     @JoinColumn(name = "created_by")
     private AppUser createdBy;

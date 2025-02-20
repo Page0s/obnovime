@@ -20,18 +20,18 @@ public class AppUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(columnDefinition = "TEXT DEFAULT 'N/A'")
+    @Column(columnDefinition = "TEXT DEFAULT '-'")
     private String email;
     @Column(columnDefinition = "TEXT DEFAULT ''")
     private String password;
-    @Column(columnDefinition = "TEXT DEFAULT 'N/A'")
+    @Column(columnDefinition = "TEXT DEFAULT '-'")
     private String userType;
-    @Column(columnDefinition = "TEXT DEFAULT 'N/A'")
+    @Column(columnDefinition = "TEXT DEFAULT '-'")
+    private String department;
+    @Column(columnDefinition = "TEXT DEFAULT '-'")
     private String firstName;
-    @Column(columnDefinition = "TEXT DEFAULT 'N/A'")
+    @Column(columnDefinition = "TEXT DEFAULT '-'")
     private String lastName;
-    @Column(columnDefinition = "TEXT DEFAULT 'N/A'")
+    @Column(columnDefinition = "TEXT DEFAULT '0'")
     private String phoneNumber;
-    @Column(columnDefinition = "TEXT DEFAULT 'N/A'")
-    private String address;
 }

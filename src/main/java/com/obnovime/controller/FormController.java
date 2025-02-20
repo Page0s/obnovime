@@ -23,7 +23,6 @@ public class FormController {
             LocationRepository locationRepository,
             ResourceTypeRepository resourceTypeRepository,
             DocumentStatusRepository documentStatusRepository,
-            VehicleInspectionPeriodRepository vehicleInspectionPeriodRepository,
             AppUserRepository userRepository) {
         this.documentRepository = documentRepository;
         this.documentTypeRepository = documentTypeRepository;

@@ -20,6 +20,9 @@ public class DocumentType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(columnDefinition = "TEXT DEFAULT 'N/A'")
+    @Column(columnDefinition = "TEXT DEFAULT '-'")
     private String name;
+    
+    @Column(columnDefinition = "INTEGER DEFAULT 0")
+    private Integer renewalPeriod;
 }

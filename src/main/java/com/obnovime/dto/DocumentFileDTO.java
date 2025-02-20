@@ -1,6 +1,5 @@
 package com.obnovime.dto;
 
-import com.obnovime.enums.DocumentStatus;
 import com.obnovime.model.*;
 import lombok.Data;
 import java.time.LocalDate;
