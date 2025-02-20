@@ -2,6 +2,7 @@ package com.obnovime.controller;
 
 import com.obnovime.model.*;
 import com.obnovime.repository.*;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -38,9 +39,10 @@ public class FormController {
             @RequestParam String identificationNumber,
             @RequestParam LocalDate renewalDate,
             @RequestParam String service,
-            @RequestParam("locationId") Long locationId,  // OVDJE JE SAD PRAVILNO
+            @RequestParam("locationId") Long locationId,
             @RequestParam("resourceTypeId") Long resourceTypeId,
             @RequestParam("documentTypeId") Long documentTypeId,
+            HttpSession session,
             RedirectAttributes redirectAttributes) {
         try {
             DocumentFile document = new DocumentFile();
@@ -64,6 +66,15 @@ public class FormController {
                     .orElseThrow(() -> new RuntimeException("DocumentType not found"));
             document.setDocumentType(documentType);
 
+            // Postavi korisnika koji kreira dokument iz sesije
+            AppUser currentUser = (AppUser) session.getAttribute("user");
+            if (currentUser != null) {
+                document.setCreatedBy(currentUser);
+            } else {
+                throw new RuntimeException("User not found in session");
+            }
+
+            // Postavi početni status na "Aktivno"
             DocumentStatus activeStatus = documentStatusRepository.findByName("Aktivno");
             document.setStatus(activeStatus);
 
@@ -75,6 +86,7 @@ public class FormController {
             return "redirect:/error";
         }
     }
+
 
 
 
