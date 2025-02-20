@@ -36,5 +36,9 @@ out/
 ### VS Code ###
 .vscode/
 
+### Data ###
+/data/
+data/
+
 ### Environment Variables ###
 .env
