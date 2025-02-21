@@ -90,3 +90,24 @@ document.addEventListener("DOMContentLoaded", function() {
             sessionStorage.setItem('showToast', 'true');
             document.getElementById('editForm').submit();
         }
+
+document.addEventListener("DOMContentLoaded", function() {
+    const saveButton = document.querySelector("button[type='submit']");
+    const modalConfirmButton = document.querySelector("#confirmationModalRenewal .btn-primary");
+    const form = document.querySelector("form");
+
+    if (saveButton && modalConfirmButton && form) {
+        // Spriječi automatsko slanje forme i prikaži modal
+        saveButton.addEventListener("click", function(event) {
+            event.preventDefault(); // Sprječava defaultni submit
+            const modal = new bootstrap.Modal(document.getElementById("confirmationModalRenewal"));
+            modal.show();
+        });
+
+        // Kada korisnik potvrdi, pošalji formu
+        modalConfirmButton.addEventListener("click", function() {
+            form.submit();
+        });
+    }
+});
+
