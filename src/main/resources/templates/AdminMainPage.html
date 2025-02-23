@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="hr">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -42,7 +42,7 @@
                         </button>
                         <ul class="dropdown-menu">
                             <li><h6 class="dropdown-header">Korisnik</h6></li>
-                            <li><a class="dropdown-item" href="#"><span>Admin</span></a></li>
+                            <li><a class="dropdown-item" href="#"><span th:text="${session.user.email}">Korisnik</span></a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
@@ -65,7 +65,7 @@
         </div>
         <div class="col-md-6">
             <a href="/adminDocumentTypeList" class="btn btn-primary admin-button">
-                <i class="bi bi-file-earmark-text-fill me-2"></i>Uredi tip dokumenta
+                <i class="bi bi-file-earmark-text-fill me-2"></i>Uredi tipove dokumenata
             </a>
         </div>
     </div>

@@ -124,8 +124,8 @@ public class AdminController {
             newUser.setLastName(lastName);
             newUser.setEmail(email);
             newUser.setPassword(password);
-            newUser.setPhoneNumber(phoneNumber);
-            newUser.setDepartment(department);
+            newUser.setPhoneNumber((phoneNumber == null || phoneNumber.trim().isEmpty()) ? "-" : phoneNumber);
+            newUser.setDepartment((department == null || department.trim().isEmpty()) ? "-" : department);
             newUser.setUserType("CLIENT");
             appUserRepository.save(newUser);
 
