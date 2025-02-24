@@ -312,41 +312,41 @@
                     <tr>
                         <th>Naziv</th>
                         <th>Šifra</th>
-                        <th>Partner</th>
-                        <th>Ispostava</th>
                         <th>Vrsta resursa</th>
-                        <th>Datum obnove</th>
+                        <th>Ispostava</th>
+                        <th>Partner</th>
                         <th>Tip dokumenta</th>
+                        <th>Datum obnove</th>
                         <th>Status</th>
                         <th>Akcije</th>
                     </tr>
                     </thead>
                     <tbody>
                         <tr th:each="document, iterStat : ${documents}" th:class="${document.rowColor}">
-                        <td th:text="${document.name}">Naziv</td>
-                        <td th:text="${document.number}">Šifra dokumenta</td>
-                        <td th:text="${document.serviceProvider}">Partner</td>
-                        <td th:text="${document.locationName}">Lokacija</td>
-                        <td th:text="${document.resourceTypeName}">Vrsta resursa</td>
-                        <td style="white-space: nowrap;" th:text="${document.renewalDate != T(java.time.LocalDate).MIN} ? ${#temporals.format(document.renewalDate, 'dd.MM.yyyy.')} : 'N/A'">Datum obnove</td>
-                        <td th:text="${document.documentTypeName}">Tip dokumenta</td>
-                        <td>
-                            <span class="badge" th:classappend="${document.badgeClass}">
-                                <img th:if="${document.statusName == 'Vrijeme za obnovu'}" class="status-picture" th:src="@{/renewal.png}">
-                                <img th:if="${document.statusName == 'Aktivno'}" class="status-picture" th:src="@{/active.png}">
-                                <img th:if="${document.statusName == 'Nema obnove'}" class="status-picture" th:src="@{/active.png}">
-                                <img th:if="${document.statusName == 'Obnova u tijeku'}" class="status-picture" th:src="@{/renewal-progress.png}">
-                                <img th:if="${document.statusName == 'Obnova u tijeku isteklo'}" class="status-picture" th:src="@{/renewal-progress-red.png}">
-                                <img th:if="${document.statusName == 'Vrijeme za obnovu isteklo'}" class="status-picture" th:src="@{/renewal-red.png}">
-                            </span>
-                        </td>
-                        <td>
-                            <div class="d-flex gap-1">
-                                <a th:href="@{/edit/{id}(id=${document.id})}" class="btn btn-sm btn-secondary" title="Promijeni"><i class="bi bi-pencil-square"></i></a>
-                                <a href="/history" class="btn btn-sm btn-secondary" title="Povijest obnova"><i class="bi bi-clock-history"></i></a>
-                                <a th:href="@{/document/{id}/obnova(id=${document.id})}" class="btn btn-sm btn-secondary" title="Obnova"><i class="bi bi-arrow-clockwise"></i></a>
-                            </div>
-                        </td>
+                            <td th:text="${document.name}">Naziv</td>
+                            <td th:text="${document.number}">Šifra dokumenta</td>
+                            <td th:text="${document.resourceTypeName}">Vrsta resursa</td>
+                            <td th:text="${document.locationName}">Lokacija</td>
+                            <td th:text="${document.serviceProvider}">Partner</td>
+                            <td th:text="${document.documentTypeName}">Tip dokumenta</td>
+                            <td style="white-space: nowrap;" th:text="${document.renewalDate != T(java.time.LocalDate).MIN} ? ${#temporals.format(document.renewalDate, 'dd.MM.yyyy.')} : 'N/A'">Datum obnove</td>
+                            <td>
+                                <span class="badge" th:classappend="${document.badgeClass}">
+                                    <img th:if="${document.statusName == 'Vrijeme za obnovu'}" class="status-picture" th:src="@{/renewal.png}">
+                                    <img th:if="${document.statusName == 'Aktivno'}" class="status-picture" th:src="@{/active.png}">
+                                    <img th:if="${document.statusName == 'Nema obnove'}" class="status-picture" th:src="@{/active.png}">
+                                    <img th:if="${document.statusName == 'Obnova u tijeku'}" class="status-picture" th:src="@{/renewal-progress.png}">
+                                    <img th:if="${document.statusName == 'Obnova u tijeku isteklo'}" class="status-picture" th:src="@{/renewal-progress-red.png}">
+                                    <img th:if="${document.statusName == 'Vrijeme za obnovu isteklo'}" class="status-picture" th:src="@{/renewal-red.png}">
+                                </span>
+                            </td>
+                            <td>
+                                <div class="d-flex gap-1">
+                                    <a th:href="@{/edit/{id}(id=${document.id})}" class="btn btn-sm btn-secondary" title="Promijeni"><i class="bi bi-pencil-square"></i></a>
+                                    <a href="/history" class="btn btn-sm btn-secondary" title="Povijest obnova"><i class="bi bi-clock-history"></i></a>
+                                    <a th:href="@{/document/{id}/obnova(id=${document.id})}" class="btn btn-sm btn-secondary" title="Obnova"><i class="bi bi-arrow-clockwise"></i></a>
+                                </div>
+                            </td>
                     </tr>
                     </tbody>
                 </table>
