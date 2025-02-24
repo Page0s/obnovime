@@ -49,6 +49,7 @@ public class DocumentController {
 
         DocumentStatus activeStatus = documentStatusRepository.findById(1L).orElseThrow(); // Aktivno
         DocumentStatus renewalStatus = documentStatusRepository.findById(2L).orElseThrow(); // Vrijeme za obnovu
+        DocumentStatus renewalInProgress = documentStatusRepository.findById(4L).orElseThrow(); // Obnova u tijeku
         DocumentStatus renewalStatusExpired = documentStatusRepository.findById(6L).orElseThrow(); // Vrijeme za obnovu isteklo
         DocumentStatus renewalInProgressExpired = documentStatusRepository.findById(5L).orElseThrow(); // Obnova u tijeku isteklo
 
@@ -73,6 +74,21 @@ public class DocumentController {
         if (today.isAfter(renewalDate)) {
             if (renewalStatus.getName().equalsIgnoreCase(document.getStatus().getName())) {
                 document.setStatus(renewalStatusExpired);
+                documentRepository.save(document);
+            }
+        }
+
+                // If we're after renewal date and status is Renewal -> set to Expired
+        if (today.isAfter(renewalDate)) {
+            if (renewalStatus.getName().equalsIgnoreCase(document.getStatus().getName())) {
+                document.setStatus(renewalStatusExpired);
+                documentRepository.save(document);
+            }
+        }
+
+        if (today.isAfter(renewalDate)) {
+            if (renewalInProgress.getName().equalsIgnoreCase(document.getStatus().getName())) {
+                document.setStatus(renewalInProgressExpired);
                 documentRepository.save(document);
             }
         }
@@ -106,6 +122,12 @@ public class DocumentController {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
             
+            // remove if from this list elements "Obnova u tijeku isteklo", "Vrijeme za obnovu isteklo", "Nema obnove", "Aktivno"
+            statuses.removeIf(status -> status.getName().equals("Obnova u tijeku isteklo") ||
+            status.getName().equals("Aktivno") ||
+            status.getName().equals("Nema obnove") ||
+            status.getName().equals("Vrijeme za obnovu isteklo"));
+
             model.addAttribute("document", document);
             model.addAttribute("statuses", statuses);
             return "DocumentRenewal";
@@ -117,8 +139,8 @@ public class DocumentController {
     @PostMapping("/spremi-obnovu")
     public String handleRenewal(
             @RequestParam("id") Long id,
-            @RequestParam("statusId") Long statusId,
-            @RequestParam("renewalDate") LocalDate renewalDate,
+            @RequestParam(value = "statusId", required = false) Long statusId,
+            @RequestParam(value = "renewalDate", required = false) LocalDate renewalDate,
             @RequestParam(value = "arhiva", required = false, defaultValue = "false") Boolean arhiva,
             RedirectAttributes redirectAttributes) {
         
@@ -127,20 +149,21 @@ public class DocumentController {
         if (existingDoc.isPresent()) {
             DocumentFile existing = existingDoc.get();
 
-            System.out.println("DOCUMENT ID: " + existing.getId());
-            System.out.println("DOCUMENT NAME: " + existing.getName());
-            System.out.println("RENEWAL DATE: " + existing.getRenewalDate());
-            System.out.println("NEW RENEWAL DATE: " + renewalDate);
-            System.out.println("STATUS ID: " + existing.getStatus().getId());
-            System.out.println("NEW STATUS ID: " + statusId);
-
-            if (existing.getRenewalDate().isBefore(renewalDate)) {
+            if (renewalDate != null && existing.getRenewalDate().isBefore(renewalDate)) {
                 DocumentStatus activeStatus = documentStatusRepository.findByName("Aktivno");
                 existing.setStatus(activeStatus);
                 existing.setRenewalDate(renewalDate);
-            } else if (existing.getRenewalDate().isEqual(renewalDate)) {
-                DocumentStatus activeStatus = documentStatusRepository.findByName("Aktivno");
-                existing.setStatus(activeStatus);
+            }
+
+            if (statusId != null) {
+                if (existing.getStatus().getId() != statusId) {
+                    Optional<DocumentStatus> newStatus = documentStatusRepository.findById(statusId);
+                    existing.setStatus(newStatus.get());
+                    existing.setArhiva(arhiva);
+                }
+            }
+
+            if (existing.getArhiva() != arhiva){
                 existing.setArhiva(arhiva);
             }
             
