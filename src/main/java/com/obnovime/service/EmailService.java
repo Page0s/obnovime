@@ -36,7 +36,12 @@ public class EmailService {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
             helper.setFrom(fromEmail);
-            helper.setTo(toEmail);
+            // Split email addresses by comma and remove any whitespace
+            String[] recipients = toEmail.split(",");
+            for (int i = 0; i < recipients.length; i++) {
+                recipients[i] = recipients[i].trim();
+            }
+            helper.setTo(recipients);
             helper.setSubject("Document Expiration Alert - " + alertType);
 
             Context context = new Context();
