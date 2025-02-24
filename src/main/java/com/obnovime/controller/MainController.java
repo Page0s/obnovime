@@ -1,11 +1,7 @@
 package com.obnovime.controller;
 
 import com.obnovime.model.*;
-import com.obnovime.repository.DocumentRepository;
-import com.obnovime.repository.DocumentStatusRepository;
-import com.obnovime.repository.LocationRepository;
-import com.obnovime.repository.ResourceTypeRepository;
-import com.obnovime.repository.DocumentTypeRepository;
+import com.obnovime.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,15 +17,17 @@ public class MainController {
     private final LocationRepository locationRepository;
     private final ResourceTypeRepository resourceTypeRepository;
     private final DocumentTypeRepository documentTypeRepository; // ✅ Dodano
+    private final AppUserRepository userRepository;
 
     public MainController(DocumentRepository documentRepository, DocumentStatusRepository documentStatusRepository,
                           LocationRepository locationRepository, ResourceTypeRepository resourceTypeRepository,
-                          DocumentTypeRepository documentTypeRepository) {
+                          DocumentTypeRepository documentTypeRepository, AppUserRepository userRepository) {
         this.documentRepository = documentRepository;
         this.documentStatusRepository = documentStatusRepository;
         this.locationRepository = locationRepository;
         this.resourceTypeRepository = resourceTypeRepository;
         this.documentTypeRepository = documentTypeRepository; // ✅ Inicijalizirano
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/form")
@@ -38,6 +36,7 @@ public class MainController {
         List<DocumentType> documentTypes = documentTypeRepository.findAll();
         List<DocumentStatus> documentStatuses = documentStatusRepository.findAll();
         List<ResourceType> resourceTypes = resourceTypeRepository.findAll();
+        List<AppUser> users = userRepository.findByUserType("CLIENT");
 
         // Kreiranje novog dokumenta i postavljanje praznog documentType kako bi se izbjegao null
         DocumentFile document = new DocumentFile();
@@ -48,6 +47,7 @@ public class MainController {
         model.addAttribute("document_statuses", documentStatuses);
         model.addAttribute("resource_types", resourceTypes);
         model.addAttribute("document", document); // Dodaj dokument u model
+        model.addAttribute("app_users", users);
 
         return "DocumentEntryForm";
     }
