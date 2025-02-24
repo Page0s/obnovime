@@ -37,11 +37,16 @@ public class LoginController {
 
         Optional<AppUser> user = appUserRepository.findByEmailIgnoreCase(email.toLowerCase());
 
-        if (user.isPresent() && user.get().getPassword().equals(password)) {
+        if (user.isPresent() && user.get().getPassword().equals(password) && user.get().getUserType().equals("CLIENT")) {
             session.setAttribute("user", user.get());
             System.out.println("Korisnik u sesiji: " + session.getAttribute("user"));
 
             return "redirect:/main";
+        }else if (user.isPresent() && user.get().getPassword().equals(password) && user.get().getUserType().equals("ADMIN")) {
+            session.setAttribute("user", user.get());
+            System.out.println("Korisnik u sesiji: " + session.getAttribute("user"));
+
+            return "redirect:/admin";
         }
 
         model.addAttribute("error", "Neispravni podaci za prijavu!");
