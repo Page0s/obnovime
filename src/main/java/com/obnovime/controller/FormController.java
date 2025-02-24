@@ -51,6 +51,8 @@ public class FormController {
             document.setServiceProvider(service);
             document.setArhiva(false);
 
+            document.setServiceProvider(service.isEmpty() ? "-" : service);
+
             // Dohvati lokaciju
             Location location = locationRepository.findById(locationId)
                     .orElseThrow(() -> new RuntimeException("Location not found"));
