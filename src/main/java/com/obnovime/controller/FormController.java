@@ -41,6 +41,7 @@ public class FormController {
             @RequestParam("locationId") Long locationId,
             @RequestParam("resourceTypeId") Long resourceTypeId,
             @RequestParam("documentTypeId") Long documentTypeId,
+            @RequestParam("responsiblePersonId") Long responsiblePersonId,
             HttpSession session,
             RedirectAttributes redirectAttributes) {
         try {
@@ -67,6 +68,12 @@ public class FormController {
             DocumentType documentType = documentTypeRepository.findById(documentTypeId)
                     .orElseThrow(() -> new RuntimeException("DocumentType not found"));
             document.setDocumentType(documentType);
+
+            // Dohvati i postavi odgovornu osobu
+            AppUser responsiblePerson = userRepository.findById(responsiblePersonId)
+                    .orElseThrow(() -> new RuntimeException("Responsible person not found"));
+            document.setResponsiblePerson(responsiblePerson);
+
 
             // Postavi korisnika koji kreira dokument iz sesije
             AppUser currentUser = (AppUser) session.getAttribute("user");
