@@ -332,12 +332,12 @@
                             <td style="white-space: nowrap;" th:text="${document.renewalDate != T(java.time.LocalDate).MIN} ? ${#temporals.format(document.renewalDate, 'dd.MM.yyyy.')} : 'N/A'">Datum obnove</td>
                             <td>
                                 <span class="badge" th:classappend="${document.badgeClass}">
-                                    <img th:if="${document.statusName == 'Vrijeme za obnovu'}" class="status-picture" th:src="@{/renewal.png}">
-                                    <img th:if="${document.statusName == 'Aktivno'}" class="status-picture" th:src="@{/active.png}">
-                                    <img th:if="${document.statusName == 'Nema obnove'}" class="status-picture" th:src="@{/active.png}">
-                                    <img th:if="${document.statusName == 'Obnova u tijeku'}" class="status-picture" th:src="@{/renewal-progress.png}">
-                                    <img th:if="${document.statusName == 'Obnova u tijeku isteklo'}" class="status-picture" th:src="@{/renewal-progress-red.png}">
-                                    <img th:if="${document.statusName == 'Vrijeme za obnovu isteklo'}" class="status-picture" th:src="@{/renewal-red.png}">
+                                    <img th:if="${document.statusName == 'Vrijeme za obnovu'}" class="status-picture" th:src="@{/renewal.png}" data-bs-toggle="tooltip" data-bs-placement="top" title="Vrijeme za obnovu">
+                                    <img th:if="${document.statusName == 'Aktivno'}" class="status-picture" th:src="@{/active.png}" data-bs-toggle="tooltip" data-bs-placement="top" title="Aktivno">
+                                    <img th:if="${document.statusName == 'Nema obnove'}" class="status-picture" th:src="@{/active.png}" data-bs-toggle="tooltip" data-bs-placement="top" title="Nema obnove">
+                                    <img th:if="${document.statusName == 'Obnova u tijeku'}" class="status-picture" th:src="@{/renewal-progress.png}" data-bs-toggle="tooltip" data-bs-placement="top" title="Obnova u tijeku">
+                                    <img th:if="${document.statusName == 'Obnova u tijeku isteklo'}" class="status-picture" th:src="@{/renewal-progress-red.png}" data-bs-toggle="tooltip" data-bs-placement="top" title="Obnova u tijeku isteklo">
+                                    <img th:if="${document.statusName == 'Vrijeme za obnovu isteklo'}" class="status-picture" th:src="@{/renewal-red.png}" data-bs-toggle="tooltip" data-bs-placement="top" title="Vrijeme za obnovu isteklo">
                                 </span>
                             </td>
                             <td>
@@ -373,6 +373,13 @@
             </div>
         </div>
     </div>
+    <script>
+        // Initialize all tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    </script>
 </div>
 </body>
 </html>
