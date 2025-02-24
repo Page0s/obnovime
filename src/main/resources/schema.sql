@@ -53,6 +53,7 @@ CREATE TABLE document_files (
     renewal_date DATE,
     service_provider TEXT DEFAULT '-',
     arhiva BOOLEAN,
+    notes TEXT DEFAULT '-',
     document_type_id BIGINT REFERENCES document_types(id),
     location_id BIGINT REFERENCES locations(id),
     resource_type_id BIGINT REFERENCES resource_types(id),
