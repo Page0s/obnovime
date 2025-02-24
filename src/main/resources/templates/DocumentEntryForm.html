@@ -68,7 +68,6 @@
                             th:selected="${document.location?.id == loc.id}">
                     </option>
                 </select>
-
             </div>
 
 
@@ -82,7 +81,17 @@
                             th:selected="${document.resourceType?.id == res.id}">
                     </option>
                 </select>
+            </div>
 
+            <div class="mb-3">
+                <label for="responsiblePerson" class="form-label">Odgovorna osoba:</label>
+                <select class="form-select" id="responsiblePerson" name="responsiblePersonId" required>
+                    <option th:each="user : ${app_users}"
+                            th:value="${user.id}"
+                            th:text="${user.firstName + ' ' + user.lastName}"
+                            th:selected="${user.firstName == 'Nema odgovorne'}">
+                    </option>
+                </select>
             </div>
 
 
