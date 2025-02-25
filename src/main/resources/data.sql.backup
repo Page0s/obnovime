@@ -26,8 +26,8 @@ INSERT INTO document_types (name, renewal_period) VALUES
 ('Licenca', 60),
 ('Periodički pregled vozila', 30),
 ('Svjedodžba', 60),
-('Tehnički pregled vozila', 365),
-('Osiguranje vozila', 365),
+('Tehnički pregled vozila', 15),
+('Osiguranje vozila', 15),
 ('Ugovor o radu', 60);
 
 -- First add your existing inserts for users, locations, resource types, statuses, and document types

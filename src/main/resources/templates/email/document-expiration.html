@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocAlert - Obavijest o isteku dokumenta</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            line-height: 1.6; 
+            color: #333;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            position: relative;
+        }
+        .container { 
+            max-width: 600px; 
+            margin: 0 auto; 
+            padding: 20px;
+            padding-bottom: 100px; /* Space for footer */
+        }
+        .header { 
+            background-color: #f8f9fa; 
+            padding: 20px; 
+            text-align: center; 
+        }
+        .app-name {
+            color: #007bff;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .content { padding: 20px; }
+        
+        /* Table styles */
+        .responsive-table { 
+            width: 100%; 
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        .responsive-table th,
+        .responsive-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .responsive-table th {
+            background-color: #f8f9fa;
+        }
+        
+        /* Card labels for mobile only */
+        .card-label {
+            display: none;
+            font-weight: bold;
+            color: #666;
+            margin-right: 0.5rem;
+        }
+        
+        /* Mobile/Tablet styles */
+        @media screen and (max-width: 767px) {
+            .responsive-table thead {
+                display: none;
+            }
+            .responsive-table tbody tr {
+                display: block;
+                margin-bottom: 1rem;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                padding: 1rem;
+                background: #fff;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .responsive-table tbody td {
+                display: block;
+                padding: 0.5rem 0;
+                border: none;
+            }
+            .responsive-table .card-label {
+                display: inline-block;
+            }
+        }
+        
+        .button { 
+            display: inline-block; 
+            padding: 10px 20px; 
+            background-color: #007bff; 
+            color: #ffffff !important; /* Force white color */
+            text-decoration: none !important; /* Prevent link styling */
+            border-radius: 5px; 
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        
+        /* Ensure button text stays white even after being clicked */
+        .button:visited,
+        .button:hover,
+        .button:active {
+            color: #ffffff !important;
+            text-decoration: none !important;
+        }
+
+        .footer {
+            background-color: #f8f9fa;
+            color: #666;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9em;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            border-top: 1px solid #ddd;
+        }
+        .footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="app-name">DocAlert</div>
+            <h1>Obavijest o isteku dokumenta</h1>
+            <p th:text="${alertType}">Vrsta upozorenja</p>
+        </div>
+        
+        <div class="content">
+            <p>Poštovani,</p>
+            <p>Obavještavamo vas da sljedeći dokumenti zahtijevaju vašu pažnju:</p>
+            
+            <table class="responsive-table">
+                <thead>
+                    <tr>
+                        <th>Naziv</th>
+                        <th>Tip dokumenta</th>
+                        <th>Šifra</th>
+                        <th>Datum obnove</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="doc : ${documents}">
+                        <td>
+                            <span class="card-label">Naziv:</span>
+                            <span th:text="${doc.name}">Naziv</span>
+                        </td>
+                        <td>
+                            <span class="card-label">Tip dokumenta:</span>
+                            <span th:text="${doc.documentType?.name}">Tip dokumenta</span>
+                        </td>
+                        <td>
+                            <span class="card-label">Šifra:</span>
+                            <span th:text="${doc.number}">Šifra</span>
+                        </td>
+                        <td>
+                            <span class="card-label">Datum obnove:</span>
+                            <span th:text="${#temporals.format(doc.renewalDate, 'dd.MM.yyyy')}">Datum obnove</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <p>Za više detalja i upravljanje dokumentima, kliknite na gumb ispod:</p>
+            <a th:href="${appUrl}" class="button">Otvori aplikaciju</a>
+            
+            <p style="margin-top: 20px;">S poštovanjem,<br>DocAlert tim</p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2025 DocAlert. Sva prava pridržana.</p>
+        <p>Sustav za upravljanje dokumentima i obavijestima o isteku</p>
+    </footer>
+</body>
+</html>
