@@ -28,9 +28,9 @@ public class EmailService {
 
     public void sendDocumentExpirationNotification(String toEmail, List<DocumentFile> documents, String alertType) {
         try {
-            System.out.println("Attempting to send email to: " + toEmail);
-            System.out.println("Alert type: " + alertType);
-            System.out.println("Number of documents: " + documents.size());
+            System.out.println("Pokušaj slanja e-maila na: " + toEmail);
+            System.out.println("Vrsta upozorenja: " + alertType);
+            System.out.println("Broj dokumenata: " + documents.size());
             
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -42,7 +42,7 @@ public class EmailService {
                 recipients[i] = recipients[i].trim();
             }
             helper.setTo(recipients);
-            helper.setSubject("Document Expiration Alert - " + alertType);
+            helper.setSubject("Upozorenje o isteku dokumenta - " + alertType);
 
             Context context = new Context();
             context.setVariable("documents", documents);
@@ -52,13 +52,13 @@ public class EmailService {
             String emailContent = templateEngine.process("email/document-expiration", context);
             helper.setText(emailContent, true);
 
-            System.out.println("Sending email...");
+            System.out.println("Slanje e-maila...");
             mailSender.send(message);
-            System.out.println("Email sent successfully!");
+            System.out.println("E-mail uspješno poslan!");
         } catch (MessagingException e) {
-            System.err.println("Failed to send email: " + e.getMessage());
+            System.err.println("Neuspjelo slanje e-maila: " + e.getMessage());
             e.printStackTrace();
-            throw new RuntimeException("Failed to send email notification", e);
+            throw new RuntimeException("Neuspjelo slanje e-mail obavijesti", e);
         }
     }
 }

@@ -32,8 +32,8 @@ public class DocumentExpirationService {
         System.out.println("Checking document expirations. Total documents: " + allDocuments.size());
         System.out.println("Today's date: " + today);
 
-        // Documents that will expire in 30 days
-        List<DocumentFile> expiringIn30Days = allDocuments.stream()
+        // Documents that will expire in specific number of days
+        List<DocumentFile> expiringInXDays = allDocuments.stream()
             .filter(doc -> {
                 LocalDate alertDate = doc.getRenewalDate().minusDays(
                     doc.getDocumentType() != null ? doc.getDocumentType().getRenewalPeriod() : 0
@@ -42,14 +42,14 @@ public class DocumentExpirationService {
             })
             .collect(Collectors.toList());
 
-        System.out.println("Documents expiring in 30 days: " + expiringIn30Days.size());
+        System.out.println("Documents expiring in X days: " + expiringInXDays.size());
 
-        if (!expiringIn30Days.isEmpty()) {
+        if (!expiringInXDays.isEmpty()) {
             System.out.println("Sending notification for documents entering renewal period");
             emailService.sendDocumentExpirationNotification(
                 notificationEmail,
-                expiringIn30Days,
-                "Documents Entering Renewal Period"
+                expiringInXDays,
+                "Dokumenti ulaze u period obnove"
             );
         }
 
@@ -65,7 +65,7 @@ public class DocumentExpirationService {
             emailService.sendDocumentExpirationNotification(
                 notificationEmail,
                 expiringIn10Days,
-                "Documents Expiring in 10 Days"
+                "Dokumenti ističu za 10 dana"
             );
         }
 
@@ -81,7 +81,7 @@ public class DocumentExpirationService {
             emailService.sendDocumentExpirationNotification(
                 notificationEmail,
                 expiringToday,
-                "Documents Expiring Today"
+                "Dokumenti ističu danas"
             );
         }
     }

@@ -85,10 +85,19 @@
             display: inline-block; 
             padding: 10px 20px; 
             background-color: #007bff; 
-            color: white; 
-            text-decoration: none; 
+            color: #ffffff !important; /* Force white color */
+            text-decoration: none !important; /* Prevent link styling */
             border-radius: 5px; 
-            margin-top: 20px; 
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        
+        /* Ensure button text stays white even after being clicked */
+        .button:visited,
+        .button:hover,
+        .button:active {
+            color: #ffffff !important;
+            text-decoration: none !important;
         }
 
         .footer {
@@ -116,11 +125,12 @@
         <div class="header">
             <div class="app-name">DocAlert</div>
             <h1>Obavijest o isteku dokumenta</h1>
-            <p th:text="${alertType}">Vrsta obavijesti</p>
+            <p th:text="${alertType}">Vrsta upozorenja</p>
         </div>
         
         <div class="content">
-            <p>Sljedeći dokumenti zahtijevaju vašu pažnju:</p>
+            <p>Poštovani,</p>
+            <p>Obavještavamo vas da sljedeći dokumenti zahtijevaju vašu pažnju:</p>
             
             <table class="responsive-table">
                 <thead>
@@ -153,12 +163,15 @@
                 </tbody>
             </table>
             
+            <p>Za više detalja i upravljanje dokumentima, kliknite na gumb ispod:</p>
             <a th:href="${appUrl}" class="button">Otvori aplikaciju</a>
+            
+            <p style="margin-top: 20px;">S poštovanjem,<br>DocAlert tim</p>
         </div>
     </div>
 
     <footer class="footer">
-        <p> 2025 DocAlert. Sva prava pridržana.</p>
+        <p>&copy; 2025 DocAlert. Sva prava pridržana.</p>
         <p>Sustav za upravljanje dokumentima i obavijestima o isteku</p>
     </footer>
 </body>
