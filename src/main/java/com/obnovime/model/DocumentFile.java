@@ -27,6 +27,8 @@ public class DocumentFile {
     @Column(columnDefinition = "TEXT DEFAULT '-'")
     private String serviceProvider;
     private Boolean arhiva;
+    @Column(columnDefinition = "TEXT DEFAULT '-'")
+    private String notes;
 
     @ManyToOne
     @JoinColumn(name = "document_type_id")
