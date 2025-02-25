@@ -6,8 +6,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import com.obnovime.repository.LocationRepository;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class MainController {
@@ -18,16 +20,18 @@ public class MainController {
     private final ResourceTypeRepository resourceTypeRepository;
     private final DocumentTypeRepository documentTypeRepository; // ✅ Dodano
     private final AppUserRepository userRepository;
+    private final RenewalHistoryRepository renewalHistoryRepository;
 
     public MainController(DocumentRepository documentRepository, DocumentStatusRepository documentStatusRepository,
                           LocationRepository locationRepository, ResourceTypeRepository resourceTypeRepository,
-                          DocumentTypeRepository documentTypeRepository, AppUserRepository userRepository) {
+                          DocumentTypeRepository documentTypeRepository, AppUserRepository userRepository, RenewalHistoryRepository renewalHistoryRepository) {
         this.documentRepository = documentRepository;
         this.documentStatusRepository = documentStatusRepository;
         this.locationRepository = locationRepository;
         this.resourceTypeRepository = resourceTypeRepository;
         this.documentTypeRepository = documentTypeRepository; // ✅ Inicijalizirano
         this.userRepository = userRepository;
+        this.renewalHistoryRepository = renewalHistoryRepository;
     }
 
     @GetMapping("/form")
@@ -60,10 +64,22 @@ public class MainController {
         return "DocumentArchive";
     }
 
-    @GetMapping("/history")
-    public String showHistory() {
-        return "DocumentRenewalHistory";
+    @GetMapping("/document/{id}/history")
+    public String getRenewalHistory(@PathVariable Long id, Model model) {
+        Optional<DocumentFile> documentOpt = documentRepository.findById(id);
+
+        if (documentOpt.isPresent()) {
+            DocumentFile document = documentOpt.get();
+            List<RenewalHistory> history = renewalHistoryRepository.findByDocumentFileId(id);
+
+            model.addAttribute("document", document);
+            model.addAttribute("history", history);
+            return "DocumentRenewalHistory";
+        } else {
+            return "redirect:/main";
+        }
     }
+
 
     @GetMapping("/index")
     public String showIndex() {

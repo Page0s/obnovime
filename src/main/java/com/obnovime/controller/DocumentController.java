@@ -1,5 +1,6 @@
 package com.obnovime.controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,16 +29,18 @@ public class DocumentController {
     private final DocumentStatusRepository documentStatusRepository;
     private final LocationRepository locationRepository;
     private final ResourceTypeRepository resourceTypeRepository;
+    private final RenewalHistoryRepository renewalHistoryRepository;
 
     public DocumentController(
             DocumentRepository documentRepository,
             DocumentStatusRepository documentStatusRepository,
             LocationRepository locationRepository,
-            ResourceTypeRepository resourceTypeRepository) {
+            ResourceTypeRepository resourceTypeRepository, RenewalHistoryRepository renewalHistoryRepository) {
         this.documentRepository = documentRepository;
         this.documentStatusRepository = documentStatusRepository;
         this.locationRepository = locationRepository;
         this.resourceTypeRepository = resourceTypeRepository;
+        this.renewalHistoryRepository = renewalHistoryRepository;
     }
 
     private void updateDocumentStatus(DocumentFile document) {
@@ -142,12 +145,36 @@ public class DocumentController {
             @RequestParam(value = "statusId", required = false) Long statusId,
             @RequestParam(value = "renewalDate", required = false) LocalDate renewalDate,
             @RequestParam(value = "arhiva", required = false, defaultValue = "false") Boolean arhiva,
+            HttpSession session,
             RedirectAttributes redirectAttributes) {
         
         Optional<DocumentFile> existingDoc = documentRepository.findById(id);
         
         if (existingDoc.isPresent()) {
             DocumentFile existing = existingDoc.get();
+
+            // Dohvati trenutno prijavljenog korisnika iz sesije
+            AppUser currentUser = (AppUser) session.getAttribute("user");
+
+            if (currentUser == null) {
+                redirectAttributes.addFlashAttribute("error", "Greška: Nema prijavljenog korisnika.");
+                return "redirect:/main";
+            }
+
+            if (renewalDate != null && existing.getRenewalDate().isBefore(renewalDate)) {
+                RenewalHistory renewalHistory = new RenewalHistory();
+                renewalHistory.setDocumentFile(existing);
+                renewalHistory.setRenewedBy(currentUser);
+                renewalHistory.setPastRenewalDate(existing.getRenewalDate()); // Spremi trenutni datum obnove prije promjene
+
+                renewalHistoryRepository.save(renewalHistory);
+
+                DocumentStatus activeStatus = documentStatusRepository.findByName("Aktivno");
+                existing.setStatus(activeStatus);
+                existing.setRenewalDate(renewalDate);
+            }
+
+
 
             if (renewalDate != null && existing.getRenewalDate().isBefore(renewalDate)) {
                 DocumentStatus activeStatus = documentStatusRepository.findByName("Aktivno");
