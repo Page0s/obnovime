@@ -19,6 +19,7 @@ public class DocumentFileDTO {
     private String statusName = "-";
     private String badgeClass = "bg-secondary";
     private String rowColor = "";
+    private String responsiblePersonName = "-";
 
     public static DocumentFileDTO fromEntity(DocumentFile entity) {
         DocumentFileDTO dto = new DocumentFileDTO();
@@ -47,13 +48,20 @@ public class DocumentFileDTO {
             dto.setResourceTypeName(entity.getResourceType().getName() != null ? 
                 entity.getResourceType().getName() : "-");
         }
-        
+
         if (entity.getStatus() != null) {
             // update the status name and badge class
             String statusName = entity.getStatus().getName();
             dto.setStatusName(statusName != null ? statusName : "-");
 
             dto.setBadgeClass("badge-renewal-progress");
+        }
+
+        if (entity.getResponsiblePerson() != null) {
+            dto.setResponsiblePersonName(entity.getResponsiblePerson().getFirstName() + " " +
+                    entity.getResponsiblePerson().getLastName());
+        } else {
+            dto.setResponsiblePersonName("N/A");
         }
         return dto;
     }

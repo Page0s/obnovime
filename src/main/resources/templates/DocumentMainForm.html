@@ -315,6 +315,7 @@
                         <th>Vrsta resursa</th>
                         <th>Ispostava</th>
                         <th>Partner</th>
+                        <th>Odgovorna osoba</th>
                         <th>Tip dokumenta</th>
                         <th>Datum obnove</th>
                         <th>Status</th>
@@ -328,6 +329,7 @@
                             <td th:text="${document.resourceTypeName}">Vrsta resursa</td>
                             <td th:text="${document.locationName}">Lokacija</td>
                             <td th:text="${document.serviceProvider}">Partner</td>
+                            <td th:text="${document.responsiblePersonName}">Odgovorna osoba</td>
                             <td th:text="${document.documentTypeName}">Tip dokumenta</td>
                             <td style="white-space: nowrap;" th:text="${document.renewalDate != T(java.time.LocalDate).MIN} ? ${#temporals.format(document.renewalDate, 'dd.MM.yyyy.')} : 'N/A'">Datum obnove</td>
                             <td>
