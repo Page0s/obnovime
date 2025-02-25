@@ -1,5 +1,8 @@
 package com.obnovime.model;
 
+import java.time.LocalDate;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,12 +25,14 @@ public class RenewalHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "past_renewal_date")
+    private LocalDate pastRenewalDate = LocalDate.of(1970, 1, 1); // Using Unix epoch start date as minimum
+
     @ManyToOne
     @JoinColumn(name = "renewed_by_id")
     private AppUser renewedBy;
 
     @ManyToOne
-    @JoinColumn(name = "doucment_id")
-    private DocumentFile doucmentFile;
+    @JoinColumn(name = "document_id")
+    private DocumentFile documentFile;
 }
-
