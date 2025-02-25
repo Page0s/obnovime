@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,11 +21,9 @@
         <div class="card mb-4">
             <div class="card-body">
                 <h5 class="card-title">Informacije o dokumentu</h5>
-                <p class="card-text">
-                    <strong>Naziv dokumenta:</strong> Licenca za rad<br>
-                    <strong>Trenutni serijski broj:</strong> LIC-2024-001<br>
-                    <strong>Tip dokumenta:</strong> Licenca
-                </p>
+                <strong>Naziv dokumenta:</strong> <span th:text="${document.name}"></span><br>
+                <strong>Šifra:</strong> <span th:text="${document.number}"></span><br>
+                <strong>Tip dokumenta:</strong> <span th:text="${document.documentType.name}"></span>
             </div>
         </div>
 
@@ -35,30 +33,17 @@
                 <thead class="table-light">
                     <tr>
                         <th>ID</th>
-                        <th>Vrijedio od</th>
                         <th>Vrijedio do</th>
-                        <th>Serijski broj</th>
+                        <th>Obnovio</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>3</td>
-                        <td>2024-01-01</td>
-                        <td>2024-12-15</td>
-                        <td>LIC-2024-001</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>2023-01-01</td>
-                        <td>2023-12-31</td>
-                        <td>LIC-2023-001</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>2022-01-01</td>
-                        <td>2022-12-31</td>
-                        <td>LIC-2022-001</td>
-                    </tr>
+                <tr th:each="entry, stat : ${history}">
+                    <td th:text="${stat.count}"></td>
+                    <td th:text="${entry.pastRenewalDate != T(java.time.LocalDate).MIN} ? ${#temporals.format(entry.pastRenewalDate, 'dd.MM.yyyy.')} : 'N/A'"></td>
+                    <td th:text="${entry.renewedBy.firstName + ' ' + entry.renewedBy.lastName}"></td>
+                </tr>
+
                 </tbody>
             </table>
         </div>

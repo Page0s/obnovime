@@ -33,6 +33,6 @@ public class RenewalHistory {
     private AppUser renewedBy;
 
     @ManyToOne
-    @JoinColumn(name = "document_id")
+    @JoinColumn(name = "document_file_id")
     private DocumentFile documentFile;
 }
