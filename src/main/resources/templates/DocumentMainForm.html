@@ -476,7 +476,14 @@
                     </div>
                 </nav>
             </div>
-
+            <div class="text-center mt-2">
+                <p>
+                    Stranica
+                    <span th:text="${currentPage + 1}">1</span>
+                    od
+                    <span th:text="${totalPages}">5</span>
+                </p>
+            </div>
 
         </div>
     </div>
