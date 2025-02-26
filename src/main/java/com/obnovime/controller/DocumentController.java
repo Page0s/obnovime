@@ -33,17 +33,19 @@ public class DocumentController {
     private final LocationRepository locationRepository;
     private final ResourceTypeRepository resourceTypeRepository;
     private final RenewalHistoryRepository renewalHistoryRepository;
+    private final AppUserRepository appUserRepository;
 
     public DocumentController(
             DocumentRepository documentRepository,
             DocumentStatusRepository documentStatusRepository,
             LocationRepository locationRepository,
-            ResourceTypeRepository resourceTypeRepository, RenewalHistoryRepository renewalHistoryRepository) {
+            ResourceTypeRepository resourceTypeRepository, RenewalHistoryRepository renewalHistoryRepository, AppUserRepository appUserRepository) {
         this.documentRepository = documentRepository;
         this.documentStatusRepository = documentStatusRepository;
         this.locationRepository = locationRepository;
         this.resourceTypeRepository = resourceTypeRepository;
         this.renewalHistoryRepository = renewalHistoryRepository;
+        this.appUserRepository = appUserRepository;
     }
 
     private void updateDocumentStatus(DocumentFile document) {
@@ -298,6 +300,10 @@ public class DocumentController {
             model.addAttribute("dokument", dokument.get());
             model.addAttribute("locations", locationRepository.findAll());
             model.addAttribute("resourceTypes", resourceTypeRepository.findAll());
+
+            List<AppUser> users = appUserRepository.findByUserType("CLIENT");
+            model.addAttribute("app_users", users);
+
             return "DocumentEditForm";
         } else {
             return "redirect:/main";
@@ -310,6 +316,7 @@ public class DocumentController {
             @RequestParam("name") String name,
             @RequestParam("serviceProvider") String serviceProvider,
             @RequestParam("locationId") Long locationId,
+            @RequestParam("responsiblePersonId") Long responsiblePersonId,
             @RequestParam(value = "notes", required = false, defaultValue = "-") String notes,
             RedirectAttributes redirectAttributes) {
 
@@ -321,6 +328,9 @@ public class DocumentController {
             dokument.setServiceProvider(serviceProvider);
             dokument.setNotes(notes.isEmpty() ? "-" : notes);
 
+            AppUser responsiblePerson = appUserRepository.findById(responsiblePersonId)
+                    .orElseThrow(() -> new RuntimeException("Responsible person not found"));
+            dokument.setResponsiblePerson(responsiblePerson);
 
             Location location = locationRepository.findById(locationId)
                 .orElseThrow(() -> new RuntimeException("Location not found"));
