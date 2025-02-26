@@ -110,13 +110,13 @@
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
-                <form th:action="@{/filter}" method="get" id="filterForm">
+                <form th:action="@{/main}" method="get" id="filterForm">
                     <!-- Tip dokumenta -->
                     <div class="filter-section">
                         <div class="filter-header" data-bs-toggle="collapse" data-bs-target="#tipDokumentaCollapse" aria-expanded="false">
                             Tip dokumenta
                         </div>
-                        <div id="tipDokumentaCollapse" class="collapse">
+                        <div id="tipDokumentaCollapse" class="collapse mt-2">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="licenca" name="documentTypes" value="Licenca" th:checked="${selectedDocumentTypes != null and selectedDocumentTypes.contains('Licenca')}"/>
                                 <label class="form-check-label" for="licenca">Licenca</label>
@@ -143,7 +143,7 @@
                             </div>
                         </div>
                     </div>
-
+                    <hr class="my-3" style="height: 1px; background-color: #bbb; border: none;">
                     <!-- Vrijeme obnove -->
                     <div class="row mt-2">
                         <div class="col-auto">
@@ -157,13 +157,13 @@
                                    th:value="${endDate != null} ? ${#temporals.format(endDate, 'yyyy-MM-dd')} : ''">
                         </div>
                     </div>
-
+                    <hr class="my-3" style="height: 1px; background-color: #bbb; border: none;">
                     <!-- Resursi -->
                     <div class="filter-section">
                         <div class="filter-header" data-bs-toggle="collapse" data-bs-target="#resursiCollapse" aria-expanded="false">
                             Resursi
                         </div>
-                        <div id="resursiCollapse" class="collapse">
+                        <div id="resursiCollapse" class="collapse mt-2">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="oprema" name="resourceTypeName" value="Oprema" th:checked="${selectedResourceTypes != null and selectedResourceTypes.contains('Oprema')}"/>
                                 <label class="form-check-label" for="oprema">Oprema</label>
@@ -178,13 +178,13 @@
                             </div>
                         </div>
                     </div>
-
+                    <hr class="my-3" style="height: 1px; background-color: #bbb; border: none;">
                     <!-- Status -->
                     <div class="filter-section">
                         <div class="filter-header" data-bs-toggle="collapse" data-bs-target="#statusCollapse" aria-expanded="false">
                             Status
                         </div>
-                        <div id="statusCollapse" class="collapse">
+                        <div id="statusCollapse" class="collapse mt-2">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="vrijemeZaObnovu" name="statusName" value="Vrijeme za obnovu" th:checked="${selectedStatuses != null and selectedStatuses.contains('Vrijeme za obnovu')}"/>
                                 <label class="form-check-label" for="vrijemeZaObnovu">Vrijeme za obnovu</label>
@@ -195,8 +195,6 @@
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="aktivno" name="statusName" value="Aktivno" th:checked="${selectedStatuses != null and selectedStatuses.contains('Aktivno')}"/>
-
-
                                 <label class="form-check-label" for="aktivno">Aktivno</label>
                             </div>
                             <div class="form-check">
@@ -205,13 +203,13 @@
                             </div>
                         </div>
                     </div>
-
+                    <hr class="my-3" style="height: 1px; background-color: #bbb; border: none;">
                     <!-- Ispostava -->
                     <div class="filter-section">
                         <div class="filter-header" data-bs-toggle="collapse" data-bs-target="#ispostavaCollapse" aria-expanded="false">
                             Ispostava
                         </div>
-                        <div id="ispostavaCollapse" class="collapse">
+                        <div id="ispostavaCollapse" class="collapse mt-2">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="krapina" name="locationName" value="Krapina" th:checked="${selectedLocations != null and selectedLocations.contains('Krapina')}"/>
                                 <label class="form-check-label" for="krapina">Krapina</label>
@@ -246,10 +244,11 @@
                             </div>
                         </div>
                     </div>
+                    <hr class="my-3" style="height: 1px; background-color: #bbb; border: none;">
                     <!-- Akcijske tipke -->
                     <div class="d-flex justify-content-between mt-4">
                         <button type="submit" class="btn btn-primary" name="clear" value="false">Filtriraj</button>
-                        <a class="btn btn-secondary" th:href="@{/main}">Obriši filter</a>
+                        <a class="btn btn-secondary" th:href="@{/main(clear=true, page=0, size=10)}">Obriši filter</a>
                     </div>
                 </form>
             </div>
@@ -356,6 +355,157 @@
                     </tbody>
                 </table>
             </div>
+            <!-- Paginacija s Bootstrap Icons -->
+            <div class="d-flex justify-content-center mt-4">
+                <nav aria-label="Paginacija">
+                    <ul class="pagination">
+
+                        <!-- PRVA STRANICA: << (bi-chevron-double-left) -->
+                        <li class="page-item"
+                            th:classappend="${currentPage} == 0 ? 'disabled'">
+                            <a class="page-link text-dark"
+                               th:href="@{/main(
+                               page=0,
+                               size=${size},
+                               documentTypes=${selectedDocumentTypes},
+                               resourceTypeName=${selectedResourceTypes},
+                               statusName=${selectedStatuses},
+                               locationName=${selectedLocations},
+                               startDate=${startDate},
+                               endDate=${endDate}
+                           )}"
+                               aria-label="Prva">
+                                <i class="bi bi-chevron-double-left"></i>
+                            </a>
+                        </li>
+
+                        <!-- <5 (pet stranica unatrag) -->
+                        <li class="page-item"
+                            th:classappend="${currentPage} < 5 ? 'disabled'">
+                            <a class="page-link text-dark"
+                               th:href="@{/main(page=${(currentPage - 5) < 0} ? 0 : ${currentPage - 5}, size=${size})}"
+                               aria-label="5 unatrag">
+                                <i class="bi bi-chevron-left"></i>5
+                            </a>
+                        </li>
+
+                        <!-- PRETHODNA: < (bi-chevron-left) -->
+                        <li class="page-item"
+                            th:classappend="${currentPage} == 0 ? 'disabled'">
+                            <a class="page-link text-dark"
+                               th:href="@{/main(
+                               page=${(currentPage - 5) < 0} ? 0 : ${currentPage - 5},
+                               size=${size},
+                               documentTypes=${selectedDocumentTypes},
+                               resourceTypeName=${selectedResourceTypes},
+                               statusName=${selectedStatuses},
+                               locationName=${selectedLocations},
+                               startDate=${startDate},
+                               endDate=${endDate}
+                           )}"
+                               aria-label="Prethodna">
+                                <i class="bi bi-chevron-left"></i>
+                            </a>
+                        </li>
+
+
+                        <!-- BROJEVI STRANICA -->
+                        <li class="page-item"
+                            th:each="p : ${#numbers.sequence(0, totalPages - 1)}">
+
+                            <!-- Ako p nije trenutna stranica - link s crnim tekstom -->
+                            <a class="page-link text-dark"
+                               th:href="@{/main(
+                               page=${p},
+                               size=${size},
+                               documentTypes=${selectedDocumentTypes},
+                               resourceTypeName=${selectedResourceTypes},
+                               statusName=${selectedStatuses},
+                               locationName=${selectedLocations},
+                               startDate=${startDate},
+                               endDate=${endDate}
+                           )}"
+                               th:if="${p} != ${currentPage}"
+                               th:text="${p + 1}">
+                            </a>
+
+                            <!-- Ako p jest trenutna stranica - siva pozadina i crni tekst, bez linka -->
+                            <span class="page-link bg-secondary text-black"
+                                  th:if="${p} == ${currentPage}"
+                                  th:text="${p + 1}">
+                </span>
+                        </li>
+
+
+                        <!-- SLJEDEĆA: > (bi-chevron-right) -->
+                        <li class="page-item"
+                            th:classappend="${currentPage} == ${totalPages - 1} ? 'disabled'">
+                            <a class="page-link text-dark"
+                               th:href="@{/main(
+                               page=${currentPage + 1},
+                               size=${size},
+                               documentTypes=${selectedDocumentTypes},
+                               resourceTypeName=${selectedResourceTypes},
+                               statusName=${selectedStatuses},
+                               locationName=${selectedLocations},
+                               startDate=${startDate},
+                               endDate=${endDate}
+                           )}"
+                               aria-label="Sljedeća">
+                                <i class="bi bi-chevron-right"></i>
+                            </a>
+                        </li>
+
+                        <!-- 5> (pet stranica naprijed) -->
+                        <li class="page-item"
+                            th:classappend="${currentPage} + 5 >= ${totalPages} ? 'disabled'">
+                            <a class="page-link text-dark"
+                               th:href="@{/main(
+                               page=${(currentPage + 5) >= totalPages} ? ${totalPages - 1} : ${currentPage + 5},
+                               size=${size},
+                               documentTypes=${selectedDocumentTypes},
+                               resourceTypeName=${selectedResourceTypes},
+                               statusName=${selectedStatuses},
+                               locationName=${selectedLocations},
+                               startDate=${startDate},
+                               endDate=${endDate}
+                           )}"
+                               aria-label="5 naprijed">
+                                5<i class="bi bi-chevron-right"></i>
+                            </a>
+                        </li>
+
+                        <!-- ZADNJA STRANICA: >> (bi-chevron-double-right) -->
+                        <li class="page-item"
+                            th:classappend="${currentPage} == ${totalPages - 1} ? 'disabled'">
+                            <a class="page-link text-dark"
+                               th:href="@{/main(
+                               page=${totalPages - 1},
+                               size=${size},
+                               documentTypes=${selectedDocumentTypes},
+                               resourceTypeName=${selectedResourceTypes},
+                               statusName=${selectedStatuses},
+                               locationName=${selectedLocations},
+                               startDate=${startDate},
+                               endDate=${endDate}
+                           )}"
+                               aria-label="Prethodna">
+                                <i class="bi bi-chevron-left"></i>
+                            </a>
+                        </li>
+
+                    </ul>
+                </nav>
+            </div>
+
+            <!-- Prikaz "Stranica X od Y" -->
+            <div class="text-center mt-2">
+                Stranica
+                <span th:text="${currentPage + 1}">1</span>
+                od
+                <span th:text="${totalPages}">1</span>
+            </div>
+
         </div>
     </div>
     <!-- Footer -->

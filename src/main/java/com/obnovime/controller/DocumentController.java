@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import com.obnovime.model.*;
 import com.obnovime.repository.*;
@@ -98,17 +101,91 @@ public class DocumentController {
     }
 
     @GetMapping("/main")
-    public String showMainPage(Model model) {
+    public String showMainPage(
+            Model model,
+            // Paginacija
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            // Filtriranje
+            @RequestParam(name = "documentTypes", required = false) List<String> documentTypes,
+            @RequestParam(name = "resourceTypeName", required = false) List<String> resourceTypeName,
+            @RequestParam(name = "statusName", required = false) List<String> statusName,
+            @RequestParam(name = "locationName", required = false) List<String> locationName,
+            @RequestParam(name = "startDate", required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(name = "endDate", required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam(required = false, name = "clear") String clear
+    ) {
+        // 1) Ako je "clear" => resetiraj filter
+        if ("true".equals(clear)) {
+            documentTypes = null;
+            resourceTypeName = null;
+            statusName = null;
+            locationName = null;
+            startDate = null;
+            endDate = null;
+        }
 
-        List<DocumentFile> documents = documentRepository.findAllByOrderByRenewalDateAsc();
-        documents.forEach(this::updateDocumentStatus);
+        // 2) PageRequest
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("renewalDate").ascending());
 
-        List<DocumentFileDTO> documentDtos = documents.stream()
-                .filter(Objects::nonNull)
-                .map(DocumentFileDTO::fromEntity)
-                .collect(Collectors.toList());
+        // 3) Ako su filter parametri prazni, uzmi sve (paginirano):
+        if ((documentTypes == null || documentTypes.isEmpty())
+                && (resourceTypeName == null || resourceTypeName.isEmpty())
+                && (statusName == null || statusName.isEmpty())
+                && (locationName == null || locationName.isEmpty())
+                && startDate == null && endDate == null)
+        {
+            // Vrati sve, ali paginirano
+            Page<DocumentFile> documentsPage = documentRepository.findAll(pageRequest);
 
-        model.addAttribute("documents", documentDtos);
+            documentsPage.forEach(this::updateDocumentStatus);
+
+            // Konverzija u DTO
+            List<DocumentFileDTO> documentDtos = documentsPage.getContent().stream()
+                    .map(DocumentFileDTO::fromEntity)
+                    .toList();
+
+            model.addAttribute("documents", documentDtos);
+            model.addAttribute("currentPage", documentsPage.getNumber());
+            model.addAttribute("totalPages", documentsPage.getTotalPages());
+        } else {
+            // 4) Ako su filter parametri postavljeni, filtriraj i paginiraj
+            List<DocumentFile> filteredAll = documentRepository.searchDocuments(
+                    documentTypes, resourceTypeName, statusName, locationName, startDate, endDate
+            );
+            filteredAll.forEach(this::updateDocumentStatus);
+
+            // "Paginacija na listi"
+            int startIdx = page * size;
+            int endIdx = Math.min(startIdx + size, filteredAll.size());
+            // Ako je startIdx >= veličine, to znači da je stranica prazna
+            List<DocumentFile> pageContent = startIdx < filteredAll.size()
+                    ? filteredAll.subList(startIdx, endIdx)
+                    : List.of();
+
+            // Konvertiraj sublistu u DTO
+            List<DocumentFileDTO> documentDtos = pageContent.stream()
+                    .map(DocumentFileDTO::fromEntity)
+                    .toList();
+
+            // Izračun "totalPages"
+            int totalPages = (int) Math.ceil((double) filteredAll.size() / size);
+
+            // Dodaj u model
+            model.addAttribute("documents", documentDtos);
+            model.addAttribute("currentPage", page);
+            model.addAttribute("totalPages", totalPages);
+        }
+
+        // 5) Uvijek vrati i odabrane parametre, da ih Thymeleaf "zapamti" na formi:
+        model.addAttribute("selectedDocumentTypes", documentTypes);
+        model.addAttribute("selectedResourceTypes", resourceTypeName);
+        model.addAttribute("selectedStatuses", statusName);
+        model.addAttribute("selectedLocations", locationName);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
 
         return "DocumentMainForm";
     }
@@ -116,7 +193,7 @@ public class DocumentController {
     @GetMapping("/document/{id}/obnova")
     public String showRenewalForm(@PathVariable Long id, Model model) {
         Optional<DocumentFile> documentOpt = documentRepository.findById(id);
-        
+
         if (documentOpt.isPresent()) {
             DocumentFile document = documentOpt.get();
             System.out.println("ID OF THE DOCUMENT: " + document.getId());
@@ -124,7 +201,7 @@ public class DocumentController {
             List<DocumentStatus> statuses = documentStatusRepository.findAll().stream()
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
-            
+
             // remove if from this list elements "Obnova u tijeku isteklo", "Vrijeme za obnovu isteklo", "Nema obnove", "Aktivno"
             statuses.removeIf(status -> status.getName().equals("Obnova u tijeku isteklo") ||
             status.getName().equals("Aktivno") ||
@@ -245,57 +322,5 @@ public class DocumentController {
         }
 
         return "redirect:/main";
-    }
-    @GetMapping("/filter")
-    public String filterDocuments(
-            @RequestParam(name = "documentTypes", required = false) List<String> documentTypes,
-            @RequestParam(name = "resourceTypeName", required = false) List<String> resourceTypeName,
-            @RequestParam(name = "statusName", required = false) List<String> statusName,
-            @RequestParam(name = "locationName", required = false) List<String> locationName,
-            @RequestParam(name = "startDate", required = false)
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam(name = "endDate", required = false)
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-            @RequestParam(required = false, name = "clear") String clear,
-            Model model
-    ) {
-        if ("true".equals(clear)) {
-            // Vrati punu listu
-            List<DocumentFile> allDocs = documentRepository.findAllByOrderByRenewalDateAsc();
-            model.addAttribute("documents", allDocs);
-
-            // ... i postavi docTypes, resourceTypes i sve ostalo na null (ili prazno)
-            documentTypes = null;
-            resourceTypeName = null;
-            statusName = null;
-            locationName = null;
-            startDate = null;
-            endDate = null;
-        } else {
-            // Inače, filtriraj
-        // Poziv metode u DocumentRepository koja radi filtriranje
-        List<DocumentFile> filteredDocs = documentRepository.searchDocuments(
-                documentTypes,
-                resourceTypeName,
-                statusName,
-                locationName,
-                startDate,
-                endDate
-        );
-            model.addAttribute("documents", filteredDocs);
-        List<DocumentFileDTO> documentDtos = filteredDocs.stream()
-                .map(DocumentFileDTO::fromEntity)
-                .collect(Collectors.toList());
-
-        model.addAttribute("documents", documentDtos);
-            model.addAttribute("selectedDocumentTypes", documentTypes);
-            model.addAttribute("selectedResourceTypes", resourceTypeName);
-            model.addAttribute("selectedStatuses", statusName);
-            model.addAttribute("selectedLocations", locationName);
-            model.addAttribute("startDate", startDate);
-            model.addAttribute("endDate", endDate);
-            System.out.println("docTypes = " + documentTypes);
-        }
-        return "DocumentMainForm";
     }
 }
