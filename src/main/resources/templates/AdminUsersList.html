@@ -26,19 +26,18 @@
                     <p class="mb-0">Uredi korisnike</p>
                 </div>
             </div>
-            <div class="col-auto">
-                <a href="/admin" class="btn btn-light">Natrag na Admin Panel</a>
-            </div>
         </div>
     </div>
 </header>
 
 <div class="container">
-    <div class="mb-4">
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
+    <div class="mb-4 d-flex justify-content-end gap-2">
+        <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#addUserModal">
             <i class="bi bi-plus-circle me-2"></i>Dodaj novog korisnika
         </button>
+        <a href="/admin" class="btn btn-secondary">Natrag na Admin Panel</a>
     </div>
+
 
     <div class="card">
         <div class="card-body">
@@ -123,9 +122,9 @@
                         <label for="odjel" class="form-label">Odjel</label>
                         <input type="text" class="form-control" id="odjel" name="department">
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Odustani</button>
+                    <div class="modal-footer d-flex justify-content-start">
                         <button type="submit" class="btn btn-primary">Spremi korisnika</button>
+                        <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal">Odustani</button>
                     </div>
                 </form>
             </div>
@@ -167,9 +166,9 @@
                     </div>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Odustani</button>
+            <div class="modal-footer d-flex justify-content-start">
                 <button type="submit" class="btn btn-primary" onclick="submitEditUserForm()">Spremi promjene</button>
+                <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal">Odustani</button>
             </div>
         </div>
     </div>
