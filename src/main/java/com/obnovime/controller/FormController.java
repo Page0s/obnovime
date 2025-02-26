@@ -42,6 +42,7 @@ public class FormController {
             @RequestParam("resourceTypeId") Long resourceTypeId,
             @RequestParam("documentTypeId") Long documentTypeId,
             @RequestParam("responsiblePersonId") Long responsiblePersonId,
+            @RequestParam(required = false, defaultValue = "-") String notes,
             HttpSession session,
             RedirectAttributes redirectAttributes) {
         try {
@@ -51,7 +52,7 @@ public class FormController {
             document.setRenewalDate(renewalDate);
             document.setServiceProvider(service);
             document.setArhiva(false);
-
+            document.setNotes(notes.isEmpty() ? "-" : notes);
             document.setServiceProvider(service.isEmpty() ? "-" : service);
 
             // Dohvati lokaciju
