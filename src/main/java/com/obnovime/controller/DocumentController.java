@@ -60,9 +60,13 @@ public class DocumentController {
         DocumentStatus renewalInProgressExpired = documentStatusRepository.findById(5L).orElseThrow(); // Obnova u tijeku isteklo
 
         // If we're between alert date and renewal date, and status is Active -> set to Renewal
-        if (!today.isBefore(alertDate) && today.isBefore(renewalDate) && 
+        if (today.isAfter(alertDate) && today.isBefore(renewalDate) && 
             activeStatus.getName().equalsIgnoreCase(document.getStatus().getName())) {
             document.setStatus(renewalStatus);
+            documentRepository.save(document);
+        } else if (today.isAfter(alertDate) && today.isAfter(renewalDate) &&
+            activeStatus.getName().equalsIgnoreCase(document.getStatus().getName())){
+            document.setStatus(renewalStatusExpired);
             documentRepository.save(document);
         }
         
@@ -77,14 +81,6 @@ public class DocumentController {
         }
 
         // If we're after renewal date and status is Renewal -> set to Expired
-        if (today.isAfter(renewalDate)) {
-            if (renewalStatus.getName().equalsIgnoreCase(document.getStatus().getName())) {
-                document.setStatus(renewalStatusExpired);
-                documentRepository.save(document);
-            }
-        }
-
-                // If we're after renewal date and status is Renewal -> set to Expired
         if (today.isAfter(renewalDate)) {
             if (renewalStatus.getName().equalsIgnoreCase(document.getStatus().getName())) {
                 document.setStatus(renewalStatusExpired);
@@ -246,14 +242,6 @@ public class DocumentController {
 
                 renewalHistoryRepository.save(renewalHistory);
 
-                DocumentStatus activeStatus = documentStatusRepository.findByName("Aktivno");
-                existing.setStatus(activeStatus);
-                existing.setRenewalDate(renewalDate);
-            }
-
-
-
-            if (renewalDate != null && existing.getRenewalDate().isBefore(renewalDate)) {
                 DocumentStatus activeStatus = documentStatusRepository.findByName("Aktivno");
                 existing.setStatus(activeStatus);
                 existing.setRenewalDate(renewalDate);
