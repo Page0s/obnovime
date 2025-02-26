@@ -117,31 +117,20 @@
                             Tip dokumenta
                         </div>
                         <div id="tipDokumentaCollapse" class="collapse mt-2">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="licenca" name="documentTypes" value="Licenca" th:checked="${selectedDocumentTypes != null and selectedDocumentTypes.contains('Licenca')}"/>
-                                <label class="form-check-label" for="licenca">Licenca</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="periodicki" name="documentTypes" value="Periodički pregled vozila" th:checked="${selectedDocumentTypes != null and selectedDocumentTypes.contains('Periodički pregled vozila')}"/>
-                                <label class="form-check-label" for="periodicki">Periodički pregled vozila</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="svjedodzba" name="documentTypes" value="Svjedodžba" th:checked="${selectedDocumentTypes != null and selectedDocumentTypes.contains('Svjedodžba')}"/>
-                                <label class="form-check-label" for="svjedodzba">Svjedodžba</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="tehnički pregled vozila" name="documentTypes" value="Tehnički pregled vozila" th:checked="${selectedDocumentTypes != null and selectedDocumentTypes.contains('Tehnički pregled vozila')}"/>
-                                <label class="form-check-label" for="tehnički pregled vozila">Tehnički pregled vozila</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="osiguranje vozila" name="documentTypes" value="Osiguranje vozila" th:checked="${selectedDocumentTypes != null and selectedDocumentTypes.contains('Osiguranje vozila')}"/>
-                                <label class="form-check-label" for="osiguranje vozila">Osiguranje vozila</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="ugovor o radu" name="documentTypes" value="Ugovor o radu" th:checked="${selectedDocumentTypes != null and selectedDocumentTypes.contains('Ugovor o radu')}"/>
-                                <label class="form-check-label" for="ugovor o radu">Ugovor o radu</label>
+                            <!-- Iteriraj kroz listu "allDocumentTypes" i prikazuj ih kao check-box -->
+                            <div th:each="docType : ${allDocumentTypes}" class="form-check">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       name="documentTypes"
+                                       th:id="${docType.name}"
+                                       th:value="${docType.name}"
+                                       th:checked="${selectedDocumentTypes != null and selectedDocumentTypes.contains(docType.name)}" />
+                                <label class="form-check-label"
+                                       th:for="${docType.name}"
+                                       th:text="${docType.name}"></label>
                             </div>
                         </div>
+
                     </div>
                     <hr class="my-3" style="height: 1px; background-color: #bbb; border: none;">
                     <!-- Vrijeme obnove -->
@@ -164,19 +153,19 @@
                             Resursi
                         </div>
                         <div id="resursiCollapse" class="collapse mt-2">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="oprema" name="resourceTypeName" value="Oprema" th:checked="${selectedResourceTypes != null and selectedResourceTypes.contains('Oprema')}"/>
-                                <label class="form-check-label" for="oprema">Oprema</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="radnik" name="resourceTypeName" value="Radnik"  th:checked="${selectedResourceTypes != null and selectedResourceTypes.contains('Radnik')}"/>
-                                <label class="form-check-label" for="radnik">Radnik</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="vozilo" name="resourceTypeName" value="Vozilo" th:checked="${selectedResourceTypes != null and selectedResourceTypes.contains('Vozilo')}"/>
-                                <label class="form-check-label" for="vozilo">Vozilo</label>
+                            <div th:each="resType : ${allResourceTypes}" class="form-check">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       name="resourceTypeName"
+                                       th:id="${resType.name}"
+                                       th:value="${resType.name}"
+                                       th:checked="${selectedResourceTypes != null and selectedResourceTypes.contains(resType.name)}" />
+                                <label class="form-check-label"
+                                       th:for="${resType.name}"
+                                       th:text="${resType.name}"></label>
                             </div>
                         </div>
+
                     </div>
                     <hr class="my-3" style="height: 1px; background-color: #bbb; border: none;">
                     <!-- Status -->
@@ -185,21 +174,16 @@
                             Status
                         </div>
                         <div id="statusCollapse" class="collapse mt-2">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="vrijemeZaObnovu" name="statusName" value="Vrijeme za obnovu" th:checked="${selectedStatuses != null and selectedStatuses.contains('Vrijeme za obnovu')}"/>
-                                <label class="form-check-label" for="vrijemeZaObnovu">Vrijeme za obnovu</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="obnovaUTijeku" name="statusName" value="Obnova u tijeku" th:checked="${selectedStatuses != null and selectedStatuses.contains('Obnova u tijeku')}"/>
-                                <label class="form-check-label" for="obnovaUTijeku">Obnova u tijeku</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="aktivno" name="statusName" value="Aktivno" th:checked="${selectedStatuses != null and selectedStatuses.contains('Aktivno')}"/>
-                                <label class="form-check-label" for="aktivno">Aktivno</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="nemaObnove" name="statusName" value="Nema obnove" th:checked="${selectedStatuses != null and selectedStatuses.contains('Nema obnove')}"/>
-                                <label class="form-check-label" for="nemaObnove">Nema obnove</label>
+                            <div th:each="sts : ${allStatuses}" class="form-check">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       name="statusName"
+                                       th:id="${sts.name}"
+                                       th:value="${sts.name}"
+                                       th:checked="${selectedStatuses != null and selectedStatuses.contains(sts.name)}" />
+                                <label class="form-check-label"
+                                       th:for="${sts.name}"
+                                       th:text="${sts.name}"></label>
                             </div>
                         </div>
                     </div>
@@ -210,39 +194,19 @@
                             Ispostava
                         </div>
                         <div id="ispostavaCollapse" class="collapse mt-2">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="krapina" name="locationName" value="Krapina" th:checked="${selectedLocations != null and selectedLocations.contains('Krapina')}"/>
-                                <label class="form-check-label" for="krapina">Krapina</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="donjaStubica" name="locationName" value="Donja Stubica" th:checked="${selectedLocations != null and selectedLocations.contains('Donja Stubica')}"/>
-                                <label class="form-check-label" for="donjaStubica">Donja Stubica</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="zabok" name="locationName" value="Zabok" th:checked="${selectedLocations != null and selectedLocations.contains('Zabok')}"/>
-                                <label class="form-check-label" for="zabok">Zabok</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="zlatar" name="locationName" value="Zlatar" th:checked="${selectedLocations != null and selectedLocations.contains('Zlatar')}"/>
-                                <label class="form-check-label" for="zlatar">Zlatar</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="klanjec" name="locationName" value="Klanjec" th:checked="${selectedLocations != null and selectedLocations.contains('Klanjec')}"/>
-                                <label class="form-check-label" for="klanjec">Klanjec</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="konjscina" name="locationName" value="Konjščina" th:checked="${selectedLocations != null and selectedLocations.contains('Konjščina')}"/>
-                                <label class="form-check-label" for="konjscina">Konjščina</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="marijaBistrica" name="locationName" value="Marija Bistrica" th:checked="${selectedLocations != null and selectedLocations.contains('Marija Bistrica')}"/>
-                                <label class="form-check-label" for="marijaBistrica">Marija Bistrica</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="pregrada" name="locationName" value="Pregrada" th:checked="${selectedLocations != null and selectedLocations.contains('Pregrada')}"/>
-                                <label class="form-check-label" for="pregrada">Pregrada</label>
+                            <div th:each="loc : ${allLocations}" class="form-check">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       name="locationName"
+                                       th:id="${loc.name}"
+                                       th:value="${loc.name}"
+                                       th:checked="${selectedLocations != null and selectedLocations.contains(loc.name)}" />
+                                <label class="form-check-label"
+                                       th:for="${loc.name}"
+                                       th:text="${loc.name}"></label>
                             </div>
                         </div>
+
                     </div>
                     <hr class="my-3" style="height: 1px; background-color: #bbb; border: none;">
                     <!-- Akcijske tipke -->
