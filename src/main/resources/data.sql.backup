@@ -1,11 +1,11 @@
 -- Unos korisnika
-INSERT INTO app_user (email, password, user_type, first_name) VALUES
-('-', '1234', 'CLIENT', 'nema odgovorne osobe osobe'),
-('glavna.sestra@gmail.com', 'gs123', 'CLIENT', 'Glavna sestra'),
-('kadrovska@gmail.com', 'ka123', 'CLIENT', 'Kadrovska'),
-('vozni.park@gmail.com', 'vp123', 'CLIENT', 'Vozni park'),
-('ravnatelj@gmail.com', 'rv123', 'CLIENT', 'Ravnatelj'),
-('admin@gmail.com', 'admin123', 'ADMIN', 'Admin');
+INSERT INTO app_user (email, password, user_type, first_name, last_name) VALUES
+('-', '1234', 'CLIENT', 'Nema odgovorne osobe osobe', ''),
+('glavna.sestra@gmail.com', 'gs123', 'CLIENT', 'Glavna sestra', ''),
+('kadrovska@gmail.com', 'ka123', 'CLIENT', 'Kadrovska', ''),
+('vozni.park@gmail.com', 'vp123', 'CLIENT', 'Vozni park', ''),
+('ravnatelj@gmail.com', 'rv123', 'CLIENT', 'Ravnatelj', ''),
+('admin@gmail.com', 'admin123', 'ADMIN', 'Admin', '');
 
 
 -- Unos lokacija
