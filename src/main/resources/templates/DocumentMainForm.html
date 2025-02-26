@@ -364,153 +364,155 @@
             <!-- Paginacija s Bootstrap Icons -->
             <div class="d-flex justify-content-center mt-4">
                 <nav aria-label="Paginacija">
-                    <ul class="pagination">
+                    <!-- Definiramo varijable za "windowed" prikaz (±4 stranice oko trenutne) -->
+                    <div th:with="
+            rangeSize=3,
+            startPage=${(currentPage - rangeSize) < 0} ? 0 : ${currentPage - rangeSize},
+            endPage=${(currentPage + rangeSize) >= (totalPages - 1)} ? ${totalPages - 1} : ${currentPage + rangeSize}
+        ">
+                        <ul class="pagination">
 
-                        <!-- PRVA STRANICA: << (bi-chevron-double-left) -->
-                        <li class="page-item"
-                            th:classappend="${currentPage} == 0 ? 'disabled'">
-                            <a class="page-link text-dark"
-                               th:href="@{/main(
-                               page=0,
-                               size=${size},
-                               documentTypes=${selectedDocumentTypes},
-                               resourceTypeName=${selectedResourceTypes},
-                               statusName=${selectedStatuses},
-                               locationName=${selectedLocations},
-                               startDate=${startDate},
-                               endDate=${endDate}
-                           )}"
-                               aria-label="Prva">
-                                <i class="bi bi-chevron-double-left"></i>
-                            </a>
-                        </li>
+                            <!-- PRVA STRANICA: << (bi-chevron-double-left) -->
+                            <li class="page-item" th:classappend="${currentPage} == 0 ? 'disabled'">
+                                <a class="page-link text-dark"
+                                   th:href="@{/main(
+                           page=0,
+                           size=${size},
+                           documentTypes=${selectedDocumentTypes},
+                           resourceTypeName=${selectedResourceTypes},
+                           statusName=${selectedStatuses},
+                           locationName=${selectedLocations},
+                           startDate=${startDate},
+                           endDate=${endDate}
+                       )}"
+                                   aria-label="Prva">
+                                    <i class="bi bi-chevron-double-left"></i>
+                                </a>
+                            </li>
 
-                        <!-- <5 (pet stranica unatrag) -->
-                        <li class="page-item"
-                            th:classappend="${currentPage} < 5 ? 'disabled'">
-                            <a class="page-link text-dark"
-                               th:href="@{/main(page=${(currentPage - 5) < 0} ? 0 : ${currentPage - 5}, size=${size})}"
-                               aria-label="5 unatrag">
-                                <i class="bi bi-chevron-left"></i>5
-                            </a>
-                        </li>
+                            <!-- <5 (pet stranica unatrag) -->
+                            <li class="page-item" th:classappend="${currentPage} < 5 ? 'disabled'">
+                                <a class="page-link text-dark"
+                                   th:href="@{/main(
+                           page=${(currentPage - 5) < 0} ? 0 : ${currentPage - 5},
+                           size=${size},
+                           documentTypes=${selectedDocumentTypes},
+                           resourceTypeName=${selectedResourceTypes},
+                           statusName=${selectedStatuses},
+                           locationName=${selectedLocations},
+                           startDate=${startDate},
+                           endDate=${endDate}
+                       )}"
+                                   aria-label="5 unatrag">
+                                    <i class="bi bi-chevron-left"></i>5
+                                </a>
+                            </li>
 
-                        <!-- PRETHODNA: < (bi-chevron-left) -->
-                        <li class="page-item"
-                            th:classappend="${currentPage} == 0 ? 'disabled'">
-                            <a class="page-link text-dark"
-                               th:href="@{/main(
-                               page=${(currentPage - 5) < 0} ? 0 : ${currentPage - 5},
-                               size=${size},
-                               documentTypes=${selectedDocumentTypes},
-                               resourceTypeName=${selectedResourceTypes},
-                               statusName=${selectedStatuses},
-                               locationName=${selectedLocations},
-                               startDate=${startDate},
-                               endDate=${endDate}
-                           )}"
-                               aria-label="Prethodna">
-                                <i class="bi bi-chevron-left"></i>
-                            </a>
-                        </li>
+                            <!-- PRETHODNA: < (bi-chevron-left) -->
+                            <li class="page-item" th:classappend="${currentPage} == 0 ? 'disabled'">
+                                <a class="page-link text-dark"
+                                   th:href="@{/main(
+                           page=${(currentPage - 1) < 0} ? 0 : ${currentPage - 1},
+                           size=${size},
+                           documentTypes=${selectedDocumentTypes},
+                           resourceTypeName=${selectedResourceTypes},
+                           statusName=${selectedStatuses},
+                           locationName=${selectedLocations},
+                           startDate=${startDate},
+                           endDate=${endDate}
+                       )}"
+                                   aria-label="Prethodna">
+                                    <i class="bi bi-chevron-left"></i>
+                                </a>
+                            </li>
 
+                            <!-- "WINDOWED" PRIKAZ: stranice unutar [startPage, endPage] -->
+                            <li class="page-item" th:each="p : ${#numbers.sequence(startPage, endPage)}">
 
-                        <!-- BROJEVI STRANICA -->
-                        <li class="page-item"
-                            th:each="p : ${#numbers.sequence(0, totalPages - 1)}">
+                                <!-- Ako p nije trenutna stranica -> link -->
+                                <a class="page-link text-dark"
+                                   th:if="${p} != ${currentPage}"
+                                   th:text="${p + 1}"
+                                   th:href="@{/main(
+                           page=${p},
+                           size=${size},
+                           documentTypes=${selectedDocumentTypes},
+                           resourceTypeName=${selectedResourceTypes},
+                           statusName=${selectedStatuses},
+                           locationName=${selectedLocations},
+                           startDate=${startDate},
+                           endDate=${endDate}
+                       )}">
+                                </a>
 
-                            <!-- Ako p nije trenutna stranica - link s crnim tekstom -->
-                            <a class="page-link text-dark"
-                               th:href="@{/main(
-                               page=${p},
-                               size=${size},
-                               documentTypes=${selectedDocumentTypes},
-                               resourceTypeName=${selectedResourceTypes},
-                               statusName=${selectedStatuses},
-                               locationName=${selectedLocations},
-                               startDate=${startDate},
-                               endDate=${endDate}
-                           )}"
-                               th:if="${p} != ${currentPage}"
-                               th:text="${p + 1}">
-                            </a>
+                                <!-- Ako p jest trenutna stranica -> samo ispiši broj -->
+                                <span class="page-link bg-secondary text-black"
+                                      th:if="${p} == ${currentPage}"
+                                      th:text="${p + 1}">
+                    </span>
+                            </li>
 
-                            <!-- Ako p jest trenutna stranica - siva pozadina i crni tekst, bez linka -->
-                            <span class="page-link bg-secondary text-black"
-                                  th:if="${p} == ${currentPage}"
-                                  th:text="${p + 1}">
-                </span>
-                        </li>
+                            <!-- SLJEDEĆA: > (bi-chevron-right) -->
+                            <li class="page-item"
+                                th:classappend="${currentPage} == ${totalPages - 1} ? 'disabled'">
+                                <a class="page-link text-dark"
+                                   th:href="@{/main(
+                           page=${(currentPage + 1) >= (totalPages - 1)} ? ${totalPages - 1} : ${currentPage + 1},
+                           size=${size},
+                           documentTypes=${selectedDocumentTypes},
+                           resourceTypeName=${selectedResourceTypes},
+                           statusName=${selectedStatuses},
+                           locationName=${selectedLocations},
+                           startDate=${startDate},
+                           endDate=${endDate}
+                       )}"
+                                   aria-label="Sljedeća">
+                                    <i class="bi bi-chevron-right"></i>
+                                </a>
+                            </li>
 
+                            <!-- 10> (pet stranica naprijed) -->
+                            <li class="page-item"
+                                th:classappend="${currentPage} + 5 >= ${totalPages} ? 'disabled'">
+                                <a class="page-link text-dark"
+                                   th:href="@{/main(
+                           page=${(currentPage + 5) >= totalPages} ? ${totalPages - 1} : ${currentPage + 5},
+                           size=${size},
+                           documentTypes=${selectedDocumentTypes},
+                           resourceTypeName=${selectedResourceTypes},
+                           statusName=${selectedStatuses},
+                           locationName=${selectedLocations},
+                           startDate=${startDate},
+                           endDate=${endDate}
+                       )}"
+                                   aria-label="5 naprijed">
+                                    5<i class="bi bi-chevron-right"></i>
+                                </a>
+                            </li>
 
-                        <!-- SLJEDEĆA: > (bi-chevron-right) -->
-                        <li class="page-item"
-                            th:classappend="${currentPage} == ${totalPages - 1} ? 'disabled'">
-                            <a class="page-link text-dark"
-                               th:href="@{/main(
-                               page=${currentPage + 1},
-                               size=${size},
-                               documentTypes=${selectedDocumentTypes},
-                               resourceTypeName=${selectedResourceTypes},
-                               statusName=${selectedStatuses},
-                               locationName=${selectedLocations},
-                               startDate=${startDate},
-                               endDate=${endDate}
-                           )}"
-                               aria-label="Sljedeća">
-                                <i class="bi bi-chevron-right"></i>
-                            </a>
-                        </li>
-
-                        <!-- 5> (pet stranica naprijed) -->
-                        <li class="page-item"
-                            th:classappend="${currentPage} + 5 >= ${totalPages} ? 'disabled'">
-                            <a class="page-link text-dark"
-                               th:href="@{/main(
-                               page=${(currentPage + 5) >= totalPages} ? ${totalPages - 1} : ${currentPage + 5},
-                               size=${size},
-                               documentTypes=${selectedDocumentTypes},
-                               resourceTypeName=${selectedResourceTypes},
-                               statusName=${selectedStatuses},
-                               locationName=${selectedLocations},
-                               startDate=${startDate},
-                               endDate=${endDate}
-                           )}"
-                               aria-label="5 naprijed">
-                                5<i class="bi bi-chevron-right"></i>
-                            </a>
-                        </li>
-
-                        <!-- ZADNJA STRANICA: >> (bi-chevron-double-right) -->
-                        <li class="page-item"
-                            th:classappend="${currentPage} == ${totalPages - 1} ? 'disabled'">
-                            <a class="page-link text-dark"
-                               th:href="@{/main(
-                               page=${totalPages - 1},
-                               size=${size},
-                               documentTypes=${selectedDocumentTypes},
-                               resourceTypeName=${selectedResourceTypes},
-                               statusName=${selectedStatuses},
-                               locationName=${selectedLocations},
-                               startDate=${startDate},
-                               endDate=${endDate}
-                           )}"
-                               aria-label="Prethodna">
-                                <i class="bi bi-chevron-double-right"></i>
-                            </a>
-                        </li>
-
-                    </ul>
+                            <!-- ZADNJA STRANICA: >> (bi-chevron-double-right) -->
+                            <li class="page-item"
+                                th:classappend="${currentPage} == ${totalPages - 1} ? 'disabled'">
+                                <a class="page-link text-dark"
+                                   th:href="@{/main(
+                           page=${totalPages - 1},
+                           size=${size},
+                           documentTypes=${selectedDocumentTypes},
+                           resourceTypeName=${selectedResourceTypes},
+                           statusName=${selectedStatuses},
+                           locationName=${selectedLocations},
+                           startDate=${startDate},
+                           endDate=${endDate}
+                       )}"
+                                   aria-label="Zadnja">
+                                    <i class="bi bi-chevron-double-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </nav>
             </div>
 
-            <!-- Prikaz "Stranica X od Y" -->
-            <div class="text-center mt-2">
-                Stranica
-                <span th:text="${currentPage + 1}">1</span>
-                od
-                <span th:text="${totalPages}">1</span>
-            </div>
 
         </div>
     </div>
