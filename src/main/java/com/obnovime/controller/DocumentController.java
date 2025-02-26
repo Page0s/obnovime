@@ -34,18 +34,21 @@ public class DocumentController {
     private final ResourceTypeRepository resourceTypeRepository;
     private final RenewalHistoryRepository renewalHistoryRepository;
     private final AppUserRepository appUserRepository;
+    private final DocumentTypeRepository documentTypeRepository;
 
     public DocumentController(
             DocumentRepository documentRepository,
             DocumentStatusRepository documentStatusRepository,
             LocationRepository locationRepository,
-            ResourceTypeRepository resourceTypeRepository, RenewalHistoryRepository renewalHistoryRepository, AppUserRepository appUserRepository) {
+            ResourceTypeRepository resourceTypeRepository, RenewalHistoryRepository renewalHistoryRepository, AppUserRepository appUserRepository,
+            DocumentTypeRepository documentTypeRepository) {
         this.documentRepository = documentRepository;
         this.documentStatusRepository = documentStatusRepository;
         this.locationRepository = locationRepository;
         this.resourceTypeRepository = resourceTypeRepository;
         this.renewalHistoryRepository = renewalHistoryRepository;
         this.appUserRepository = appUserRepository;
+        this.documentTypeRepository = documentTypeRepository;
     }
 
     private void updateDocumentStatus(DocumentFile document) {
@@ -184,6 +187,11 @@ public class DocumentController {
         model.addAttribute("selectedLocations", locationName);
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
+
+        model.addAttribute("allDocumentTypes", documentTypeRepository.findAll());
+        model.addAttribute("allResourceTypes", resourceTypeRepository.findAll());
+        model.addAttribute("allStatuses", documentStatusRepository.findAll());
+        model.addAttribute("allLocations", locationRepository.findAll());
 
         return "DocumentMainForm";
     }
