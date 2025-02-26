@@ -281,6 +281,27 @@ public class DocumentController {
         return "redirect:/main";
     }
 
+    @GetMapping("/documents/{id}/details")
+    public String showDocumentDetails(@PathVariable Long id, Model model) {
+        DocumentFile document = documentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Document not found"));
+        
+        LocalDate today = LocalDate.now();
+        LocalDate renewalDate = document.getRenewalDate();
+        int renewalPeriod = Optional.ofNullable(document.getDocumentType().getRenewalPeriod()).orElse(0);
+        
+        LocalDate startDate = renewalDate.minusDays(renewalPeriod);
+        
+        long daysToStart = java.time.temporal.ChronoUnit.DAYS.between(today, startDate);
+        long daysToEnd = java.time.temporal.ChronoUnit.DAYS.between(today, renewalDate);
+        
+        model.addAttribute("document", document);
+        model.addAttribute("daysToStart", daysToStart);
+        model.addAttribute("daysToEnd", daysToEnd);
+        
+        return "fragments/document-details :: documentDetails";
+    }
+
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
         Optional<DocumentFile> dokument = documentRepository.findById(id);

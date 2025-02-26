@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="documentDetails">
+        <div class="modal-header">
+            <h3 class="modal-title text-primary">Detalji dokumenta</h3>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <!-- Renewal Info Section -->
+            <div class="bg-light p-3 rounded mb-4">
+                <div class="row">
+                    <div class="col-md-6">
+                        <strong>Dani do pokretanja obnove:</strong>
+                        <span th:text="${daysToStart}">0</span>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Dani do kraja obnove:</strong>
+                        <span th:text="${daysToEnd}">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Document Info Grid -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <div class="p-2 border rounded">
+                        <div class="fw-bold text-secondary">Šifra</div>
+                        <div th:text="${document.number}">123</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-2 border rounded">
+                        <div class="fw-bold text-secondary">Naziv</div>
+                        <div th:text="${document.name}">Naziv dokumenta</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-2 border rounded">
+                        <div class="fw-bold text-secondary">Ispostava</div>
+                        <div th:text="${document.location != null ? document.location.name : '-'}">Lokacija</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-2 border rounded">
+                        <div class="fw-bold text-secondary">Partner</div>
+                        <div th:text="${document.serviceProvider}">Partner</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-2 border rounded">
+                        <div class="fw-bold text-secondary">Odgovorna osoba</div>
+                        <div th:text="${document.responsiblePerson != null ? document.responsiblePerson.email : '-'}">Ime Prezime</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-2 border rounded">
+                        <div class="fw-bold text-secondary">Tip dokumenta</div>
+                        <div th:text="${document.documentType != null ? document.documentType.name : '-'}">Tip</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-2 border rounded">
+                        <div class="fw-bold text-secondary">Datum obnove</div>
+                        <div th:text="${document.renewalDate != null ? #temporals.format(document.renewalDate, 'dd.MM.yyyy.') : '-'}">01.01.2024.</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-2 border rounded">
+                        <div class="fw-bold text-secondary">Status</div>
+                        <div th:text="${document.status != null ? document.status.name : '-'}">Status</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Note Section -->
+            <div class="bg-light p-3 rounded">
+                <div class="fw-bold text-secondary mb-2">Napomena</div>
+                <div th:text="${document.notes ?: 'Nema napomene'}" class="min-h-100">Napomena</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -111,3 +111,21 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
+function showDocumentDetails(documentId) {
+    const modal = new bootstrap.Modal(document.getElementById('documentDetailsModal'));
+    const modalContent = document.querySelector('#documentDetailsModal .modal-content');
+    
+    // Load fragment content
+    modalContent.innerHTML = '<div class="text-center p-5"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
+    
+    fetch(`/documents/${documentId}/details`)
+        .then(response => response.text())
+        .then(html => {
+            modalContent.innerHTML = html;
+            modal.show();
+        })
+        .catch(error => {
+            modalContent.innerHTML = '<div class="modal-body text-danger">Greška pri učitavanju detalja dokumenta.</div>';
+            modal.show();
+        });
+}
