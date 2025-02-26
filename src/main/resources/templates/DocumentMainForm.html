@@ -349,11 +349,11 @@
                             </td>
                             <td>
                                 <div class="d-flex gap-1">
-                                    <a th:href="@{/edit/{id}(id=${document.id})}" class="btn btn-sm btn-secondary" title="Promijeni">
+                                    <a th:href="@{/edit/{id}(id=${document.id})}" class="btn btn-sm btn-secondary" title="Promijeni" onclick="event.stopPropagation()">
                                         <i class="bi bi-pencil-square"></i></a>
-                                    <a th:href="@{/document/{id}/history(id=${document.id})}" class="btn btn-sm btn-secondary" title="Povijest obnova">
+                                    <a th:href="@{/document/{id}/history(id=${document.id})}" class="btn btn-sm btn-secondary" title="Povijest obnova" onclick="event.stopPropagation()">
                                         <i class="bi bi-clock-history"></i></a>
-                                    <a th:href="@{/document/{id}/obnova(id=${document.id})}" class="btn btn-sm btn-secondary" title="Obnova">
+                                    <a th:href="@{/document/{id}/obnova(id=${document.id})}" class="btn btn-sm btn-secondary" title="Obnova" onclick="event.stopPropagation()">
                                         <i class="bi bi-arrow-clockwise"></i></a>
                                 </div>
                             </td>

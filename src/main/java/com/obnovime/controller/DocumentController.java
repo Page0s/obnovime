@@ -282,12 +282,14 @@ public class DocumentController {
         
         LocalDate startDate = renewalDate.minusDays(renewalPeriod);
         
-        long daysToStart = java.time.temporal.ChronoUnit.DAYS.between(today, startDate);
-        long daysToEnd = java.time.temporal.ChronoUnit.DAYS.between(today, renewalDate);
+        long daysToStart = Math.abs(java.time.temporal.ChronoUnit.DAYS.between(today, startDate));
+        long daysToEnd = Math.abs(java.time.temporal.ChronoUnit.DAYS.between(today, renewalDate));
         
         model.addAttribute("document", document);
         model.addAttribute("daysToStart", daysToStart);
         model.addAttribute("daysToEnd", daysToEnd);
+        model.addAttribute("isStartDatePassed", today.isAfter(startDate));
+        model.addAttribute("isEndDatePassed", today.isAfter(renewalDate));
         
         return "fragments/document-details :: documentDetails";
     }
