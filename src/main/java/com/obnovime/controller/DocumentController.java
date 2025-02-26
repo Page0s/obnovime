@@ -322,6 +322,7 @@ public class DocumentController {
             @RequestParam("name") String name,
             @RequestParam("serviceProvider") String serviceProvider,
             @RequestParam("locationId") Long locationId,
+            @RequestParam(value = "notes", required = false, defaultValue = "-") String notes,
             RedirectAttributes redirectAttributes) {
 
         Optional<DocumentFile> existingDoc = documentRepository.findById(id);
@@ -330,7 +331,9 @@ public class DocumentController {
             DocumentFile dokument = existingDoc.get();
             dokument.setName(name);
             dokument.setServiceProvider(serviceProvider);
-            
+            dokument.setNotes(notes.isEmpty() ? "-" : notes);
+
+
             Location location = locationRepository.findById(locationId)
                 .orElseThrow(() -> new RuntimeException("Location not found"));
             dokument.setLocation(location);
