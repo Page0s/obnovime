@@ -11,12 +11,14 @@
             <div class="bg-light p-3 rounded mb-4">
                 <div class="row">
                     <div class="col-md-6">
-                        <strong>Dani do pokretanja obnove:</strong>
-                        <span th:text="${daysToStart}">0</span>
+                        <strong th:if="${!isStartDatePassed}">Dani do pokretanja obnove:</strong>
+                        <strong th:if="${isStartDatePassed}" class="text-warning">Potrebno je pokrenuti obnovu prije:</strong>
+                        <span th:text="${daysToStart + ' dana'}" th:class="${isStartDatePassed ? 'text-warning' : ''}">0 dana</span>
                     </div>
                     <div class="col-md-6">
-                        <strong>Dani do kraja obnove:</strong>
-                        <span th:text="${daysToEnd}">0</span>
+                        <strong th:if="${!isEndDatePassed}">Dani do isteka licence:</strong>
+                        <strong th:if="${isEndDatePassed}" class="text-danger">Licenca je istekla prije:</strong>
+                        <span th:text="${daysToEnd + ' dana'}" th:class="${isEndDatePassed ? 'text-danger' : ''}">0 dana</span>
                     </div>
                 </div>
             </div>
@@ -50,19 +52,32 @@
                 <div class="col-md-6">
                     <div class="p-2 border rounded">
                         <div class="fw-bold text-secondary">Odgovorna osoba</div>
-                        <div th:text="${document.responsiblePerson != null ? document.responsiblePerson.email : '-'}">Ime Prezime</div>
+                        <div th:text="${document.responsiblePerson != null ? document.responsiblePerson.firstName + ' ' + document.responsiblePerson.lastName : '-'}">Ime Prezime</div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="p-2 border rounded">
                         <div class="fw-bold text-secondary">Tip dokumenta</div>
-                        <div th:text="${document.documentType != null ? document.documentType.name : '-'}">Tip</div>
+                        <div>
+                            <span th:text="${document.documentType != null ? document.documentType.name : '-'}">Tip</span>
+                            <span class="text-muted" th:if="${document.documentType != null && document.documentType.renewalPeriod != null}">
+                                (Podsjetnik za dana: <span th:text="${document.documentType.renewalPeriod}">30</span>)
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="p-2 border rounded">
                         <div class="fw-bold text-secondary">Datum obnove</div>
                         <div th:text="${document.renewalDate != null ? #temporals.format(document.renewalDate, 'dd.MM.yyyy.') : '-'}">01.01.2024.</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-2 border rounded">
+                        <div class="fw-bold text-secondary">Datum kada bi se trebala pokrenuti obnova</div>
+                        <div th:with="startDate=${document.renewalDate != null and document.documentType != null and document.documentType.renewalPeriod != null ? 
+                                     document.renewalDate.minusDays(document.documentType.renewalPeriod) : null}"
+                             th:text="${startDate != null ? #temporals.format(startDate, 'dd.MM.yyyy.') : '-'}">01.01.2024.</div>
                     </div>
                 </div>
                 <div class="col-md-6">
