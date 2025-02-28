@@ -97,31 +97,26 @@ document.addEventListener("DOMContentLoaded", function() {
     const form = document.querySelector("form");
 
     if (saveButton && modalConfirmButton && form) {
-        // Spriječi automatsko slanje forme i prikaži modal samo ako su podaci ispravni
         saveButton.addEventListener("click", function(event) {
-            event.preventDefault(); // Sprječava defaultni submit
+            event.preventDefault(); // Sprječava defaultno slanje forme
 
             if (!form.checkValidity()) {
+                // Ako polja nisu popunjena, prikaži modal za upozorenje
                 const validationModal = new bootstrap.Modal(document.getElementById("validationModal"));
-                validationModal.show(); // Prikazuje modal ako validacija ne prođe
-                form.classList.add("was-validated"); // Dodaje Bootstrap stil za validaciju
-                return;
+                validationModal.show();
+                form.classList.add("was-validated"); // Bootstrap validacija
+                return; // Zaustavlja otvaranje modala za potvrdu
             }
 
-            // Ako su podaci ispravni, otvori potvrdu
+            // Ako su polja ispravna, prikaži modal za potvrdu spremanja
             const confirmationModal = new bootstrap.Modal(document.getElementById("confirmationModalRenewal"));
             confirmationModal.show();
         });
 
-        // Kada korisnik potvrdi, pošalji formu
+        // Kada korisnik potvrdi, pošalji formu i onemogući gumb kako bi spriječio višestruko slanje
         modalConfirmButton.addEventListener("click", function() {
-            form.submit();
-        });
-    }
-});
-
-        // Kada korisnik potvrdi, pošalji formu
-        modalConfirmButton.addEventListener("click", function() {
+            modalConfirmButton.disabled = true; // Onemogućava dugme
+            modalConfirmButton.innerHTML = "Spremanje..."; // Mijenja tekst gumba
             form.submit();
         });
     }
