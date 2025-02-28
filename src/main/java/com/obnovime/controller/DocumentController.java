@@ -104,6 +104,7 @@ public class DocumentController {
     @GetMapping("/main")
     public String showMainPage(
             Model model,
+            HttpSession session,
             // Paginacija
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -120,12 +121,50 @@ public class DocumentController {
     ) {
         // 1) Ako je "clear" => resetiraj filter
         if ("true".equals(clear)) {
+            session.removeAttribute("selectedDocumentTypes");
+            session.removeAttribute("selectedResourceTypes");
+            session.removeAttribute("selectedStatuses");
+            session.removeAttribute("selectedLocations");
+            session.removeAttribute("startDate");
+            session.removeAttribute("endDate");
             documentTypes = null;
             resourceTypeName = null;
             statusName = null;
             locationName = null;
             startDate = null;
             endDate = null;
+        } else {
+            // Ako filter parametri nisu poslani, pokušaj ih dohvatiti iz sesije
+            if (documentTypes == null) {
+                documentTypes = (List<String>) session.getAttribute("selectedDocumentTypes");
+            } else {
+                session.setAttribute("selectedDocumentTypes", documentTypes);
+            }
+            if (resourceTypeName == null) {
+                resourceTypeName = (List<String>) session.getAttribute("selectedResourceTypes");
+            } else {
+                session.setAttribute("selectedResourceTypes", resourceTypeName);
+            }
+            if (statusName == null) {
+                statusName = (List<String>) session.getAttribute("selectedStatuses");
+            } else {
+                session.setAttribute("selectedStatuses", statusName);
+            }
+            if (locationName == null) {
+                locationName = (List<String>) session.getAttribute("selectedLocations");
+            } else {
+                session.setAttribute("selectedLocations", locationName);
+            }
+            if (startDate == null) {
+                startDate = (LocalDate) session.getAttribute("startDate");
+            } else {
+                session.setAttribute("startDate", startDate);
+            }
+            if (endDate == null) {
+                endDate = (LocalDate) session.getAttribute("endDate");
+            } else {
+                session.setAttribute("endDate", endDate);
+            }
         }
 
         // 2) PageRequest
