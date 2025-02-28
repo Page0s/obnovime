@@ -97,12 +97,28 @@ document.addEventListener("DOMContentLoaded", function() {
     const form = document.querySelector("form");
 
     if (saveButton && modalConfirmButton && form) {
-        // Spriječi automatsko slanje forme i prikaži modal
+        // Spriječi automatsko slanje forme i prikaži modal samo ako su podaci ispravni
         saveButton.addEventListener("click", function(event) {
             event.preventDefault(); // Sprječava defaultni submit
-            const modal = new bootstrap.Modal(document.getElementById("confirmationModalRenewal"));
-            modal.show();
+
+            if (!form.checkValidity()) {
+                const validationModal = new bootstrap.Modal(document.getElementById("validationModal"));
+                validationModal.show(); // Prikazuje modal ako validacija ne prođe
+                form.classList.add("was-validated"); // Dodaje Bootstrap stil za validaciju
+                return;
+            }
+
+            // Ako su podaci ispravni, otvori potvrdu
+            const confirmationModal = new bootstrap.Modal(document.getElementById("confirmationModalRenewal"));
+            confirmationModal.show();
         });
+
+        // Kada korisnik potvrdi, pošalji formu
+        modalConfirmButton.addEventListener("click", function() {
+            form.submit();
+        });
+    }
+});
 
         // Kada korisnik potvrdi, pošalji formu
         modalConfirmButton.addEventListener("click", function() {
