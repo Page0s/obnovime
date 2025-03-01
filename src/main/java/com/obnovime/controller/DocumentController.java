@@ -172,7 +172,12 @@ public class DocumentController {
                     .toList();
 
             // Izračun "totalPages"
+            // Izračun "totalPages"
             int totalPages = (int) Math.ceil((double) filteredAll.size() / size);
+            if (totalPages == 0) {
+                totalPages = 1;
+            }
+
 
             // Dodaj u model
             model.addAttribute("documents", documentDtos);
