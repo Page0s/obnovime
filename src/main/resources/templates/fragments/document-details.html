@@ -86,6 +86,12 @@
                         <div th:text="${document.status != null ? document.status.name : '-'}">Status</div>
                     </div>
                 </div>
+                <div class="col-md-6">
+                    <div class="p-2 border rounded">
+                        <div class="fw-bold text-secondary">Vrsta resursa</div>
+                        <div th:text="${document.resourceType != null ? document.resourceType.name : '-'}">Vrsta resursa</div>
+                    </div>
+                </div>
             </div>
 
             <!-- Note Section -->
