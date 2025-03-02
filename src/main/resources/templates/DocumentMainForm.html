@@ -94,7 +94,7 @@
         </div>
     </div>
 </header>
-
+<!-- Filter-->
 <div class="container">
     <!-- Action Buttons -->
     <div class="mb-4 d-flex justify-content-end gap-2">
@@ -113,8 +113,14 @@
                 <form th:action="@{/main}" method="get" id="filterForm">
                     <!-- Tip dokumenta -->
                     <div class="filter-section">
-                        <div class="filter-header" data-bs-toggle="collapse" data-bs-target="#tipDokumentaCollapse" aria-expanded="false">
-                            Tip dokumenta
+                        <div class="filter-header d-flex align-items-center justify-content-between"
+                             data-bs-toggle="collapse"
+                             data-bs-target="#tipDokumentaCollapse"
+                             aria-expanded="false"
+                             aria-controls="tipDokumentaCollapse">
+                            <span>Tip dokumenta</span>
+                            <!-- Tanki chevron prema dolje kad je zatvoreno -->
+                            <i class="bi bi-chevron-down" style="font-size: 0.7rem;"></i>
                         </div>
                         <div id="tipDokumentaCollapse" class="collapse mt-2">
                             <!-- Iteriraj kroz listu "allDocumentTypes" i prikazuj ih kao check-box -->
@@ -149,8 +155,13 @@
                     <hr class="my-3" style="height: 1px; background-color: #bbb; border: none;">
                     <!-- Resursi -->
                     <div class="filter-section">
-                        <div class="filter-header" data-bs-toggle="collapse" data-bs-target="#resursiCollapse" aria-expanded="false">
-                            Resursi
+                        <div class="filter-header d-flex align-items-center justify-content-between"
+                             data-bs-toggle="collapse"
+                             data-bs-target="#resursiCollapse"
+                             aria-expanded="false"
+                             aria-controls="resursiCollapse">
+                            <span>Resursi</span>
+                            <i class="bi bi-chevron-down" style="font-size: 0.7rem;"></i>
                         </div>
                         <div id="resursiCollapse" class="collapse mt-2">
                             <div th:each="resType : ${allResourceTypes}" class="form-check">
@@ -170,8 +181,13 @@
                     <hr class="my-3" style="height: 1px; background-color: #bbb; border: none;">
                     <!-- Status -->
                     <div class="filter-section">
-                        <div class="filter-header" data-bs-toggle="collapse" data-bs-target="#statusCollapse" aria-expanded="false">
-                            Status
+                        <div class="filter-header d-flex align-items-center justify-content-between"
+                             data-bs-toggle="collapse"
+                             data-bs-target="#statusCollapse"
+                             aria-expanded="false"
+                             aria-controls="statusCollapse">
+                            <span>Status</span>
+                            <i class="bi bi-chevron-down" style="font-size: 0.7rem;"></i>
                         </div>
                         <div id="statusCollapse" class="collapse mt-2">
                             <div th:each="sts : ${allStatuses}" class="form-check">
@@ -190,8 +206,13 @@
                     <hr class="my-3" style="height: 1px; background-color: #bbb; border: none;">
                     <!-- Ispostava -->
                     <div class="filter-section">
-                        <div class="filter-header" data-bs-toggle="collapse" data-bs-target="#ispostavaCollapse" aria-expanded="false">
-                            Ispostava
+                        <div class="filter-header d-flex align-items-center justify-content-between"
+                             data-bs-toggle="collapse"
+                             data-bs-target="#ispostavaCollapse"
+                             aria-expanded="false"
+                             aria-controls="ispostavaCollapse">
+                            <span>Ispostava</span>
+                            <i class="bi bi-chevron-down" style="font-size: 0.7rem;"></i>
                         </div>
                         <div id="ispostavaCollapse" class="collapse mt-2">
                             <div th:each="loc : ${allLocations}" class="form-check">

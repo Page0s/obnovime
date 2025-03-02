@@ -140,3 +140,37 @@ function showDocumentDetails(documentId) {
             modal.show();
         });
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Selektiramo sve .collapse elemente na stranici
+  document.querySelectorAll('.collapse').forEach((collapseEl) => {
+
+    // Kad se collapse otvori...
+    collapseEl.addEventListener('shown.bs.collapse', () => {
+      // Pronađi naslovni <div> koji cilja baš ovaj collapse
+      const header = document.querySelector(`[data-bs-target="#${collapseEl.id}"]`);
+      if (header) {
+        const icon = header.querySelector('i.bi');
+        if (icon) {
+          // Zamijeni klasu iz strelice dolje u strelicu gore
+          icon.classList.remove('bi-chevron-down');
+          icon.classList.add('bi-chevron-up');
+        }
+      }
+    });
+
+    // Kad se collapse zatvori...
+    collapseEl.addEventListener('hidden.bs.collapse', () => {
+      const header = document.querySelector(`[data-bs-target="#${collapseEl.id}"]`);
+      if (header) {
+        const icon = header.querySelector('i.bi');
+        if (icon) {
+          // Vrati klasu strelice dolje
+          icon.classList.remove('bi-chevron-up');
+          icon.classList.add('bi-chevron-down');
+        }
+      }
+    });
+
+  });
+});
