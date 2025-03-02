@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="120px" height="120px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Clock Circle -->
+  <circle cx="60" cy="60" r="50" fill="none" stroke="#0d6efd" stroke-width="4" stroke-dasharray="314" stroke-dashoffset="314">
+    <animate attributeName="stroke-dashoffset" from="314" to="0" dur="2s" fill="freeze" />
+  </circle>
+  
+  <!-- Clock Center -->
+  <circle cx="60" cy="60" r="5" fill="#0d6efd" opacity="0">
+    <animate attributeName="opacity" from="0" to="1" dur="0.3s" begin="2s" fill="freeze" />
+  </circle>
+  
+  <!-- Hour Hand -->
+  <line x1="60" y1="60" x2="60" y2="35" stroke="#0d6efd" stroke-width="4" stroke-linecap="round" stroke-dasharray="25" stroke-dashoffset="25">
+    <animate attributeName="stroke-dashoffset" from="25" to="0" dur="0.5s" begin="2.3s" fill="freeze" />
+    <animateTransform attributeName="transform" type="rotate" from="0 60 60" to="360 60 60" dur="12s" repeatCount="indefinite" />
+  </line>
+  
+  <!-- Minute Hand -->
+  <line x1="60" y1="60" x2="85" y2="60" stroke="#0d6efd" stroke-width="3" stroke-linecap="round" stroke-dasharray="25" stroke-dashoffset="25">
+    <animate attributeName="stroke-dashoffset" from="25" to="0" dur="0.5s" begin="2.8s" fill="freeze" />
+    <animateTransform attributeName="transform" type="rotate" from="0 60 60" to="360 60 60" dur="2s" repeatCount="indefinite" />
+  </line>
+  
+  <!-- Clock Marks -->
+  <g>
+    <line x1="60" y1="20" x2="60" y2="25" stroke="#0d6efd" stroke-width="2" opacity="0">
+      <animate attributeName="opacity" from="0" to="1" dur="0.1s" begin="3.0s" fill="freeze" />
+    </line>
+    <line x1="100" y1="60" x2="95" y2="60" stroke="#0d6efd" stroke-width="2" opacity="0">
+      <animate attributeName="opacity" from="0" to="1" dur="0.1s" begin="3.1s" fill="freeze" />
+    </line>
+    <line x1="60" y1="100" x2="60" y2="95" stroke="#0d6efd" stroke-width="2" opacity="0">
+      <animate attributeName="opacity" from="0" to="1" dur="0.1s" begin="3.2s" fill="freeze" />
+    </line>
+    <line x1="20" y1="60" x2="25" y2="60" stroke="#0d6efd" stroke-width="2" opacity="0">
+      <animate attributeName="opacity" from="0" to="1" dur="0.1s" begin="3.3s" fill="freeze" />
+    </line>
+  </g>
+</svg>

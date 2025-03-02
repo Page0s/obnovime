@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="60px" height="60px" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+  <!-- Document Icon with Clock -->
+  <rect x="10" y="5" width="30" height="40" fill="#ffffff" stroke="#ffffff" stroke-width="2" rx="2" />
+  <path d="M10,5 L40,5 L40,45 L10,45 Z" fill="none" stroke="#ffffff" stroke-width="2" stroke-dasharray="150" stroke-dashoffset="0" rx="2">
+    <animate attributeName="stroke-dashoffset" from="150" to="0" dur="1.5s" fill="freeze" />
+  </path>
+  
+  <!-- Document Lines -->
+  <line x1="15" y1="15" x2="35" y2="15" stroke="#ffffff" stroke-width="2" />
+  <line x1="15" y1="22" x2="35" y2="22" stroke="#ffffff" stroke-width="2" />
+  <line x1="15" y1="29" x2="35" y2="29" stroke="#ffffff" stroke-width="2" />
+  <line x1="15" y1="36" x2="25" y2="36" stroke="#ffffff" stroke-width="2" />
+  
+  <!-- Clock Circle Overlay -->
+  <circle cx="35" cy="40" r="15" fill="#0d6efd" stroke="#ffffff" stroke-width="2" />
+  
+  <!-- Clock Hands -->
+  <line x1="35" y1="40" x2="35" y2="30" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
+  <line x1="35" y1="40" x2="42" y2="40" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
+  
+  <!-- Clock Center -->
+  <circle cx="35" cy="40" r="2" fill="#ffffff" />
+</svg>
