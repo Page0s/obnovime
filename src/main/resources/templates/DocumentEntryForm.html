@@ -34,7 +34,7 @@
 
     <!-- Forma za općeniti tip dokumenta (odmah vidljiva) -->
     <div id="generalForm">
-        <form th:action="@{/saveDocument}" method="post">
+        <form th:action="@{/saveDocument}" method="post" data-prevent-spam="true" data-loading-text="Spremanje...">
             <!-- Tip dokumenta -->
             <div class="mb-3">
                 <label for="documentCategory" class="form-label">Tip dokumenta:</label>
