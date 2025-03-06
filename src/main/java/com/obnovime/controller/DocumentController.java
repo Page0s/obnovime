@@ -65,7 +65,7 @@ public class DocumentController {
         DocumentStatus renewalInProgressExpired = documentStatusRepository.findById(5L).orElseThrow(); // Obnova u tijeku isteklo
 
         // If we're between alert date and renewal date, and status is Active -> set to Renewal
-        if (today.isAfter(alertDate) || today.isEqual(alertDate) && today.isBefore(renewalDate) &&
+        if ((today.isAfter(alertDate) || today.isEqual(alertDate)) && today.isBefore(renewalDate) &&
             activeStatus.getName().equalsIgnoreCase(document.getStatus().getName())) {
             document.setStatus(renewalStatus);
             documentRepository.save(document);
