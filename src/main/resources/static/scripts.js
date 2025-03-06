@@ -174,3 +174,249 @@ document.addEventListener('DOMContentLoaded', () => {
 
   });
 });
+
+// Login Animation with p5.js
+let loginAnimationSketch = function(p) {
+    let documents = [];
+    let animationActive = false;
+    let documentIcon;
+    
+    p.preload = function() {
+        // Preload the document icon
+        documentIcon = p.loadImage('/images/logo.svg');
+    };
+    
+    p.setup = function() {
+        let canvas = p.createCanvas(p.windowWidth, p.windowHeight);
+        canvas.parent('animation-container');
+        p.background(255, 0); // Transparent background
+    };
+    
+    p.draw = function() {
+        if (!animationActive) return;
+        
+        p.clear();
+        
+        // Add new document icons
+        if (documents.length < 50 && p.frameCount % 3 === 0) {
+            documents.push(new DocumentIcon());
+        }
+        
+        // Update and display document icons
+        for (let i = documents.length - 1; i >= 0; i--) {
+            let doc = documents[i];
+            doc.update();
+            doc.display();
+            
+            // Remove documents that are no longer visible
+            if (doc.isDead()) {
+                documents.splice(i, 1);
+            }
+        }
+        
+        // Stop animation if all documents are gone
+        if (animationActive && documents.length === 0) {
+            stopLoginAnimation();
+        }
+    };
+    
+    // DocumentIcon class
+    class DocumentIcon {
+        constructor() {
+            this.position = p.createVector(p.random(p.width), p.height + 20);
+            this.velocity = p.createVector(p.random(-1, 1), p.random(-8, -4));
+            this.acceleration = p.createVector(0, 0.05);
+            this.size = p.random(20, 40);
+            this.rotation = p.random(-0.1, 0.1);
+            this.rotationSpeed = p.random(-0.02, 0.02);
+            this.lifespan = 255;
+            this.tint = p.color(
+                p.random([13, 110, 253]), // Primary blue variations
+                p.random([110, 150, 253]),
+                p.random([200, 220, 255])
+            );
+        }
+        
+        update() {
+            this.velocity.add(this.acceleration);
+            this.position.add(this.velocity);
+            this.rotation += this.rotationSpeed;
+            this.lifespan -= 1.5;
+        }
+        
+        display() {
+            p.push();
+            p.translate(this.position.x, this.position.y);
+            p.rotate(this.rotation);
+            p.tint(this.tint, this.lifespan);
+            p.imageMode(p.CENTER);
+            p.image(documentIcon, 0, 0, this.size, this.size);
+            p.pop();
+        }
+        
+        isDead() {
+            return this.lifespan <= 0 || this.position.y < -50;
+        }
+    }
+    
+    // Public methods to control animation
+    p.startAnimation = function() {
+        document.getElementById('animation-container').style.display = 'block';
+        documents = [];
+        for (let i = 0; i < 15; i++) {
+            documents.push(new DocumentIcon());
+        }
+        animationActive = true;
+    };
+    
+    p.stopAnimation = function() {
+        animationActive = false;
+        setTimeout(() => {
+            document.getElementById('animation-container').style.display = 'none';
+        }, 500);
+    };
+    
+    // Window resize handler
+    p.windowResized = function() {
+        p.resizeCanvas(p.windowWidth, p.windowHeight);
+    };
+};
+
+// Initialize login animation when on login page
+document.addEventListener('DOMContentLoaded', function() {
+    const loginForm = document.getElementById('login-form');
+    const animationContainer = document.getElementById('animation-container');
+    
+    if (loginForm && animationContainer) {
+        // Initialize p5.js sketch
+        let loginP5 = new p5(loginAnimationSketch);
+        
+        // Store p5 instance globally
+        window.loginP5 = loginP5;
+        
+        // Form submission handler
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Apply anti-spam protection with custom loading text
+            preventFormSpamming(this, 'button[type="submit"]', 'Prijava u tijeku...', 1500);
+            
+            // Show loading spinner
+            document.getElementById('form-overlay').style.display = 'flex';
+            
+            // Start animation
+            loginP5.startAnimation();
+            
+            // Submit the form after a short delay to show animation
+            setTimeout(() => {
+                this.submit();
+            }, 1500);
+        });
+    }
+});
+
+function stopLoginAnimation() {
+    if (window.loginP5) {
+        window.loginP5.stopAnimation();
+    }
+}
+
+/**
+ * Prevents form button spamming by disabling the button and showing a loading spinner
+ * @param {HTMLFormElement} form - The form element
+ * @param {string} buttonSelector - CSS selector for the submit button (default: 'button[type="submit"]')
+ * @param {string} loadingText - Text to display while loading (default: 'Učitavanje...')
+ * @param {number} delay - Optional delay before submitting the form in ms (default: 0)
+ */
+function preventFormSpamming(form, buttonSelector = 'button[type="submit"]', loadingText = 'Učitavanje...', delay = 0) {
+    if (!form) return;
+    
+    // Find the submit button
+    const submitButton = form.querySelector(buttonSelector);
+    if (!submitButton) return;
+    
+    // Store original button content for potential restoration
+    if (!submitButton.dataset.originalHtml) {
+        submitButton.dataset.originalHtml = submitButton.innerHTML;
+    }
+    
+    // Disable the button
+    submitButton.disabled = true;
+    submitButton.classList.add('disabled');
+    
+    // Change button text and add spinner
+    submitButton.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> ${loadingText}`;
+    
+    // Submit the form after optional delay
+    if (delay > 0) {
+        setTimeout(() => form.submit(), delay);
+        return false; // Prevent default form submission
+    }
+    
+    return true; // Allow form submission to continue
+}
+
+// Add event listeners to all forms that need spam protection
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all forms that need spam protection (using a data attribute)
+    const forms = document.querySelectorAll('form[data-prevent-spam="true"]');
+    
+    forms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            // Get loading text from data attribute or use default
+            const loadingText = this.dataset.loadingText || 'Učitavanje...';
+            
+            // Prevent form spamming
+            return preventFormSpamming(this, 'button[type="submit"]', loadingText);
+        });
+    });
+    
+    // Handle navigation buttons with anti-spam protection
+    setupNavigationAntiSpam();
+});
+
+/**
+ * Prevents navigation link spamming by disabling the link and showing a loading spinner
+ * @param {HTMLAnchorElement} linkElement - The anchor element
+ * @param {string} loadingText - Text to display while loading (default from data-loading-text or 'Učitavanje...')
+ */
+function preventLinkSpamming(linkElement, loadingText) {
+    if (!linkElement) return;
+    
+    // Store original content for potential restoration
+    if (!linkElement.dataset.originalHtml) {
+        linkElement.dataset.originalHtml = linkElement.innerHTML;
+    }
+    
+    // Disable the link
+    linkElement.classList.add('disabled');
+    linkElement.setAttribute('aria-disabled', 'true');
+    
+    // Change link text and add spinner
+    linkElement.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> ${loadingText}`;
+}
+
+/**
+ * Sets up anti-spam protection for navigation buttons
+ * Looks for elements with id="backButton" or other navigation buttons that need protection
+ */
+function setupNavigationAntiSpam() {
+    // Find navigation buttons that need anti-spam protection
+    const navButtons = document.querySelectorAll('a#backButton, a[data-prevent-spam="true"]');
+    
+    navButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const href = this.getAttribute('href');
+            const loadingText = this.getAttribute('data-loading-text') || 'Učitavanje...';
+            
+            // Apply anti-spam protection
+            preventLinkSpamming(this, loadingText);
+            
+            // Navigate to the href after a short delay
+            setTimeout(function() {
+                window.location.href = href;
+            }, 100);
+        });
+    });
+}
