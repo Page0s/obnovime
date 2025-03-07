@@ -1,24 +1,42 @@
 let particles = [];
-const particleCount = 50;
+let documents = [];
+let logoImage;
+const particleCount = 30;
+const documentCount = 15;
+
+function preload() {
+  logoImage = loadImage('/images/logo.svg');
+}
 
 function setup() {
   const canvas = createCanvas(windowWidth, windowHeight);
   canvas.parent('p5-canvas');
   
-  // Initialize particles
+  // Inicijalizacija točkica
   for (let i = 0; i < particleCount; i++) {
     particles.push(new Particle());
+  }
+  
+  // Inicijalizacija letećih dokumenata
+  for (let i = 0; i < documentCount; i++) {
+    documents.push(new Document());
   }
 }
 
 function draw() {
   clear();
   
-  // Update and display particles
+  // Ažuriranje i prikaz točkica
   for (let particle of particles) {
     particle.update();
     particle.display();
     particle.connectNeighbors(particles);
+  }
+  
+  // Ažuriranje i prikaz dokumenata
+  for (let doc of documents) {
+    doc.update();
+    doc.display();
   }
 }
 
@@ -37,7 +55,7 @@ class Particle {
   update() {
     this.position.add(this.velocity);
     
-    // Bounce off edges
+    // Odbijanje od rubova
     if (this.position.x < 0 || this.position.x > width) this.velocity.x *= -1;
     if (this.position.y < 0 || this.position.y > height) this.velocity.y *= -1;
   }
@@ -59,5 +77,39 @@ class Particle {
         }
       }
     }
+  }
+}
+
+class Document {
+  constructor() {
+    this.position = createVector(random(width), random(height));
+    this.velocity = createVector(random(-0.3, 0.3), random(-0.3, 0.3));
+    this.size = random(16, 24);
+    this.alpha = random(150, 200);
+    this.rotation = random(-0.02, 0.02);
+    this.angle = random(0, TWO_PI);
+    this.scale = random(0.5, 0.8);
+  }
+  
+  update() {
+    this.position.add(this.velocity);
+    this.angle += this.rotation;
+    
+    // Odbijanje od rubova
+    if (this.position.x < 0 || this.position.x > width) this.velocity.x *= -1;
+    if (this.position.y < 0 || this.position.y > height) this.velocity.y *= -1;
+  }
+  
+  display() {
+    push();
+    translate(this.position.x, this.position.y);
+    rotate(this.angle);
+    
+    // Prikaz loga
+    tint(255, this.alpha);
+    imageMode(CENTER);
+    image(logoImage, 0, 0, 45 * this.scale, 45 * this.scale);
+    
+    pop();
   }
 }

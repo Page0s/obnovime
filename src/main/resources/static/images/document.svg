@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="120px" height="160px" viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg">
   <path d="M20,0 L80,0 L100,20 L100,140 L20,140 Z" fill="none" stroke="#0d6efd" stroke-width="4" stroke-dasharray="600" stroke-dashoffset="600">
-    <animate attributeName="stroke-dashoffset" from="600" to="0" dur="2s" fill="freeze" />
+    <animate attributeName="stroke-dashoffset" from="600" to="0" dur="4s" fill="freeze" repeatCount="indefinite" />
   </path>
   <path d="M80,0 L80,20 L100,20" fill="none" stroke="#0d6efd" stroke-width="4" stroke-dasharray="40" stroke-dashoffset="40">
-    <animate attributeName="stroke-dashoffset" from="40" to="0" dur="0.5s" begin="1.5s" fill="freeze" />
+    <animate attributeName="stroke-dashoffset" from="40" to="0" dur="2s" begin="3s" fill="freeze" repeatCount="indefinite" />
   </path>
   <!-- Document Lines -->
   <line x1="30" y1="40" x2="90" y2="40" stroke="#0d6efd" stroke-width="3" stroke-dasharray="60" stroke-dashoffset="60">
-    <animate attributeName="stroke-dashoffset" from="60" to="0" dur="0.5s" begin="2s" fill="freeze" />
+    <animate attributeName="stroke-dashoffset" from="60" to="0" dur="2s" begin="3s" fill="freeze" repeatCount="indefinite" />
   </line>
   <line x1="30" y1="60" x2="90" y2="60" stroke="#0d6efd" stroke-width="3" stroke-dasharray="60" stroke-dashoffset="60">
-    <animate attributeName="stroke-dashoffset" from="60" to="0" dur="0.5s" begin="2.2s" fill="freeze" />
+    <animate attributeName="stroke-dashoffset" from="60" to="0" dur="2s" begin="3.5s" fill="freeze" repeatCount="indefinite" />
   </line>
   <line x1="30" y1="80" x2="90" y2="80" stroke="#0d6efd" stroke-width="3" stroke-dasharray="60" stroke-dashoffset="60">
-    <animate attributeName="stroke-dashoffset" from="60" to="0" dur="0.5s" begin="2.4s" fill="freeze" />
+    <animate attributeName="stroke-dashoffset" from="60" to="0" dur="2s" begin="4s" fill="freeze" repeatCount="indefinite" />
   </line>
   <line x1="30" y1="100" x2="90" y2="100" stroke="#0d6efd" stroke-width="3" stroke-dasharray="60" stroke-dashoffset="60">
-    <animate attributeName="stroke-dashoffset" from="60" to="0" dur="0.5s" begin="2.6s" fill="freeze" />
+    <animate attributeName="stroke-dashoffset" from="60" to="0" dur="2s" begin="4.5s" fill="freeze" repeatCount="indefinite" />
   </line>
   <line x1="30" y1="120" x2="70" y2="120" stroke="#0d6efd" stroke-width="3" stroke-dasharray="40" stroke-dashoffset="40">
-    <animate attributeName="stroke-dashoffset" from="40" to="0" dur="0.5s" begin="2.8s" fill="freeze" />
+    <animate attributeName="stroke-dashoffset" from="40" to="0" dur="2s" begin="5s" fill="freeze" repeatCount="indefinite" />
   </line>
+  
+  <!-- Reset animation -->
+  <animate id="resetAnimation" attributeName="visibility" from="visible" to="visible" dur="8s" begin="0s; resetAnimation.end" />
 </svg>
