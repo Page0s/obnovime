@@ -18,46 +18,50 @@
         }
 
 
-        .table th:nth-child(1), .table td:nth-child(1) { /* Šifra */
-            width: 180px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        .table th:nth-child(1), .table td:nth-child(1) { /* Status */
+            width: 65px;
         }
 
-        .table th:nth-child(2), .table td:nth-child(2) { /* Naziv */
-            width: 170px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .table th:nth-child(3), .table td:nth-child(3) { /* Vrsta resursa */
-            width: 100px;
-        }
-
-        .table th:nth-child(4), .table td:nth-child(4) { /* Ispostava */
-            width: 100px;
-        }
-
-        .table th:nth-child(5), .table td:nth-child(5) { /* Odgovorna osoba */
+        .table th:nth-child(2), .table td:nth-child(2) { /* Šifra */
             width: 160px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        .table th:nth-child(6), .table td:nth-child(6) { /* Tip dokumenta */
-            width: 180px;
+        .table th:nth-child(3), .table td:nth-child(3) { /* Naziv */
+            width: 160px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        .table th:nth-child(7), .table td:nth-child(7) { /* Datum obnove */
+        .table th:nth-child(4), .table td:nth-child(4) { /* Vrsta resursa */
+            width: 90px;
+        }
+
+        .table th:nth-child(5), .table td:nth-child(5) { /* Ispostava */
+            width: 90px;
+        }
+
+        .table th:nth-child(6), .table td:nth-child(6) { /* Odgovorna osoba */
+            width: 150px;
+        }
+
+        .table th:nth-child(7), .table td:nth-child(7) { /* Tip dokumenta */
+            width: 170px;
+        }
+
+        .table th:nth-child(8), .table td:nth-child(8) { /* Datum obnove */
+            width: 110px;
+        }
+
+        .table th:nth-child(9), .table td:nth-child(9) { /* Do isteka obnove */
             width: 120px;
         }
 
-        .table th:nth-child(8), .table td:nth-child(8) { /* Status */
-            width: 130px;
-        }
-
-        .table th:nth-child(9), .table td:nth-child(9) { /* Akcije */
-            width: 120px;
+        .table th:nth-child(10), .table td:nth-child(10) { /* Akcije */
+            width: 110px;
         }
 
         /* Sprječava promjenu širine stupaca ovisno o sadržaju */
@@ -108,6 +112,35 @@
         .custom-footer {
             background-color: #212529 !important;
         }
+        
+        .bg-danger-subtle {
+            background-color: #ffcccc;
+        }
+        
+        .text-danger-emphasis {
+            color: #8b0a1a;
+        }
+        
+        .bg-warning-subtle {
+            background-color: #ffffcc;
+        }
+        
+        .text-warning-emphasis {
+            color: #7a5c00;
+        }
+        
+        .bg-success-subtle {
+            background-color: #ccffcc;
+        }
+        
+        .text-success-emphasis {
+            color: #007a00;
+        }
+
+        .bg-light-gray {
+            background-color: #e9ecef;
+            color: #6c757d;
+        }
     </style>
 </head>
 <body>
@@ -127,7 +160,7 @@
                     <small class="d-block text-white mb-1">Prijavljeni korisnik</small>
                     <div class="dropdown">
                         <button class="btn btn-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">
-                            <i class="bi bi-person"></i>
+                            <i class="bi bi-person-circle"></i>
                         </button>
                         <ul class="dropdown-menu">
                             <li><h6 class="dropdown-header">Korisnik</h6></li>
@@ -311,23 +344,27 @@
                             <h6 class="card-title">Status</h6>
                             <div class="d-flex flex-column gap-2">
                                 <div class="legend-row">
-                                    <img src="/renewal.png" alt="Vrijeme za obnovu">
-                                    <span>Vrijeme za obnovu</span>
+                                    <img src="/renewal-yellow.png" alt="Vrijeme za obnovu (> 10 dana)">
+                                    <span>Vrijeme za obnovu (> 10 dana)</span>
                                 </div>
                                 <div class="legend-row">
-                                    <img src="/renewal-progress.png" alt="Obnova u tijeku">
+                                    <img src="/renewal-red.png" alt="Vrijeme za obnovu (≤ 10 dana)">
+                                    <span>Vrijeme za obnovu (≤ 10 dana)</span>
+                                </div>
+                                <div class="legend-row">
+                                    <img src="/renewal-progress-red.png" alt="Obnova u tijeku">
                                     <span>Obnova u tijeku</span>
                                 </div>
                                 <div class="legend-row">
-                                    <img src="/active.png" alt="Aktivno/Nema obnove">
+                                    <img src="/active-green.png" alt="Aktivno/Nema obnove">
                                     <span>Nije potrebno poduzimati nikakve radnje</span>
                                 </div>
                                 <div class="legend-row">
-                                    <img src="/renewal-red.png" alt="Vrijeme za obnovu isteklo">
+                                    <img src="/renewal-gray.png" alt="Vrijeme za obnovu isteklo">
                                     <span>Vrijeme za obnovu isteklo</span>
                                 </div>
                                 <div class="legend-row">
-                                    <img src="/renewal-progress-red.png" alt="Obnova u tijeku isteklo">
+                                    <img src="/renewal-progress-gray.png" alt="Obnova u tijeku isteklo">
                                     <span>Obnova u tijeku isteklo</span>
                                 </div>
                             </div>
@@ -345,6 +382,7 @@
                 <table class="table table-hover mb-0 table-striped">
                     <thead class="table-light">
                     <tr>
+                        <th>Status</th>
                         <th>Šifra</th>
                         <th>Naziv</th>
                         <th>Vrsta resursa</th>
@@ -352,7 +390,7 @@
                         <th>Odgovorna osoba</th>
                         <th>Tip dokumenta</th>
                         <th>Datum obnove</th>
-                        <th>Status</th>
+                        <th>Do isteka obnove</th>
                         <th>Akcije</th>
                     </tr>
                     </thead>
@@ -362,6 +400,20 @@
                             th:data-document-id="${document.id}"
                             onclick="showDocumentDetails(this.getAttribute('data-document-id'))"
                             style="cursor: pointer;">
+                            <td>
+                                <!-- Status ikona ovisno o statusu dokumenta -->
+                                <th:block th:with="today=${T(java.time.LocalDate).now()}, daysUntil=${document.renewalDate != null ? T(java.time.temporal.ChronoUnit).DAYS.between(today, document.renewalDate) : 0}">
+                                    <!-- Vrijeme za obnovu - žuta ikona ako je više od 10 dana, crvena ako je 10 ili manje dana -->
+                                    <img th:if="${document.statusName == 'Vrijeme za obnovu' && daysUntil > 10}" src="/renewal-yellow.png" alt="Vrijeme za obnovu" width="24" data-bs-toggle="tooltip" data-bs-placement="top" title="Vrijeme za obnovu">
+                                    <img th:if="${document.statusName == 'Vrijeme za obnovu' && daysUntil <= 10}" src="/renewal-red.png" alt="Vrijeme za obnovu" width="24" data-bs-toggle="tooltip" data-bs-placement="top" title="Vrijeme za obnovu">
+                                    
+                                    <!-- Ostali statusi -->
+                                    <img th:if="${document.statusName == 'Obnova u tijeku'}" src="/renewal-progress-red.png" alt="Obnova u tijeku" width="24" data-bs-toggle="tooltip" data-bs-placement="top" title="Obnova u tijeku">
+                                    <img th:if="${document.statusName == 'Aktivno' || document.statusName == 'Nema obnove'}" src="/active-green.png" alt="Aktivno/Nema obnove" width="24" data-bs-toggle="tooltip" data-bs-placement="top" title="Nije potrebno poduzimati nikakve radnje">
+                                    <img th:if="${document.statusName == 'Vrijeme za obnovu isteklo'}" src="/renewal-gray.png" alt="Vrijeme za obnovu isteklo" width="24" data-bs-toggle="tooltip" data-bs-placement="top" title="Vrijeme za obnovu isteklo">
+                                    <img th:if="${document.statusName == 'Obnova u tijeku isteklo'}" src="/renewal-progress-gray.png" alt="Obnova u tijeku isteklo" width="24" data-bs-toggle="tooltip" data-bs-placement="top" title="Obnova u tijeku isteklo">
+                                </th:block>
+                            </td>
                             <td th:text="${document.number}">Šifra dokumenta</td>
                             <td th:text="${document.name}">Naziv</td>
                             <td th:text="${document.resourceTypeName}">Vrsta resursa</td>
@@ -370,23 +422,35 @@
                             <td th:text="${document.documentTypeName}">Tip dokumenta</td>
                             <td style="white-space: nowrap;" th:text="${document.renewalDate != T(java.time.LocalDate).MIN} ? ${#temporals.format(document.renewalDate, 'dd.MM.yyyy.')} : 'N/A'">Datum obnove</td>
                             <td>
-                                <span class="badge" th:classappend="${document.badgeClass}">
-                                    <img th:if="${document.statusName == 'Vrijeme za obnovu'}" class="status-picture" th:src="@{/renewal.png}" data-bs-toggle="tooltip" data-bs-placement="top" title="Vrijeme za obnovu">
-                                    <img th:if="${document.statusName == 'Aktivno'}" class="status-picture" th:src="@{/active.png}" data-bs-toggle="tooltip" data-bs-placement="top" title="Aktivno">
-                                    <img th:if="${document.statusName == 'Nema obnove'}" class="status-picture" th:src="@{/active.png}" data-bs-toggle="tooltip" data-bs-placement="top" title="Nema obnove">
-                                    <img th:if="${document.statusName == 'Obnova u tijeku'}" class="status-picture" th:src="@{/renewal-progress.png}" data-bs-toggle="tooltip" data-bs-placement="top" title="Obnova u tijeku">
-                                    <img th:if="${document.statusName == 'Obnova u tijeku isteklo'}" class="status-picture" th:src="@{/renewal-progress-red.png}" data-bs-toggle="tooltip" data-bs-placement="top" title="Obnova u tijeku isteklo">
-                                    <img th:if="${document.statusName == 'Vrijeme za obnovu isteklo'}" class="status-picture" th:src="@{/renewal-red.png}" data-bs-toggle="tooltip" data-bs-placement="top" title="Vrijeme za obnovu isteklo">
+                                <!-- Zamjena ikona s brojem dana do isteka -->
+                                <span th:with="today=${T(java.time.LocalDate).now()}, daysUntil=${document.renewalDate != null ? T(java.time.temporal.ChronoUnit).DAYS.between(today, document.renewalDate) : 0}"
+                                      th:class="'badge ' + 
+                                      (${document.statusName == 'Obnova u tijeku isteklo' || document.statusName == 'Vrijeme za obnovu isteklo'} ? 'bg-light-gray' : 
+                                      (${daysUntil <= 10 && daysUntil >= 0} ? 'text-white bg-danger-subtle text-danger-emphasis' : 
+                                      (${document.statusName == 'Vrijeme za obnovu' || document.statusName == 'Obnova u tijeku'} ? 'text-warning-emphasis bg-warning-subtle' : 
+                                      'text-success-emphasis bg-success-subtle')))">
+                                    
+                                    <!-- Za istekle statuse -->
+                                    <span th:if="${document.statusName == 'Obnova u tijeku isteklo' || document.statusName == 'Vrijeme za obnovu isteklo'}" 
+                                          style="min-width: 80px; min-height: 20px; display: flex; justify-content: center; align-items: center; padding: 4px 8px;">
+                                        Isteklo
+                                    </span>
+                                    
+                                    <!-- Za aktivne dokumente -->
+                                    <span th:if="${document.statusName != 'Obnova u tijeku isteklo' && document.statusName != 'Vrijeme za obnovu isteklo'}"
+                                          style="min-width: 80px; min-height: 20px; display: flex; justify-content: center; align-items: center; padding: 4px 8px;">
+                                        <span th:text="${daysUntil >= 0 ? daysUntil + ' dana' : 'Isteklo'}"></span>
+                                    </span>
                                 </span>
                             </td>
                             <td>
-                                <div class="d-flex gap-1">
-                                    <a th:href="@{/edit/{id}(id=${document.id})}" class="btn btn-sm btn-secondary"  data-bs-toggle="tooltip" data-bs-placement="top" title="Promijeni" onclick="event.stopPropagation()">
-                                        <i class="bi bi-pencil-square"></i></a>
-                                    <a th:href="@{/document/{id}/history(id=${document.id})}" class="btn btn-sm btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Povijest obnova" onclick="event.stopPropagation()">
-                                        <i class="bi bi-clock-history"></i></a>
-                                    <a th:href="@{/document/{id}/obnova(id=${document.id})}" class="btn btn-sm btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Obnova" onclick="event.stopPropagation()">
-                                        <i class="bi bi-arrow-clockwise"></i></a>
+                                <div class="d-flex justify-content-center">
+                                    <div class="d-flex gap-1">
+                                        <a th:href="@{/edit/{id}(id=${document.id})}" class="btn btn-sm btn-secondary"  data-bs-toggle="tooltip" data-bs-placement="top" title="Promijeni" onclick="event.stopPropagation()">
+                                            <i class="bi bi-pencil-square"></i></a>
+                                        <a th:href="@{/document/{id}/obnova(id=${document.id})}" class="btn btn-sm btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Obnova" onclick="event.stopPropagation()">
+                                            <i class="bi bi-arrow-clockwise"></i></a>
+                                    </div>
                                 </div>
                             </td>
                     </tr>
@@ -585,7 +649,7 @@
 
     <!-- Document Details Modal -->
     <div class="modal fade" id="documentDetailsModal" tabindex="-1" aria-labelledby="documentDetailsModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <!-- Fragment will be loaded here -->
             </div>

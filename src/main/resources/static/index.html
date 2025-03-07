@@ -8,6 +8,72 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/css/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
+    <style>
+        body {
+            background-color: #212529;
+            color: #f8f9fa;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        .bg-dark-subtle {
+            background-color: #343a40;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+            background-color: #2c3034;
+            color: #f8f9fa;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .btn-primary {
+            background-color: #0d6efd;
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background-color: #0b5ed7;
+        }
+        
+        .highlight-new {
+            animation: highlight 2s ease-in-out;
+        }
+        
+        @keyframes highlight {
+            0% { background-color: rgba(13, 110, 253, 0.2); }
+            100% { background-color: transparent; }
+        }
+        
+        .bg-danger-subtle {
+            background-color: #ffcccc;
+        }
+        
+        .text-danger-emphasis {
+            color: #8b0a1a;
+        }
+        
+        .bg-warning-subtle {
+            background-color: #ffffcc;
+        }
+        
+        .text-warning-emphasis {
+            color: #7a5c00;
+        }
+        
+        .bg-success-subtle {
+            background-color: #ccffcc;
+        }
+        
+        .text-success-emphasis {
+            color: #007a00;
+        }
+    </style>
 </head>
 <body>
     <!-- P5.js Canvas Container -->
@@ -94,7 +160,7 @@
                 </div>
             </div>
             <div class="text-center mt-4">
-                <a href="#demo" class="btn btn-glass btn-lg scroll-next">
+                <a href="#step1" class="btn btn-glass btn-lg scroll-next">
                     Kako koristiti aplikaciju <i class="bi bi-arrow-down-circle ms-2"></i>
                 </a>
             </div>
@@ -153,7 +219,7 @@
                         </div>
                     </div>
                     <div class="col-lg-5">
-                        <div class="glass-effect p-4 h-100">
+                        <div class="glass-effect p-4 h-90 d-flex flex-column justify-content-top">
                             <h4 class="h5 mb-3">Što trebate napraviti?</h4>
                             <ol class="feature-list">
                                 <li>Unesite osnovne informacije o dokumentu</li>
@@ -189,24 +255,24 @@
                                     <i class="bi bi-collection"></i> Aktivni dokumenti
                                 </div>
                                 <div class="table-responsive">
-                                    <table class="table table-hover text-white">
-                                        <thead>
+                                    <table class="table table-hover table-striped text-white">
+                                        <thead class="table-light">
                                             <tr>
-                                                <th>Dokument</th>
-                                                <th>Tip</th>
-                                                <th>Istek</th>
-                                                <th>Status</th>
+                                                <th>Naziv</th>
+                                                <th>Tip dokumenta</th>
+                                                <th>Datum obnove</th>
+                                                <th>Do isteka obnove</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr class="highlight-new">
+                                            <tr>
                                                 <td>
                                                     <i class="bi bi-file-text me-2"></i>
-                                                    Ugovor o održavanju
+                                                    ISO Certifikat
                                                 </td>
-                                                <td>Ugovor</td>
-                                                <td>15.06.2025.</td>
-                                                <td><span class="badge bg-success">105 dana</span></td>
+                                                <td>Certifikat</td>
+                                                <td>10.03.2025.</td>
+                                                <td><span class="badge text-danger-emphasis bg-danger-subtle" style="min-width: 80px;">8 dana</span></td>
                                             </tr>
                                             <tr>
                                                 <td>
@@ -215,7 +281,7 @@
                                                 </td>
                                                 <td>Certifikat</td>
                                                 <td>20.03.2025.</td>
-                                                <td><span class="badge bg-warning">18 dana</span></td>
+                                                <td><span class="badge text-warning-emphasis bg-warning-subtle" style="min-width: 80px;">18 dana</span></td>
                                             </tr>
                                             <tr>
                                                 <td>
@@ -224,7 +290,16 @@
                                                 </td>
                                                 <td>Licenca</td>
                                                 <td>01.04.2025.</td>
-                                                <td><span class="badge bg-warning">30 dana</span></td>
+                                                <td><span class="badge text-warning-emphasis bg-warning-subtle" style="min-width: 80px;">30 dana</span></td>
+                                            </tr>
+                                            <tr class="highlight-new">
+                                                <td>
+                                                    <i class="bi bi-file-text me-2"></i>
+                                                    Ugovor o održavanju
+                                                </td>
+                                                <td>Ugovor</td>
+                                                <td>15.06.2025.</td>
+                                                <td><span class="badge text-success-emphasis bg-success-subtle" style="min-width: 80px;">105 dana</span></td>
                                             </tr>
                                             <tr>
                                                 <td>
@@ -233,7 +308,7 @@
                                                 </td>
                                                 <td>Osiguranje</td>
                                                 <td>31.12.2025.</td>
-                                                <td><span class="badge bg-success">304 dana</span></td>
+                                                <td><span class="badge text-success-emphasis bg-success-subtle" style="min-width: 80px;">304 dana</span></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -242,7 +317,7 @@
                         </div>
                     </div>
                     <div class="col-lg-4">
-                        <div class="glass-effect p-4 h-100">
+                        <div class="glass-effect p-4 h-90 d-flex flex-column justify-content-top">
                             <h4 class="h5 mb-3">Što vidite na glavnoj stranici?</h4>
                             <ul class="feature-list">
                                 <li>Pregled svih aktivnih dokumenata</li>
@@ -252,12 +327,16 @@
                             </ul>
                             <div class="mt-4">
                                 <div class="d-flex align-items-center mb-2">
-                                    <span class="badge bg-success me-2">Zeleno</span>
-                                    <small>Više od 30 dana do isteka</small>
+                                    <span class="badge text-success-emphasis bg-success-subtle me-2" style="min-width: 80px;">Zeleno</span>
+                                    <small>Ne treba ništa poduzimati - preostali dani do isteka</small>
                                 </div>
-                                <div class="d-flex align-items-center">
-                                    <span class="badge bg-warning me-2">Žuto</span>
-                                    <small>Manje od 30 dana do isteka</small>
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="badge text-warning-emphasis bg-warning-subtle me-2" style="min-width: 80px;">Žuto</span>
+                                    <small>Potrebno je poduzeti akciju - preostali dani do isteka</small>
+                                </div>
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="badge text-danger-emphasis bg-danger-subtle me-2" style="min-width: 80px;">Crveno</span>
+                                    <small>Hitno poduzeti akciju - preostali dani do isteka</small>
                                 </div>
                             </div>
                         </div>
@@ -325,7 +404,7 @@
                         </div>
                     </div>
                     <div class="col-lg-4">
-                        <div class="glass-effect p-4 h-100">
+                        <div class="glass-effect p-4 h-90 d-flex flex-column justify-content-top">
                             <h4 class="h5 mb-3">Kako funkcioniraju obavijesti?</h4>
                             <ul class="feature-list">
                                 <li>Automatske email obavijesti prije isteka</li>
