@@ -348,13 +348,20 @@ public class DocumentController {
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
-        Optional<DocumentFile> dokument = documentRepository.findById(id);
+        Optional<DocumentFile> optional = documentRepository.findById(id);
 
-        if (dokument.isPresent()) {
-            model.addAttribute("dokument", dokument.get());
+        if (optional.isPresent()) {
+            DocumentFile document = optional.get();
+
+            model.addAttribute("document", document);
             model.addAttribute("locations", locationRepository.findAll());
             model.addAttribute("resourceTypes", resourceTypeRepository.findAll());
 
+            List<RenewalHistory> history = renewalHistoryRepository.findByDocumentFileId(document.getId());
+            model.addAttribute("history", history);
+
+            model.addAttribute("locations", locationRepository.findAll());
+            model.addAttribute("resourceTypes", resourceTypeRepository.findAll());
             List<AppUser> users = appUserRepository.findByUserType("CLIENT");
             model.addAttribute("app_users", users);
 
