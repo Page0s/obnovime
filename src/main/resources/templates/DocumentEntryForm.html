@@ -6,13 +6,46 @@
     <title>DocAlert - Unos Dokumenata</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        .custom-header {
+            background-color: #0d6efd; /* Plava boja kao u Bootstrapu */
+            padding: 20px 0;
+        }
+        .help-icon {
+            color: #0d6efd;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+            vertical-align: middle;
+            margin-left: 10px;
+        }
+        .help-icon:hover {
+            color: #0a58ca;
+        }
+        .gif-container {
+            max-width: 100%;
+            text-align: center;
+            overflow: hidden;
+        }
+        
+        /* Modal adjustments for better GIF display */
+        .modal-xl {
+            max-width: 90%;
+        }
+        
+        @media (min-width: 1200px) {
+            .modal-xl {
+                max-width: 1140px;
+            }
+        }
+        
+        @media (min-width: 1400px) {
+            .modal-xl {
+                max-width: 1320px;
+            }
+        }
+    </style>
 </head>
-<style>
-    .custom-header {
-        background-color: #0d6efd; /* Plava boja kao u Bootstrapu */
-        padding: 20px 0;
-    }
-</style>
 <body>
 <!-- Header Section -->
 <header class="custom-header text-white py-4 mb-4">
@@ -30,7 +63,10 @@
 </header>
 
 <div class="container mt-5">
-    <h1 class="mb-4">Dodaj Novi Dokument</h1>
+    <h1 class="mb-4">
+        Dodaj Novi Dokument 
+        <i class="bi bi-question-circle-fill help-icon" id="helpIcon" data-bs-toggle="tooltip" data-bs-placement="top" title="Pomoć za unos dokumenta"></i>
+    </h1>
 
     <!-- Forma za općeniti tip dokumenta (odmah vidljiva) -->
     <div id="generalForm">
@@ -47,8 +83,6 @@
                     </option>
                 </select>
             </div>
-
-
 
             <!-- Naziv -->
             <div class="mb-3">
@@ -86,7 +120,6 @@
                 </select>
             </div>
 
-
             <div class="mb-3">
                 <label for="resourceType" class="form-label">Vrsta resursa:</label>
                 <select class="form-select" id="resourceType" name="resourceTypeId" required>
@@ -115,14 +148,32 @@
                 <textarea class="form-control" id="notes" name="notes" placeholder="Unesite napomenu"></textarea>
             </div>
 
-
-
             <!-- Akcijske tipke -->
             <div class="d-flex justify-content-start align-items-end gap-2">
                 <button type="submit" class="btn btn-primary flex-grow-0">Spremi</button>
                 <a href="/main" class="btn btn-secondary flex-grow-0">Nazad</a>
             </div>
         </form>
+    </div>
+</div>
+
+<!-- Modal za prikaz GIF-a s uputama -->
+<div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="helpModalLabel">Upute za unos novog dokumenta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="gif-container">
+                    <iframe id="gifFrame" style="width:100%; height:auto; min-height:600px; border:none; display:block;" frameborder="0"></iframe>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Razumijem</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -163,7 +214,6 @@
     </div>
 </div>
 
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- Footer Section -->
@@ -171,8 +221,54 @@
     <p>&copy; 2025 DocAlert. Sva prava pridržana.</p>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/scripts.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inicijalizacija tooltipa
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+        
+        // Dodaj event listener za ikonu pomoći
+        const helpIcon = document.getElementById('helpIcon');
+        const helpModal = new bootstrap.Modal(document.getElementById('helpModal'));
+        const gifFrame = document.getElementById('gifFrame');
+        
+        helpIcon.addEventListener('click', function() {
+            // Koristi iframe za prikaz GIF-a
+            gifFrame.src = '';
+            
+            // Prikaži modal
+            helpModal.show();
+            
+            // Nakon što je modal prikazan, postavimo iframe src
+            // Dodajemo random parametar za izbjegavanje cachiranja
+            setTimeout(function() {
+                gifFrame.src = '/Novi_unos.gif?random=' + new Date().getTime();
+                
+                // Adjust iframe height based on content after loading
+                gifFrame.onload = function() {
+                    try {
+                        // Try to adjust height based on content
+                        if (gifFrame.contentWindow.document.body) {
+                            const height = Math.max(600, gifFrame.contentWindow.document.body.scrollHeight);
+                            gifFrame.style.height = height + 'px';
+                        }
+                    } catch(e) {
+                        // If cross-origin issues, use default height
+                        gifFrame.style.height = '600px';
+                    }
+                };
+            }, 300);
+        });
+        
+        // Osiguraj da se GIF ponovno učita svaki put kad se modal otvori
+        document.getElementById('helpModal').addEventListener('hidden.bs.modal', function () {
+            gifFrame.src = '';
+        });
+    });
+</script>
 
 </body>
 </html>
