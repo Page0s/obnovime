@@ -7,6 +7,16 @@
     <title>DocAlert - Obnova Dokumenta</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        .custom-header {
+            background-color: #0d6efd; /* Plava boja kao u Bootstrapu */
+            padding: 20px 0;
+        }
+        .help-icon {
+            color: #0d6efd;
+            cursor: pointer;
+        }
+    </style>
 </head>
 
     <style>
@@ -66,7 +76,9 @@
 
             <!-- Status dropdown - visible based on current status -->
             <div class="mb-4" th:if="${document.status?.name != 'Nema obnove' && document.status?.name != 'Aktivno'}">
-                <label for="statusId" class="form-label">Status obnove</label>
+                <label for="statusId" class="form-label">Status obnove
+                    <i class="bi bi-question-circle-fill help-icon" id="statusHelpIcon" data-bs-toggle="tooltip" data-bs-placement="top" title="Pomoć za unos dokumenta"></i>
+                </label>
                 <select class="form-select" id="statusId" name="statusId">
                     <option th:each="status : ${statuses}"
                             th:value="${status.id}"
@@ -77,7 +89,9 @@
 
             <!-- New renewal date - visible based on status -->
             <div class="mb-4" th:if="${document.status?.name != 'Nema obnove' && document.status?.name != 'Aktivno'}">
-                <label for="renewalDate" class="form-label">Novi datum obnove</label>
+                <label for="renewalDate" class="form-label">Novi datum obnove
+                    <i class="bi bi-question-circle-fill help-icon" id="dateHelpIcon" data-bs-toggle="tooltip" data-bs-placement="top" title="Pomoć za unos dokumenta"></i>
+                </label>
                 <input type="date" class="form-control" id="renewalDate" name="renewalDate"
                     th:value="${document.renewalDate}">
                 <div class="form-text">Unesite datum do kojeg će vrijediti obnovljeni dokument</div>
@@ -90,6 +104,7 @@
                         th:checked="${document.arhiva}">
                     <label class="form-check-label" for="arhiva">
                         Arhiva
+                        <i class="bi bi-question-circle-fill help-icon" id="archiveHelpIcon" data-bs-toggle="tooltip" data-bs-placement="top" title="Pomoć za unos dokumenta"></i>
                     </label>
                 </div>
             </div>
@@ -120,9 +135,143 @@
         </div>
     </div>
 </div>
+
+<!-- Help Modals -->
+<!-- Status obnove Help Modal -->
+<div class="modal fade" id="statusHelpModal" tabindex="-1" aria-labelledby="statusHelpModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="statusHelpModalLabel">Upute za status obnove</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="p-4 bg-light border-bottom">
+                    <h6 class="fw-bold mb-3">Status obnove dokumenta:</h6>
+                    <p>Odaberite odgovarajući status za dokument koji obnavljate. Status određuje u kojoj fazi obnove se dokument trenutno nalazi.</p>
+                    <p class="text-muted mt-3 mb-0"><i class="bi bi-info-circle me-1"></i> Pogledajte animaciju ispod za vizualni prikaz procesa:</p>
+                </div>
+                <div class="gif-container">
+                    <iframe id="statusGifFrame" style="width:100%; height:auto; min-height:600px; border:none; display:block;" frameborder="0"></iframe>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Razumijem</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Novi datum obnove Help Modal -->
+<div class="modal fade" id="dateHelpModal" tabindex="-1" aria-labelledby="dateHelpModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="dateHelpModalLabel">Upute za novi datum obnove</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="p-4 bg-light border-bottom">
+                    <h6 class="fw-bold mb-3">Novi datum obnove:</h6>
+                    <p>Unesite datum do kojeg će vrijediti obnovljeni dokument. Sustav će automatski izračunati datum upozorenja za obnovu.</p>
+                    <p class="text-muted mt-3 mb-0"><i class="bi bi-info-circle me-1"></i> Pogledajte animaciju ispod za vizualni prikaz procesa:</p>
+                </div>
+                <div class="gif-container">
+                    <iframe id="dateGifFrame" style="width:100%; height:auto; min-height:600px; border:none; display:block;" frameborder="0"></iframe>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Razumijem</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Arhiva Help Modal -->
+<div class="modal fade" id="archiveHelpModal" tabindex="-1" aria-labelledby="archiveHelpModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="archiveHelpModalLabel">Upute za arhiviranje</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="p-4 bg-light border-bottom">
+                    <h6 class="fw-bold mb-3">Arhiviranje dokumenta:</h6>
+                    <p>Označite ovu opciju ako želite arhivirati dokument. Kada se dokument spremi s označenom opcijom arhive, on će se prebaciti na listu arhiviranih dokumenata.</p>
+                    <p>Arhivirani dokumenti se ne prikazuju na glavnoj listi dokumenata, ali su i dalje dostupni u arhivi.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Razumijem</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script src="/scripts.js"></script>
+<script src="/scripts.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inicijalizacija tooltipa
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+        
+        // Inicijalizacija modala za pomoć
+        const statusHelpIcon = document.getElementById('statusHelpIcon');
+        const dateHelpIcon = document.getElementById('dateHelpIcon');
+        const archiveHelpIcon = document.getElementById('archiveHelpIcon');
+        
+        const statusHelpModal = new bootstrap.Modal(document.getElementById('statusHelpModal'));
+        const dateHelpModal = new bootstrap.Modal(document.getElementById('dateHelpModal'));
+        const archiveHelpModal = new bootstrap.Modal(document.getElementById('archiveHelpModal'));
+        
+        if (statusHelpIcon) {
+            statusHelpIcon.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('statusGifFrame').src = '/Obnove_Renewal_In_Progress.gif';
+                statusHelpModal.show();
+            });
+        }
+        
+        if (dateHelpIcon) {
+            dateHelpIcon.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('dateGifFrame').src = '/Obnove_New_renewal.gif';
+                dateHelpModal.show();
+            });
+        }
+        
+        if (archiveHelpIcon) {
+            archiveHelpIcon.addEventListener('click', function(e) {
+                e.preventDefault();
+                archiveHelpModal.show();
+            });
+        }
+        
+        // Osiguraj da se GIF ponovno učita svaki put kad se modal otvori
+        document.getElementById('statusHelpModal').addEventListener('hidden.bs.modal', function () {
+            document.getElementById('statusGifFrame').src = '';
+        });
+        
+        document.getElementById('dateHelpModal').addEventListener('hidden.bs.modal', function () {
+            document.getElementById('dateGifFrame').src = '';
+        });
+    });
+    
+    function openConfirmationModalRenewal() {
+        const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModalRenewal'));
+        confirmationModal.show();
+    }
+    
+    function submitForm() {
+        document.getElementById('renewalForm').submit();
+    }
+</script>
+
     <!-- Footer Section -->
     <footer class="bg-dark text-white text-center py-3 mt-4">
         <p>&copy; 2025 DocAlert. Sva prava pridržana.</p>

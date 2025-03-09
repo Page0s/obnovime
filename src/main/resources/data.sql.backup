@@ -19,7 +19,7 @@ INSERT INTO resource_types (name) VALUES
 
 -- Unos statusa dokumenata
 INSERT INTO document_statuses (name) VALUES
-('Aktivno'), ('Vrijeme za obnovu'), ('Nema obnove'), ('Obnova u tijeku'), ('Obnova u tijeku isteklo'), ('Vrijeme za obnovu isteklo');
+('Aktivno'), ('Vrijeme za obnovu'), ('Nema obnove'), ('Obnova u tijeku'), ('Obnova u tijeku isteklo'), ('Vrijeme za obnovu isteklo'), ('Obnova u tijeku pred istek'), ('Vrijeme za obnovu pred istek');
 
 -- Unos vrsta dokumenata
 INSERT INTO document_types (name, renewal_period) VALUES
