@@ -66,6 +66,8 @@ public class DocumentController {
         DocumentStatus renewalStatusAboutExpired = documentStatusRepository.findById(8L).orElseThrow(); // Vrijeme za obnovu pred istek
         DocumentStatus renewalInProgressAboutExpired = documentStatusRepository.findById(7L).orElseThrow(); // Obnova u tijeku pred istek
         
+        // Check if document is about to expire (10 days or less until renewal date)
+        long daysUntilRenewal = java.time.temporal.ChronoUnit.DAYS.between(today, renewalDate);
 
         // If we're between alert date and renewal date, and status is Active -> set to Renewal
         if ((today.isAfter(alertDate) || today.isEqual(alertDate)) && today.isBefore(renewalDate) &&
@@ -76,10 +78,18 @@ public class DocumentController {
             activeStatus.getName().equalsIgnoreCase(document.getStatus().getName())){
             document.setStatus(renewalStatusExpired);
             documentRepository.save(document);
+        } else if (today.isAfter(alertDate) && (daysUntilRenewal > 10)){
+            if (renewalInProgress.getName().equalsIgnoreCase(document.getStatus().getName()) ||
+                renewalInProgressExpired.getName().equalsIgnoreCase(document.getStatus().getName()) ||
+                renewalInProgressAboutExpired.getName().equalsIgnoreCase(document.getStatus().getName())) {
+                document.setStatus(renewalInProgress);
+                documentRepository.save(document);
+            } else{
+                document.setStatus(renewalStatus);
+                documentRepository.save(document);
+            }
         }
         
-        // Check if document is about to expire (10 days or less until renewal date)
-        long daysUntilRenewal = java.time.temporal.ChronoUnit.DAYS.between(today, renewalDate);
         if (daysUntilRenewal <= 10 && daysUntilRenewal >= 0) {
             // For documents in "Vrijeme za obnovu" status
             if (renewalStatus.getName().equalsIgnoreCase(document.getStatus().getName())) {
@@ -100,7 +110,8 @@ public class DocumentController {
                 renewalStatusExpired.getName().equalsIgnoreCase(document.getStatus().getName()) ||
                 renewalInProgressExpired.getName().equalsIgnoreCase(document.getStatus().getName()) ||
                 renewalStatusAboutExpired.getName().equalsIgnoreCase(document.getStatus().getName()) ||
-                renewalInProgressAboutExpired.getName().equalsIgnoreCase(document.getStatus().getName())) {
+                renewalInProgressAboutExpired.getName().equalsIgnoreCase(document.getStatus().getName()) ||
+                renewalInProgress.getName().equalsIgnoreCase(document.getStatus().getName())) {
                 document.setStatus(activeStatus);
                 documentRepository.save(document);
             }
