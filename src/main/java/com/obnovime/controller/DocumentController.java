@@ -63,6 +63,9 @@ public class DocumentController {
         DocumentStatus renewalInProgress = documentStatusRepository.findById(4L).orElseThrow(); // Obnova u tijeku
         DocumentStatus renewalStatusExpired = documentStatusRepository.findById(6L).orElseThrow(); // Vrijeme za obnovu isteklo
         DocumentStatus renewalInProgressExpired = documentStatusRepository.findById(5L).orElseThrow(); // Obnova u tijeku isteklo
+        DocumentStatus renewalStatusAboutExpired = documentStatusRepository.findById(8L).orElseThrow(); // Vrijeme za obnovu pred istek
+        DocumentStatus renewalInProgressAboutExpired = documentStatusRepository.findById(7L).orElseThrow(); // Obnova u tijeku pred istek
+        
 
         // If we're between alert date and renewal date, and status is Active -> set to Renewal
         if ((today.isAfter(alertDate) || today.isEqual(alertDate)) && today.isBefore(renewalDate) &&
@@ -75,11 +78,29 @@ public class DocumentController {
             documentRepository.save(document);
         }
         
+        // Check if document is about to expire (10 days or less until renewal date)
+        long daysUntilRenewal = java.time.temporal.ChronoUnit.DAYS.between(today, renewalDate);
+        if (daysUntilRenewal <= 10 && daysUntilRenewal >= 0) {
+            // For documents in "Vrijeme za obnovu" status
+            if (renewalStatus.getName().equalsIgnoreCase(document.getStatus().getName())) {
+                document.setStatus(renewalStatusAboutExpired);
+                documentRepository.save(document);
+            }
+            
+            // For documents in "Obnova u tijeku" status
+            if (renewalInProgress.getName().equalsIgnoreCase(document.getStatus().getName())) {
+                document.setStatus(renewalInProgressAboutExpired);
+                documentRepository.save(document);
+            }
+        }
+        
         // If we're before alert date and status is Renewal -> set back to Active
         if (today.isBefore(alertDate)) {
             if (renewalStatus.getName().equalsIgnoreCase(document.getStatus().getName()) ||
                 renewalStatusExpired.getName().equalsIgnoreCase(document.getStatus().getName()) ||
-                renewalInProgressExpired.getName().equalsIgnoreCase(document.getStatus().getName())) {
+                renewalInProgressExpired.getName().equalsIgnoreCase(document.getStatus().getName()) ||
+                renewalStatusAboutExpired.getName().equalsIgnoreCase(document.getStatus().getName()) ||
+                renewalInProgressAboutExpired.getName().equalsIgnoreCase(document.getStatus().getName())) {
                 document.setStatus(activeStatus);
                 documentRepository.save(document);
             }
@@ -87,14 +108,16 @@ public class DocumentController {
 
         // If we're after renewal date and status is Renewal -> set to Expired
         if (today.isAfter(renewalDate)) {
-            if (renewalStatus.getName().equalsIgnoreCase(document.getStatus().getName())) {
+            if (renewalStatus.getName().equalsIgnoreCase(document.getStatus().getName()) ||
+                renewalStatusAboutExpired.getName().equalsIgnoreCase(document.getStatus().getName())) {
                 document.setStatus(renewalStatusExpired);
                 documentRepository.save(document);
             }
         }
 
         if (today.isAfter(renewalDate)) {
-            if (renewalInProgress.getName().equalsIgnoreCase(document.getStatus().getName())) {
+            if (renewalInProgress.getName().equalsIgnoreCase(document.getStatus().getName()) ||
+                renewalInProgressAboutExpired.getName().equalsIgnoreCase(document.getStatus().getName())) {
                 document.setStatus(renewalInProgressExpired);
                 documentRepository.save(document);
             }
@@ -252,11 +275,13 @@ public class DocumentController {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
-            // remove if from this list elements "Obnova u tijeku isteklo", "Vrijeme za obnovu isteklo", "Nema obnove", "Aktivno"
+            // remove if from this list elements "Obnova u tijeku isteklo", "Vrijeme za obnovu isteklo", "Nema obnove", "Aktivno", "Obnova u tijeku pred istek", "Vrijeme za obnovu pred istek"
             statuses.removeIf(status -> status.getName().equals("Obnova u tijeku isteklo") ||
             status.getName().equals("Aktivno") ||
             status.getName().equals("Nema obnove") ||
-            status.getName().equals("Vrijeme za obnovu isteklo"));
+            status.getName().equals("Vrijeme za obnovu isteklo") ||
+            status.getName().equals("Obnova u tijeku pred istek") ||
+            status.getName().equals("Vrijeme za obnovu pred istek"));
 
             model.addAttribute("document", document);
             model.addAttribute("statuses", statuses);

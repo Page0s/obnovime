@@ -344,20 +344,24 @@
                             <h6 class="card-title">Status</h6>
                             <div class="d-flex flex-column gap-2">
                                 <div class="legend-row">
+                                    <img src="/active-green.png" alt="Aktivno/Nema obnove">
+                                    <span>Nije potrebno poduzimati nikakve radnje</span>
+                                </div>
+                                <div class="legend-row">
                                     <img src="/renewal-yellow.png" alt="Vrijeme za obnovu (> 10 dana)">
                                     <span>Vrijeme za obnovu (> 10 dana)</span>
                                 </div>
                                 <div class="legend-row">
-                                    <img src="/renewal-red.png" alt="Vrijeme za obnovu (≤ 10 dana)">
-                                    <span>Vrijeme za obnovu (≤ 10 dana)</span>
-                                </div>
-                                <div class="legend-row">
-                                    <img src="/renewal-progress-red.png" alt="Obnova u tijeku">
+                                    <img src="/renewal-progress-yellow.png" alt="Obnova u tijeku">
                                     <span>Obnova u tijeku</span>
                                 </div>
                                 <div class="legend-row">
-                                    <img src="/active-green.png" alt="Aktivno/Nema obnove">
-                                    <span>Nije potrebno poduzimati nikakve radnje</span>
+                                    <img src="/renewal-red.png" alt="Vrijeme za obnovu (≤ 10 dana)">
+                                    <span>Vrijeme za obnovu pred istek (≤ 10 dana)</span>
+                                </div>
+                                <div class="legend-row">
+                                    <img src="/renewal-progress-red.png" alt="Obnova u tijeku pred istek">
+                                    <span>Obnova u tijeku pred istek</span>
                                 </div>
                                 <div class="legend-row">
                                     <img src="/renewal-gray.png" alt="Vrijeme za obnovu isteklo">
@@ -404,11 +408,12 @@
                                 <!-- Status ikona ovisno o statusu dokumenta -->
                                 <th:block th:with="today=${T(java.time.LocalDate).now()}, daysUntil=${document.renewalDate != null ? T(java.time.temporal.ChronoUnit).DAYS.between(today, document.renewalDate) : 0}">
                                     <!-- Vrijeme za obnovu - žuta ikona ako je više od 10 dana, crvena ako je 10 ili manje dana -->
-                                    <img th:if="${document.statusName == 'Vrijeme za obnovu' && daysUntil > 10}" src="/renewal-yellow.png" alt="Vrijeme za obnovu" width="24" data-bs-toggle="tooltip" data-bs-placement="top" title="Vrijeme za obnovu">
-                                    <img th:if="${document.statusName == 'Vrijeme za obnovu' && daysUntil <= 10}" src="/renewal-red.png" alt="Vrijeme za obnovu" width="24" data-bs-toggle="tooltip" data-bs-placement="top" title="Vrijeme za obnovu">
+                                    <img th:if="${document.statusName == 'Vrijeme za obnovu'}" src="/renewal-yellow.png" alt="Vrijeme za obnovu" width="24" data-bs-toggle="tooltip" data-bs-placement="top" title="Vrijeme za obnovu">
+                                    <img th:if="${document.statusName == 'Vrijeme za obnovu pred istek'}" src="/renewal-red.png" alt="Vrijeme za obnovu pred istek" width="24" data-bs-toggle="tooltip" data-bs-placement="top" title="Vrijeme za obnovu pred istek">
                                     
                                     <!-- Ostali statusi -->
-                                    <img th:if="${document.statusName == 'Obnova u tijeku'}" src="/renewal-progress-red.png" alt="Obnova u tijeku" width="24" data-bs-toggle="tooltip" data-bs-placement="top" title="Obnova u tijeku">
+                                    <img th:if="${document.statusName == 'Obnova u tijeku'}" src="/renewal-progress-yellow.png" alt="Obnova u tijeku" width="24" data-bs-toggle="tooltip" data-bs-placement="top" title="Obnova u tijeku">
+                                    <img th:if="${document.statusName == 'Obnova u tijeku pred istek'}" src="/renewal-progress-red.png" alt="Obnova u tijeku pred istek" width="24" data-bs-toggle="tooltip" data-bs-placement="top" title="Obnova u tijeku pred istek">
                                     <img th:if="${document.statusName == 'Aktivno' || document.statusName == 'Nema obnove'}" src="/active-green.png" alt="Aktivno/Nema obnove" width="24" data-bs-toggle="tooltip" data-bs-placement="top" title="Nije potrebno poduzimati nikakve radnje">
                                     <img th:if="${document.statusName == 'Vrijeme za obnovu isteklo'}" src="/renewal-gray.png" alt="Vrijeme za obnovu isteklo" width="24" data-bs-toggle="tooltip" data-bs-placement="top" title="Vrijeme za obnovu isteklo">
                                     <img th:if="${document.statusName == 'Obnova u tijeku isteklo'}" src="/renewal-progress-gray.png" alt="Obnova u tijeku isteklo" width="24" data-bs-toggle="tooltip" data-bs-placement="top" title="Obnova u tijeku isteklo">
@@ -426,7 +431,7 @@
                                 <span th:with="today=${T(java.time.LocalDate).now()}, daysUntil=${document.renewalDate != null ? T(java.time.temporal.ChronoUnit).DAYS.between(today, document.renewalDate) : 0}"
                                       th:class="'badge ' + 
                                       (${document.statusName == 'Obnova u tijeku isteklo' || document.statusName == 'Vrijeme za obnovu isteklo'} ? 'bg-light-gray' : 
-                                      (${daysUntil <= 10 && daysUntil >= 0} ? 'text-white bg-danger-subtle text-danger-emphasis' : 
+                                      (${document.statusName == 'Vrijeme za obnovu pred istek' || document.statusName == 'Obnova u tijeku pred istek'} ? 'text-white bg-danger-subtle text-danger-emphasis' : 
                                       (${document.statusName == 'Vrijeme za obnovu' || document.statusName == 'Obnova u tijeku'} ? 'text-warning-emphasis bg-warning-subtle' : 
                                       'text-success-emphasis bg-success-subtle')))">
                                     
