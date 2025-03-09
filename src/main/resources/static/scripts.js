@@ -177,14 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Login Animation with p5.js
 let loginAnimationSketch = function(p) {
-    let documents = [];
     let animationActive = false;
-    let documentIcon;
-    
-    p.preload = function() {
-        // Preload the document icon
-        documentIcon = p.loadImage('/images/logo.svg');
-    };
     
     p.setup = function() {
         let canvas = p.createCanvas(p.windowWidth, p.windowHeight);
@@ -193,79 +186,12 @@ let loginAnimationSketch = function(p) {
     };
     
     p.draw = function() {
-        if (!animationActive) return;
-        
-        p.clear();
-        
-        // Add new document icons
-        if (documents.length < 50 && p.frameCount % 3 === 0) {
-            documents.push(new DocumentIcon());
-        }
-        
-        // Update and display document icons
-        for (let i = documents.length - 1; i >= 0; i--) {
-            let doc = documents[i];
-            doc.update();
-            doc.display();
-            
-            // Remove documents that are no longer visible
-            if (doc.isDead()) {
-                documents.splice(i, 1);
-            }
-        }
-        
-        // Stop animation if all documents are gone
-        if (animationActive && documents.length === 0) {
-            stopLoginAnimation();
-        }
+        // Empty draw function - no animation needed
     };
-    
-    // DocumentIcon class
-    class DocumentIcon {
-        constructor() {
-            this.position = p.createVector(p.random(p.width), p.height + 20);
-            this.velocity = p.createVector(p.random(-1, 1), p.random(-8, -4));
-            this.acceleration = p.createVector(0, 0.05);
-            this.size = p.random(20, 40);
-            this.rotation = p.random(-0.1, 0.1);
-            this.rotationSpeed = p.random(-0.02, 0.02);
-            this.lifespan = 255;
-            this.tint = p.color(
-                p.random([13, 110, 253]), // Primary blue variations
-                p.random([110, 150, 253]),
-                p.random([200, 220, 255])
-            );
-        }
-        
-        update() {
-            this.velocity.add(this.acceleration);
-            this.position.add(this.velocity);
-            this.rotation += this.rotationSpeed;
-            this.lifespan -= 1.5;
-        }
-        
-        display() {
-            p.push();
-            p.translate(this.position.x, this.position.y);
-            p.rotate(this.rotation);
-            p.tint(this.tint, this.lifespan);
-            p.imageMode(p.CENTER);
-            p.image(documentIcon, 0, 0, this.size, this.size);
-            p.pop();
-        }
-        
-        isDead() {
-            return this.lifespan <= 0 || this.position.y < -50;
-        }
-    }
     
     // Public methods to control animation
     p.startAnimation = function() {
         document.getElementById('animation-container').style.display = 'block';
-        documents = [];
-        for (let i = 0; i < 15; i++) {
-            documents.push(new DocumentIcon());
-        }
         animationActive = true;
     };
     
