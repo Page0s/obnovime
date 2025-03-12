@@ -109,9 +109,9 @@
             </div>
 
             <div class="mb-3">
-                <label for="location" class="form-label">Ispostava:</label>
+                <label for="location" class="form-label">Lokacija:</label>
                 <select class="form-select" id="location" name="locationId" required>
-                    <option value="">Odaberite ispostavu</option>
+                    <option value="">Odaberite lokaciju</option>
                     <option th:each="loc : ${locations}"
                             th:value="${loc.id}"
                             th:text="${loc.name}"
@@ -173,7 +173,7 @@
                         <li>Unesite šifru dokumenta (jedinstveni identifikator)</li>
                         <li>Unesite naziv dokumenta</li>
                         <li>Odaberite vrstu resursa iz padajućeg izbornika</li>
-                        <li>Odaberite Ispostavu za dokument</li>
+                        <li>Odaberite Lokaciju za dokument</li>
                         <li>Odaberite odgovornu osobu</li>
                         <li>Unesite datum obnove</li>
                         <li>Pritisnite gumb "Spremi" za pohranu dokumenta</li>

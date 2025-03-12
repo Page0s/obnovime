@@ -31,6 +31,16 @@
             font-weight: bold;
             margin-bottom: 10px;
         }
+        h1 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+        .alert-type {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+            margin: 15px 0;
+        }
         .content { padding: 20px; }
         
         /* Table styles */
@@ -125,7 +135,7 @@
         <div class="header">
             <div class="app-name">DocAlert</div>
             <h1>Obavijest o isteku dokumenta</h1>
-            <p th:text="${alertType}">Vrsta upozorenja</p>
+            <p class="alert-type" th:text="${alertType}">Vrsta upozorenja</p>
         </div>
         
         <div class="content">
