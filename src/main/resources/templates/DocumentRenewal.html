@@ -34,7 +34,7 @@
                     <img src="/images/logo.svg" alt="DocAlert Logo" height="60" class="me-2">
                     <div>
                         <h1>DocAlert</h1>
-                        <p class="mb-0">Obnova dokumenta</p>
+                        <p class="mb-0">Obnova dokumenta i pregled povijesti obnova </p>
                     </div>
                 </div>
             </div>
@@ -42,6 +42,44 @@
     </header>
 
     <div class="container">
+        <!-- Navigacijske kartice -->
+        <ul class="nav nav-tabs bg-white text-dark" id="renewalTabs" role="tablist">
+            <!-- Tab 1: Obnova -->
+            <li class="nav-item" role="presentation">
+                <button
+                        class="nav-link text-dark active"
+                        id="obnova-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#obnova"
+                        type="button"
+                        role="tab"
+                        aria-controls="obnova"
+                        aria-selected="true">
+                    Obnova
+                </button>
+            </li>
+
+            <!-- Tab 2: Povijest obnova -->
+            <li class="nav-item" role="presentation">
+                <button
+                        class="nav-link text-dark"
+                        id="povijest-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#povijest"
+                        type="button"
+                        role="tab"
+                        aria-controls="povijest"
+                        aria-selected="false">
+                    Povijest obnova
+                </button>
+            </li>
+        </ul>
+        <div class="tab-content" id="renewalTabsContent">
+            <!-- TAB 1: Obnova -->
+            <div class="tab-pane fade show active p-3 border border-top-0"
+                 id="obnova"
+                 role="tabpanel"
+                 aria-labelledby="obnova-tab">
         <!-- Document Information -->
         <div class="card mb-4">
             <div class="card-header">
@@ -109,6 +147,7 @@
                 </div>
             </div>
 
+
             <!-- Submit button -->
             <div class="d-flex justify-content-start align-items-end gap-2">
                 <button type="button" class="btn btn-primary mt-2 flex-grow-0" onclick="openConfirmationModalRenewal()">Spremi</button>
@@ -135,8 +174,49 @@
         </div>
     </div>
 </div>
+            <!-- TAB 2: Povijest obnova -->
+            <div class="tab-pane fade p-3 border border-top-0"
+                 id="povijest"
+                 role="tabpanel"
+                 aria-labelledby="povijest-tab">
+                <div class="container">
+                    <!-- Document Info -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Informacije o dokumentu</h5>
+                            <strong>Naziv:</strong> <span th:text="${document.name}"></span><br>
+                            <strong>Šifra:</strong> <span th:text="${document.number}"></span><br>
+                            <strong>Tip dokumenta:</strong> <span th:text="${document.documentType.name}"></span>
+                        </div>
+                    </div>
 
-<!-- Help Modals -->
+                    <!-- History Table -->
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Vrijedio do</th>
+                                <th>Obnovio</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="entry, stat : ${history}">
+                                <td th:text="${stat.count}"></td>
+                                <td th:text="${entry.pastRenewalDate != T(java.time.LocalDate).MIN} ? ${#temporals.format(entry.pastRenewalDate, 'dd.MM.yyyy.')} : 'N/A'"></td>
+                                <td th:text="${entry.renewedBy.firstName + ' ' + entry.renewedBy.lastName}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <button type="button" class="btn btn-secondary" onclick="history.back()">Nazad</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Help Modals -->
 <!-- Status obnove Help Modal -->
 <div class="modal fade" id="statusHelpModal" tabindex="-1" aria-labelledby="statusHelpModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered" style="max-width: 1320px;">
@@ -219,16 +299,16 @@
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl);
         });
-        
+
         // Inicijalizacija modala za pomoć
         const statusHelpIcon = document.getElementById('statusHelpIcon');
         const dateHelpIcon = document.getElementById('dateHelpIcon');
         const archiveHelpIcon = document.getElementById('archiveHelpIcon');
-        
+
         const statusHelpModal = new bootstrap.Modal(document.getElementById('statusHelpModal'));
         const dateHelpModal = new bootstrap.Modal(document.getElementById('dateHelpModal'));
         const archiveHelpModal = new bootstrap.Modal(document.getElementById('archiveHelpModal'));
-        
+
         if (statusHelpIcon) {
             statusHelpIcon.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -236,7 +316,7 @@
                 statusHelpModal.show();
             });
         }
-        
+
         if (dateHelpIcon) {
             dateHelpIcon.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -244,29 +324,29 @@
                 dateHelpModal.show();
             });
         }
-        
+
         if (archiveHelpIcon) {
             archiveHelpIcon.addEventListener('click', function(e) {
                 e.preventDefault();
                 archiveHelpModal.show();
             });
         }
-        
+
         // Osiguraj da se GIF ponovno učita svaki put kad se modal otvori
         document.getElementById('statusHelpModal').addEventListener('hidden.bs.modal', function () {
             document.getElementById('statusGifFrame').src = '';
         });
-        
+
         document.getElementById('dateHelpModal').addEventListener('hidden.bs.modal', function () {
             document.getElementById('dateGifFrame').src = '';
         });
     });
-    
+
     function openConfirmationModalRenewal() {
         const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModalRenewal'));
         confirmationModal.show();
     }
-    
+
     function submitForm() {
         document.getElementById('renewalForm').submit();
     }

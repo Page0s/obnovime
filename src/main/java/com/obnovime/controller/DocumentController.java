@@ -294,6 +294,8 @@ public class DocumentController {
             status.getName().equals("Obnova u tijeku pred istek") ||
             status.getName().equals("Vrijeme za obnovu pred istek"));
 
+            List<RenewalHistory> history = renewalHistoryRepository.findByDocumentFileId(document.getId());
+            model.addAttribute("history", history);
             model.addAttribute("document", document);
             model.addAttribute("statuses", statuses);
             return "DocumentRenewal";
@@ -392,10 +394,6 @@ public class DocumentController {
             model.addAttribute("document", document);
             model.addAttribute("locations", locationRepository.findAll());
             model.addAttribute("resourceTypes", resourceTypeRepository.findAll());
-
-            List<RenewalHistory> history = renewalHistoryRepository.findByDocumentFileId(document.getId());
-            model.addAttribute("history", history);
-
             model.addAttribute("locations", locationRepository.findAll());
             model.addAttribute("resourceTypes", resourceTypeRepository.findAll());
             List<AppUser> users = appUserRepository.findByUserType("CLIENT");
