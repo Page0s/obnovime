@@ -56,31 +56,6 @@ public class MainController {
         return "DocumentEntryForm";
     }
 
-
-
-
-    @GetMapping("/archive")
-    public String showArchive() {
-        return "DocumentArchive";
-    }
-
-    @GetMapping("/document/{id}/history")
-    public String getRenewalHistory(@PathVariable Long id, Model model) {
-        Optional<DocumentFile> documentOpt = documentRepository.findById(id);
-
-        if (documentOpt.isPresent()) {
-            DocumentFile document = documentOpt.get();
-            List<RenewalHistory> history = renewalHistoryRepository.findByDocumentFileId(id);
-
-            model.addAttribute("document", document);
-            model.addAttribute("history", history);
-            return "DocumentRenewalHistory";
-        } else {
-            return "redirect:/main";
-        }
-    }
-
-
     @GetMapping("/index")
     public String showIndex() {
         return "redirect:/index.html";
