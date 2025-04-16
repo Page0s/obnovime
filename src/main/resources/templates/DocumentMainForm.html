@@ -366,20 +366,20 @@
                             <td style="border-right: 1px solid #dee2e6;">
                                 <!-- Status ikona ovisno o statusu dokumenta -->
                                 <th:block th:with="today=${T(java.time.LocalDate).now()}, daysUntil=${document.renewalDate != null ? T(java.time.temporal.ChronoUnit).DAYS.between(today, document.renewalDate) : 0}">
-                                    <!-- Vrijeme za obnovu - sve verzije koriste renewal-gray.png -->
-                                    <img th:if="${document.statusName.startsWith('Vrijeme za obnovu')}" src="/renewal-gray.png" alt="Vrijeme za obnovu" width="24" data-bs-toggle="tooltip" data-bs-placement="top" title="Vrijeme za obnovu">
+                                    <!-- Vrijeme za obnovu - žuta ikona ako je više od 10 dana, crvena ako je 10 ili manje dana -->
+                                    <img th:if="${document.statusName == 'Vrijeme za obnovu'}" src="/renewal-yellow.png" alt="Vrijeme za obnovu" width="24" data-bs-toggle="tooltip" data-bs-placement="top" title="Vrijeme za obnovu">
+                                    <img th:if="${document.statusName == 'Vrijeme za obnovu pred istek'}" src="/renewal-red.png" alt="Vrijeme za obnovu pred istek" width="24" data-bs-toggle="tooltip" data-bs-placement="top" title="Vrijeme za obnovu pred istek">
                                     
-                                    <!-- Obnova u tijeku - sve verzije koriste renewal-progress-gray.png -->
-                                    <img th:if="${document.statusName.startsWith('Obnova u tijeku')}" src="/renewal-progress-gray.png" alt="Obnova u tijeku" width="24" data-bs-toggle="tooltip" data-bs-placement="top" title="Obnova u tijeku">
-                                    
-                                    <!-- Ostali statusi ostaju nepromijenjeni -->
+                                    <!-- Ostali statusi -->
+                                    <img th:if="${document.statusName == 'Obnova u tijeku'}" src="/renewal-progress-yellow.png" alt="Obnova u tijeku" width="24" data-bs-toggle="tooltip" data-bs-placement="top" title="Obnova u tijeku">
+                                    <img th:if="${document.statusName == 'Obnova u tijeku pred istek'}" src="/renewal-progress-red.png" alt="Obnova u tijeku pred istek" width="24" data-bs-toggle="tooltip" data-bs-placement="top" title="Obnova u tijeku pred istek">
                                     <img th:if="${document.statusName == 'Aktivno' || document.statusName == 'Nema obnove'}" src="/active-green.png" alt="Aktivno/Nema obnove" width="24" data-bs-toggle="tooltip" data-bs-placement="top" title="Nije potrebno poduzimati nikakve radnje">
+                                    <img th:if="${document.statusName == 'Vrijeme za obnovu isteklo'}" src="/renewal-gray.png" alt="Vrijeme za obnovu isteklo" width="24" data-bs-toggle="tooltip" data-bs-placement="top" title="Vrijeme za obnovu isteklo">
+                                    <img th:if="${document.statusName == 'Obnova u tijeku isteklo'}" src="/renewal-progress-gray.png" alt="Obnova u tijeku isteklo" width="24" data-bs-toggle="tooltip" data-bs-placement="top" title="Obnova u tijeku isteklo">
                                 </th:block>
                             </td>
                             <td th:text="${document.number}">Šifra dokumenta</td>
-                            <td class="text-nowrap" style="max-width: 200px; overflow: hidden;" data-bs-toggle="tooltip" data-bs-placement="top" th:title="${document.name}">
-                                <div class="text-truncate" th:text="${document.name}">Naziv</div>
-                            </td>
+                            <td th:text="${document.name}">Naziv</td>
                             <td th:text="${document.resourceTypeName}">Vrsta resursa</td>
                             <td th:text="${document.locationName}" style="border-right: 1px solid #dee2e6;">Lokacija</td>
                             <td th:text="${document.responsiblePersonName}">Odgovorna osoba</td>
@@ -626,24 +626,67 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="legendModalLabel">Legenda</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    
                 </div>
                 <div class="modal-body">
-                    <div class="d-flex flex-column gap-3">
-                        <div class="d-flex align-items-center">
-                            <img src="/active-green.png" alt="Aktivno/Nema obnove" width="24" class="me-3">
-                            <span>Nije potrebno poduzimati nikakve radnje</span>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <img src="/renewal-gray.png" alt="Vrijeme za obnovu" width="24" class="me-3">
-                            <span>Vrijeme za obnovu</span>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <img src="/renewal-progress-gray.png" alt="Obnova u tijeku" width="24" class="me-3">
-                            <span>Obnova u tijeku</span>
-                        </div>
-                    </div>
-                </div>
+    <div class="d-flex flex-column gap-3">
+        <div class="d-flex align-items-center">
+            <img src="/active-green.png" alt="Aktivno/Nema obnove" width="28" class="me-3">
+            <div>
+                <b>Aktivno / Nema obnove</b><br>
+                <span class="text-success" style="font-size: 0.95em;">(nema potrebe za obnovom)</span>
+            </div>
+        </div>
+        <br>
+        <div class="d-flex align-items-center">
+            <img src="/renewal-yellow.png" alt="Vrijeme za obnovu (više od 10 dana)" width="28" class="me-3">
+            <div>
+                <b>Vrijeme za obnovu</b><br>
+                <span class="text-secondary" style="font-size: 0.95em;">(više od 10 dana do isteka)</span>
+            </div>
+        </div>
+        <br>
+        <div class="d-flex align-items-center">
+            <img src="/renewal-progress-yellow.png" alt="Obnova u tijeku (više od 10 dana)" width="28" class="me-3">
+            <div>
+                <b>Obnova u tijeku</b><br>
+                <span class="text-secondary" style="font-size: 0.95em;">(više od 10 dana do isteka)</span>
+            </div>
+        </div>
+        <br>
+        <div class="d-flex align-items-center">
+            <img src="/renewal-red.png" alt="Vrijeme za obnovu pred istek (10 ili manje dana)" width="28" class="me-3">
+            <div>
+                <b>Vrijeme za obnovu pred istek</b><br>
+                <span class="text-danger" style="font-size: 0.95em;">(10 ili manje dana do isteka)</span>
+            </div>
+        </div>
+        <br>
+        <div class="d-flex align-items-center">
+            <img src="/renewal-progress-red.png" alt="Obnova u tijeku pred istek (10 ili manje dana)" width="28" class="me-3">
+            <div>
+                <b>Obnova u tijeku pred istek</b><br>
+                <span class="text-danger" style="font-size: 0.95em;">(10 ili manje dana do isteka)</span>
+            </div>
+        </div>
+        <br>
+        <div class="d-flex align-items-center">
+            <img src="/renewal-gray.png" alt="Vrijeme za obnovu isteklo" width="28" class="me-3">
+            <div>
+                <b>Vrijeme za obnovu isteklo</b><br>
+                <span class="text-muted" style="font-size: 0.95em;">(nije obnovljeno na vrijeme)</span>
+            </div>
+        </div>
+        <br>
+        <div class="d-flex align-items-center">
+            <img src="/renewal-progress-gray.png" alt="Obnova u tijeku isteklo" width="28" class="me-3">
+            <div>
+                <b>Obnova u tijeku isteklo</b><br>
+                <span class="text-muted" style="font-size: 0.95em;">(obnova nije dovršena na vrijeme)</span>
+            </div>
+        </div>
+    </div>
+</div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zatvori</button>
                 </div>
