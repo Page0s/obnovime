@@ -212,7 +212,7 @@ public class DocumentController {
                 && startDate == null && endDate == null)
         {
             // Vrati sve, ali paginirano
-            Page<DocumentFile> documentsPage = documentRepository.findAll(pageRequest);
+            Page<DocumentFile> documentsPage = documentRepository.findByArhivaFalse(pageRequest);
 
             documentsPage.forEach(this::updateDocumentStatus);
 
@@ -438,4 +438,51 @@ public class DocumentController {
 
         return "redirect:/main";
     }
+    @GetMapping("/archive")
+    public String showArchivePage(Model model,
+                                  @RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "10") int size) {
+        // 1) Napravi PageRequest za paginaciju
+        PageRequest pageRequest = PageRequest.of(page, size);
+
+        // 2) Dohvati arhivirane dokumente
+        Page<DocumentFile> archivedDocs = documentRepository.findByArhivaTrue(pageRequest);
+
+        // 3) Konverzija u DTO (ako si radio s DTO klasom DocumentFileDTO)
+        List<DocumentFileDTO> documentDtos = archivedDocs.getContent().stream()
+                .map(DocumentFileDTO::fromEntity)
+                .toList();
+
+        // 4) Stavi podatke u model
+        model.addAttribute("documents", documentDtos);
+        model.addAttribute("currentPage", archivedDocs.getNumber());
+        model.addAttribute("totalPages", archivedDocs.getTotalPages());
+
+        // 5) Vrati naziv HTML šablone (DocumentArchive.html)
+        return "DocumentArchive";
+    }
+    @PostMapping("/document/{id}/unarchive")
+    public String unarchiveDocument(@PathVariable Long id,
+                                    RedirectAttributes redirectAttributes) {
+        Optional<DocumentFile> docOpt = documentRepository.findById(id);
+        if (docOpt.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "Dokument nije pronađen.");
+            return "redirect:/archive"; // Preusmjeri opet na arhivu
+        }
+
+        DocumentFile doc = docOpt.get();
+
+        // Ako želiš status natrag na "Aktivno":
+        DocumentStatus activeStatus = documentStatusRepository.findByName("Aktivno");
+        if (activeStatus != null) {
+            doc.setStatus(activeStatus);
+        }
+
+        doc.setArhiva(false); // Vraćamo iz arhive
+        documentRepository.save(doc);
+
+        redirectAttributes.addFlashAttribute("message", "Dokument uspješno vraćen iz arhive.");
+        return "redirect:/archive";
+    }
+
 }
