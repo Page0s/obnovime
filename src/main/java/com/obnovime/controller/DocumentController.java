@@ -280,8 +280,6 @@ public class DocumentController {
 
         if (documentOpt.isPresent()) {
             DocumentFile document = documentOpt.get();
-            System.out.println("ID OF THE DOCUMENT: " + document.getId());
-            System.out.println("NAME OF THE DOCUMENT: " + document.getName());
             List<DocumentStatus> statuses = documentStatusRepository.findAll().stream()
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
