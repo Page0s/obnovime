@@ -19,5 +19,9 @@ public interface DocumentRepository extends JpaRepository<DocumentFile, Long>, D
 
     Page<DocumentFile> findByArhivaFalse(Pageable pageable);
 
+    long countByLocationId(Long locationId);
+
+    long countByDocumentTypeId(Long documentTypeId);
+
 //    List<DocumentFile> findAllByCreatedByIdOrderByRenewalDateAsc(Long createdById);
 }

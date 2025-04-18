@@ -2,8 +2,11 @@ package com.obnovime.controller;
 
 import com.obnovime.model.AppUser;
 import com.obnovime.model.DocumentType;
+import com.obnovime.model.Location;
 import com.obnovime.repository.AppUserRepository;
+import com.obnovime.repository.DocumentRepository;
 import com.obnovime.repository.DocumentTypeRepository;
+import com.obnovime.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +26,12 @@ public class AdminController {
 
     @Autowired
     private DocumentTypeRepository documentTypeRepository;
+
+    @Autowired
+    private DocumentRepository documentRepository;
+
+    @Autowired
+    private LocationRepository locationRepository;
 
     @GetMapping("/admin")
     public String showAdmin(){
@@ -65,14 +74,22 @@ public class AdminController {
 
     @PostMapping("/adminDocumentTypeList/delete")
     public String deleteDocumentType(@RequestParam("id") Long id, RedirectAttributes redirectAttributes) {
-        try {
-            documentTypeRepository.deleteById(id);
-            redirectAttributes.addFlashAttribute("success", "Tip dokumenta uspješno obrisan.");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Greška prilikom brisanja: " + e.getMessage());
+        long povezaniDokumenti = documentRepository.countByDocumentTypeId(id);
+
+        if (povezaniDokumenti > 0) {
+            redirectAttributes.addFlashAttribute("error", "Tip dokumenta je povezan s dokumentima i ne može se obrisati.");
+        } else {
+            try {
+                documentTypeRepository.deleteById(id);
+                redirectAttributes.addFlashAttribute("success", "Tip dokumenta uspješno obrisan.");
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("error", "Greška prilikom brisanja: " + e.getMessage());
+            }
         }
+
         return "redirect:/adminDocumentTypeList";
     }
+
 
     @PostMapping("/adminUsersList/update")
     public String updateUser(@RequestParam Long id,
@@ -135,4 +152,58 @@ public class AdminController {
         }
         return "redirect:/adminUsersList";
     }
+
+    @GetMapping("/adminLocationList")
+    public String showLocationList(Model model) {
+        List<Location> locations = locationRepository.findAll();
+        model.addAttribute("locations", locations);
+        model.addAttribute("newLocation", new Location());
+        return "AdminLocationsList";
+    }
+
+    @PostMapping("/adminLocationList/add")
+    public String addLocation(@ModelAttribute Location newLocation, RedirectAttributes redirectAttributes) {
+        try {
+            locationRepository.save(newLocation);
+            redirectAttributes.addFlashAttribute("success", "Lokacija dodana.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Greška: " + e.getMessage());
+        }
+        return "redirect:/adminLocationList";
+    }
+
+    @PostMapping("/adminLocationList/update")
+    public String updateLocation(@RequestParam Long id, @RequestParam String name, RedirectAttributes redirectAttributes) {
+        try {
+            Location loc = locationRepository.findById(id).orElse(null);
+            if (loc != null) {
+                loc.setName(name);
+                locationRepository.save(loc);
+                redirectAttributes.addFlashAttribute("success", "Lokacija ažurirana.");
+            }
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Greška: " + e.getMessage());
+        }
+        return "redirect:/adminLocationList";
+    }
+
+    @PostMapping("/adminLocationList/delete")
+    public String deleteLocation(@RequestParam("id") Long id, RedirectAttributes redirectAttributes) {
+        try {
+            long brojDokumenata = documentRepository.countByLocationId(id);
+
+            if (brojDokumenata > 0) {
+                redirectAttributes.addFlashAttribute("error", "Lokacija je povezana s dokumentima i ne može se obrisati.");
+            } else {
+                locationRepository.deleteById(id);
+                redirectAttributes.addFlashAttribute("success", "Lokacija uspješno obrisana.");
+            }
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Greška: " + e.getMessage());
+        }
+
+        return "redirect:/adminLocationList";
+    }
+
+
 }
