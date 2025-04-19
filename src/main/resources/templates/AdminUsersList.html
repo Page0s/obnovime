@@ -179,6 +179,32 @@
     <p class="mb-0">&copy; 2025 DocAlert. Sva prava pridržana.</p>
 </footer>
 
+<!-- TOAST NOTIFIKACIJA -->
+<div class="position-fixed bottom-0 start-50 translate-middle-x p-3" style="z-index: 9999">
+    <div id="toastSuccess" class="toast align-items-center text-bg-success border-0" role="alert" th:if="${success}" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body" th:text="${success}">Operacija uspješna.</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Zatvori"></button>
+        </div>
+    </div>
+
+    <div id="toastError" class="toast align-items-center text-bg-danger border-0" role="alert" th:if="${error}" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body" th:text="${error}">Greška prilikom operacije.</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Zatvori"></button>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const successToast = document.getElementById('toastSuccess');
+        const errorToast = document.getElementById('toastError');
+        if (successToast) new bootstrap.Toast(successToast).show();
+        if (errorToast) new bootstrap.Toast(errorToast).show();
+    });
+</script>
+
 <script>
     function openEditUserModal(id, firstName, lastName, email, phoneNumber, department) {
         document.getElementById('editId').value = id;
