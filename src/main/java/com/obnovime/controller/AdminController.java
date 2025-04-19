@@ -8,12 +8,14 @@ import com.obnovime.repository.DocumentRepository;
 import com.obnovime.repository.DocumentTypeRepository;
 import com.obnovime.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -40,7 +42,7 @@ public class AdminController {
 
     @GetMapping("/adminUsersList")
     public String showAdminUsersList(Model model){
-        List<AppUser> users = appUserRepository.findAll(); // Dohvati sve korisnike iz baze
+        List<AppUser> users = appUserRepository.findByUserTypeNot("ADMIN");
         model.addAttribute("appUser", users);
         return "AdminUsersList";
     }
@@ -90,7 +92,6 @@ public class AdminController {
         return "redirect:/adminDocumentTypeList";
     }
 
-
     @PostMapping("/adminUsersList/update")
     public String updateUser(@RequestParam Long id,
                              @RequestParam String firstName,
@@ -99,33 +100,47 @@ public class AdminController {
                              @RequestParam String phoneNumber,
                              @RequestParam String department,
                              RedirectAttributes redirectAttributes) {
-        try {
-            AppUser user = appUserRepository.findById(id).orElse(null);
-            if (user != null) {
-                user.setFirstName(firstName);
-                user.setLastName(lastName);
-                user.setEmail(email);
-                user.setPhoneNumber(phoneNumber);
-                user.setDepartment(department);
-                appUserRepository.save(user);
-                redirectAttributes.addFlashAttribute("success", "Korisnik uspješno ažuriran.");
-            }
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Greška prilikom ažuriranja korisnika: " + e.getMessage());
+
+        AppUser user = appUserRepository.findById(id).orElse(null);
+
+        if (user != null && "ADMIN".equalsIgnoreCase(user.getUserType())) {
+            redirectAttributes.addFlashAttribute("error", "Uređivanje ADMIN korisnika nije dozvoljeno.");
+            return "redirect:/adminUsersList";
         }
+
+        try {
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setEmail(email);
+            user.setPhoneNumber(phoneNumber);
+            user.setDepartment(department);
+            appUserRepository.save(user);
+            redirectAttributes.addFlashAttribute("success", "Korisnik uspješno ažuriran.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Greška prilikom ažuriranja korisnika.");
+        }
+
         return "redirect:/adminUsersList";
     }
 
     @PostMapping("/adminUsersList/delete")
     public String deleteUser(@RequestParam("id") Long id, RedirectAttributes redirectAttributes) {
+        AppUser user = appUserRepository.findById(id).orElse(null);
+
+        if (user != null && "ADMIN".equalsIgnoreCase(user.getUserType())) {
+            redirectAttributes.addFlashAttribute("error", "Brisanje ADMIN korisnika nije dozvoljeno.");
+            return "redirect:/adminUsersList";
+        }
+
         try {
             appUserRepository.deleteById(id);
             redirectAttributes.addFlashAttribute("success", "Korisnik uspješno obrisan.");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Greška prilikom brisanja korisnika: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "Greška prilikom brisanja korisnika.");
         }
         return "redirect:/adminUsersList";
     }
+
 
     @PostMapping("/adminUsersList/add")
     public String addUser(@RequestParam String firstName,
@@ -145,10 +160,9 @@ public class AdminController {
             newUser.setDepartment((department == null || department.trim().isEmpty()) ? "-" : department);
             newUser.setUserType("CLIENT");
             appUserRepository.save(newUser);
-
             redirectAttributes.addFlashAttribute("success", "Korisnik uspješno dodan.");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Greška prilikom dodavanja korisnika: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "Greška prilikom dodavanja korisnika.");
         }
         return "redirect:/adminUsersList";
     }
